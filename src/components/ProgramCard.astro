@@ -1,0 +1,83 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image: string;
+  price: string;
+  duration: string;
+  features: string[];
+  type: 'hajj' | 'omra' | 'voyage';
+}
+
+const { title, description, image, price, duration, features, type } = Astro.props;
+
+const typeColors = {
+  hajj: 'bg-islamic-green text-white',
+  omra: 'bg-gold text-deep-green',
+  voyage: 'bg-deep-green text-white'
+};
+
+const typeLabels = {
+  hajj: 'Hajj',
+  omra: 'Omra',
+  voyage: 'Voyage Organisé'
+};
+---
+
+<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+  <div class="relative overflow-hidden">
+    <img 
+      src={image} 
+      alt={title}
+      class="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
+    />
+    <div class="absolute top-4 left-4">
+      <span class={`px-3 py-1 rounded-full text-sm font-semibold ${typeColors[type]}`}>
+        {typeLabels[type]}
+      </span>
+    </div>
+    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+      <span class="text-deep-green font-bold">{duration}</span>
+    </div>
+  </div>
+  
+  <div class="p-6">
+    <h3 class="text-2xl font-bold text-deep-green mb-3">
+      {title}
+    </h3>
+    
+    <p class="text-gray-600 mb-4 leading-relaxed">
+      {description}
+    </p>
+    
+    <div class="mb-6">
+      <h4 class="font-semibold text-deep-green mb-2">Inclus dans ce programme :</h4>
+      <ul class="space-y-1">
+        {features.map(feature => (
+          <li class="flex items-start">
+            <svg class="w-5 h-5 text-islamic-green mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-sm text-gray-700">{feature}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    
+    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+      <div>
+        <span class="text-sm text-gray-500">À partir de</span>
+        <p class="text-2xl font-bold text-gold">{price}</p>
+      </div>
+      
+      <div class="flex space-x-2">
+        <button class="bg-gold hover:bg-yellow-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors duration-200">
+          Réserver
+        </button>
+        <button class="border-2 border-gold text-gold hover:bg-gold hover:text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200">
+          Détails
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

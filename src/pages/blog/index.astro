@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+
+const allPosts = [
+  {
+    title: "Les étapes spirituelles du Hajj : Guide complet 2024",
+    excerpt: "Découvrez les rituels sacrés du Hajj, leur signification profonde et comment vous préparer spirituellement pour ce voyage unique. Un guide détaillé pour comprendre chaque étape.",
+    image: "https://images.pexels.com/photos/8535194/pexels-photo-8535194.jpeg?auto=compress&cs=tinysrgb&w=600",
+    date: "15 janvier 2024",
+    category: "Hajj",
+    slug: "etapes-spirituelles-hajj-guide-2024"
+  },
+  {
+    title: "Omra : Comment bien se préparer physiquement et spirituellement",
+    excerpt: "Conseils pratiques pour préparer votre Omra : des invocations aux préparatifs matériels, tout ce qu'il faut savoir pour un pèlerinage réussi.",
+    image: "https://images.pexels.com/photos/8367095/pexels-photo-8367095.jpeg?auto=compress&cs=tinysrgb&w=600",
+    date: "10 janvier 2024",
+    category: "Omra",
+    slug: "preparation-omra-conseils-pratiques"
+  },
+  {
+    title: "Istanbul : 10 lieux incontournables à visiter",
+    excerpt: "De Sainte-Sophie au Grand Bazar, découvrez les merveilles d'Istanbul qui font de cette ville un carrefour unique entre l'Orient et l'Occident.",
+    image: "https://images.pexels.com/photos/1510595/pexels-photo-1510595.jpeg?auto=compress&cs=tinysrgb&w=600",
+    date: "5 janvier 2024",
+    category: "Voyage",
+    slug: "istanbul-lieux-incontournables"
+  },
+  {
+    title: "Les bienfaits spirituels du voyage religieux",
+    excerpt: "Explorez comment les voyages religieux comme le Hajj et l'Omra transforment l'âme et renforcent la foi. Témoignages et réflexions spirituelles.",
+    image: "https://images.pexels.com/photos/8535191/pexels-photo-8535191.jpeg?auto=compress&cs=tinysrgb&w=600",
+    date: "28 décembre 2023",
+    category: "Spiritualité",
+    slug: "bienfaits-spirituels-voyage-religieux"
+  },
+  {
+    title: "Cappadoce : Un voyage entre ciel et terre",
+    excerpt: "Découvrez les paysages lunaires de Cappadoce, ses cheminées de fée et l'expérience magique du vol en montgolfière au lever du soleil.",
+    image: "https://images.pexels.com/photos/2563681/pexels-photo-2563681.jpeg?auto=compress&cs=tinysrgb&w=600",
+    date: "20 décembre 2023",
+    category: "Voyage",
+    slug: "cappadoce-voyage-ciel-terre"
+  },
+  {
+    title: "Médine la Lumineuse : Guide du pèlerin",
+    excerpt: "Découvrez l'histoire sacrée de Médine, la ville du Prophète (PBSL), et les lieux saints à visiter lors de votre pèlerinage.",
+    image: "https://images.pexels.com/photos/8367094/pexels-photo-8367094.jpeg?auto=compress&cs=tinysrgb&w=600",
+    date: "15 décembre 2023",
+    category: "Hajj",
+    slug: "medine-guide-pelerin"
+  }
+];
+
+const categories = ["Tous", "Hajj", "Omra", "Voyage", "Spiritualité"];
+---
+
+<Layout title="Blog - Beauséjour Voyage" description="Découvrez nos guides de voyage, conseils spirituels et articles sur le Hajj, l'Omra et les destinations culturelles.">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-deep-green via-islamic-green to-gold text-white py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl lg:text-5xl font-bold mb-6">
+        Blog Beauséjour Voyage
+      </h1>
+      <p class="text-xl text-gray-200 mb-8">
+        Guides spirituels, conseils de voyage et découvertes culturelles pour enrichir vos expériences
+      </p>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="py-8 bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap justify-center gap-4">
+        {categories.map(category => (
+          <button class="px-6 py-2 rounded-full border-2 border-gold text-gold hover:bg-gold hover:text-white transition-all duration-200 font-medium">
+            {category}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Posts -->
+  <section class="py-16 bg-warm-beige">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {allPosts.map(post => (
+          <BlogCard {...post} />
+        ))}
+      </div>
+      
+      <!-- Pagination -->
+      <div class="flex justify-center mt-12">
+        <nav class="flex space-x-2">
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors">
+            Précédent
+          </button>
+          <button class="px-4 py-2 bg-gold text-white rounded-lg">1</button>
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors">
+            2
+          </button>
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors">
+            3
+          </button>
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors">
+            Suivant
+          </button>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="py-16 bg-deep-green text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold mb-4">
+        Restez informé de nos derniers articles
+      </h2>
+      <p class="text-xl text-gray-200 mb-8">
+        Recevez nos guides spirituels et conseils de voyage directement dans votre boîte mail
+      </p>
+      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+        <input 
+          type="email" 
+          placeholder="Votre adresse email"
+          class="flex-1 px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-gold"
+        />
+        <button 
+          type="submit"
+          class="bg-gold hover:bg-yellow-600 text-deep-green px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+        >
+          S'abonner
+        </button>
+      </form>
+    </div>
+  </section>
+</Layout>

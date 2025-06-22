@@ -1,0 +1,163 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import BlogCard from '../components/BlogCard.astro';
+import ProgramCard from '../components/ProgramCard.astro';
+
+const featuredPrograms = [
+  {
+    title: "Hajj Premium 2024",
+    description: "Un pèlerinage complet avec hébergement 5 étoiles près du Haram. Accompagnement spirituel personnalisé et groupe restreint pour une expérience authentique.",
+    image: "https://images.pexels.com/photos/8367095/pexels-photo-8367095.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€4,990",
+    duration: "15 jours",
+    features: [
+      "Hébergement 5* face au Haram",
+      "Guide spirituel francophone",
+      "Transport climatisé",
+      "Repas halal inclus",
+      "Assistance 24h/7j"
+    ],
+    type: 'hajj' as const
+  },
+  {
+    title: "Omra Ramadan 2024",
+    description: "Vivez l'Omra pendant le mois béni de Ramadan. Programme spécialement conçu pour profiter pleinement des dernières nuits sacrées.",
+    image: "https://images.pexels.com/photos/8535194/pexels-photo-8535194.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€1,890",
+    duration: "10 jours",
+    features: [
+      "Période des 10 dernières nuits",
+      "Hôtel proche Masjid al-Haram",
+      "Iftar quotidien inclus",
+      "Conférences spirituelles",
+      "Visite des lieux saints"
+    ],
+    type: 'omra' as const
+  },
+  {
+    title: "Istanbul & Cappadoce",
+    description: "Découvrez les merveilles de la Turquie : Istanbul historique et les paysages féériques de Cappadoce. Un voyage culturel inoubliable.",
+    image: "https://images.pexels.com/photos/1510595/pexels-photo-1510595.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€890",
+    duration: "8 jours",
+    features: [
+      "Vols A/R inclus",
+      "Hôtels 4* centre-ville",
+      "Visites guidées",
+      "Vol en montgolfière",
+      "Tous les repas inclus"
+    ],
+    type: 'voyage' as const
+  }
+];
+
+const latestPosts = [
+  {
+    title: "Les étapes spirituelles du Hajj : Guide complet 2024",
+    excerpt: "Découvrez les rituels sacrés du Hajj, leur signification profonde et comment vous préparer spirituellement pour ce voyage unique.",
+    image: "https://images.pexels.com/photos/8535194/pexels-photo-8535194.jpeg?auto=compress&cs=tinysrgb&w=600",
+    date: "15 janvier 2024",
+    category: "Hajj",
+    slug: "etapes-spirituelles-hajj-guide-2024"
+  },
+  {
+    title: "Omra : Comment bien se préparer physiquement et spirituellement",
+    excerpt: "Conseils pratiques pour préparer votre Omra : des invocations aux préparatifs matériels, tout ce qu'il faut savoir.",
+    image: "https://images.pexels.com/photos/8367095/pexels-photo-8367095.jpeg?auto=compress&cs=tinysrgb&w=600",
+    date: "10 janvier 2024",
+    category: "Omra",
+    slug: "preparation-omra-conseils-pratiques"
+  },
+  {
+    title: "Istanbul : 10 lieux incontournables à visiter",
+    excerpt: "De Sainte-Sophie au Grand Bazar, découvrez les merveilles d'Istanbul qui font de cette ville un carrefour unique entre l'Orient et l'Occident.",
+    image: "https://images.pexels.com/photos/1510595/pexels-photo-1510595.jpeg?auto=compress&cs=tinysrgb&w=600",
+    date: "5 janvier 2024",
+    category: "Voyage",
+    slug: "istanbul-lieux-incontournables"
+  }
+];
+---
+
+<Layout title="Beauséjour Voyage - Blog de voyages, Hajj et Omra">
+  <Hero />
+  
+  <!-- Programs Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+          Nos Programmes Phares
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Découvrez nos programmes soigneusement conçus pour vous offrir une expérience spirituelle et culturelle exceptionnelle
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {featuredPrograms.map(program => (
+          <ProgramCard {...program} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section class="py-16 bg-warm-beige">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+          Derniers Articles du Blog
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Conseils, guides spirituels et découvertes culturelles pour enrichir vos voyages
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {latestPosts.map(post => (
+          <BlogCard {...post} />
+        ))}
+      </div>
+      
+      <div class="text-center mt-12">
+        <a 
+          href="/blog" 
+          class="inline-flex items-center bg-gold hover:bg-yellow-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+        >
+          Voir tous les articles
+          <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-r from-deep-green to-islamic-green text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+        Prêt à commencer votre voyage ?
+      </h2>
+      <p class="text-xl mb-8 text-gray-200">
+        Contactez-nous pour un devis personnalisé et commencez à planifier votre prochaine aventure spirituelle ou culturelle.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/contact" 
+          class="bg-gold hover:bg-yellow-600 text-deep-green px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+        >
+          Demander un devis gratuit
+        </a>
+        <a 
+          href="tel:+33123456789" 
+          class="border-2 border-white hover:bg-white hover:text-deep-green text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200"
+        >
+          Appeler maintenant
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

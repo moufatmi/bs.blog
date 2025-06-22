@@ -1,0 +1,263 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProgramCard from '../components/ProgramCard.astro';
+
+const voyagePrograms = [
+  {
+    title: "Istanbul & Cappadoce",
+    description: "Découvrez les merveilles de la Turquie : Istanbul historique et les paysages féériques de Cappadoce. Un voyage culturel inoubliable entre Orient et Occident.",
+    image: "https://images.pexels.com/photos/1510595/pexels-photo-1510595.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€890",
+    duration: "8 jours",
+    features: [
+      "Vols A/R inclus",
+      "Hôtels 4* centre-ville",
+      "Visites guidées quotidiennes",
+      "Vol en montgolfière Cappadoce",
+      "Tous les repas inclus",
+      "Guide francophone expérimenté"
+    ],
+    type: 'voyage' as const
+  },
+  {
+    title: "Andalousie Musulmane",
+    description: "Sur les traces de l'Andalousie musulmane : Cordoue, Séville, Grenade. Découvrez l'héritage islamique exceptionnel de l'Espagne.",
+    image: "https://images.pexels.com/photos/1388030/pexels-photo-1388030.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€1,190",
+    duration: "7 jours",
+    features: [
+      "Visite de l'Alhambra",
+      "Mosquée-Cathédrale de Cordoue",
+      "Alcazar de Séville",
+      "Hôtels de charme",
+      "Transport premium",
+      "Conférences historiques"
+    ],
+    type: 'voyage' as const
+  },
+  {
+    title: "Maroc Impérial",
+    description: "Circuit complet des villes impériales : Rabat, Fès, Meknès, Marrakech. Plongez dans la richesse culturelle du royaume chérifien.",
+    image: "https://images.pexels.com/photos/1534560/pexels-photo-1534560.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€790",
+    duration: "8 jours",
+    features: [
+      "Les 4 villes impériales",
+      "Riads authentiques",
+      "Excursion désert Sahara",
+      "Nuit sous les étoiles",
+      "Cuisine marocaine",
+      "Artisanat local"
+    ],
+    type: 'voyage' as const
+  },
+  {
+    title: "Jordanie Biblique",
+    description: "Découvrez les merveilles de Jordanie : Pétra la rose, Wadi Rum, Amman. Un voyage entre histoire antique et paysages spectaculaires.",
+    image: "https://images.pexels.com/photos/1467300/pexels-photo-1467300.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€1,490",
+    duration: "8 jours",
+    features: [
+      "Pétra site UNESCO",
+      "Désert Wadi Rum",
+      "Mer Morte",
+      "Château de Kerak",
+      "Campement bédouin",
+      "Guide archéologue"
+    ],
+    type: 'voyage' as const
+  },
+  {
+    title: "Egypte des Pharaons",
+    description: "Croisière sur le Nil et découverte des pyramides. L'Egypte antique révèle tous ses secrets dans ce voyage extraordinaire.",
+    image: "https://images.pexels.com/photos/3290065/pexels-photo-3290065.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€1,290",
+    duration: "10 jours",
+    features: [
+      "Croisière Nil 5 jours",
+      "Pyramides de Gizeh",
+      "Vallée des Rois",
+      "Temple de Karnak",
+      "Musée du Caire",
+      "Egyptologue francophone"
+    ],
+    type: 'voyage' as const
+  },
+  {
+    title: "Ouzbékistan Route de la Soie",
+    description: "Samarkand, Boukhara, Khiva : les joyaux de la Route de la Soie. Un voyage fascinant au cœur de l'Asie centrale.",
+    image: "https://images.pexels.com/photos/9016453/pexels-photo-9016453.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€1,690",
+    duration: "9 jours",
+    features: [
+      "Samarkand et Registan",
+      "Boukhara médiévale",
+      "Khiva fortifiée",
+      "Architecture islamique",
+      "Artisanat traditionnel",
+      "Hospitalité ouzbèke"
+    ],
+    type: 'voyage' as const
+  }
+];
+
+const destinations = [
+  { name: "Turquie", count: 3 },
+  { name: "Espagne", count: 2 },
+  { name: "Maroc", count: 4 },
+  { name: "Jordanie", count: 2 },
+  { name: "Egypte", count: 3 },
+  { name: "Ouzbékistan", count: 1 }
+];
+---
+
+<Layout title="Voyages Organisés - Beauséjour Voyage" description="Découvrez nos voyages organisés vers les destinations culturelles et historiques du monde musulman. Circuits accompagnés avec guides experts.">
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-deep-green via-islamic-green to-gold text-white overflow-hidden">
+    <div class="absolute inset-0 bg-black opacity-40"></div>
+    <div class="absolute inset-0">
+      <img 
+        src="https://images.pexels.com/photos/1510595/pexels-photo-1510595.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop" 
+        alt="Istanbul Turkey" 
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+      <div class="max-w-4xl">
+        <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+          Voyages Organisés
+          <span class="block text-gold">Culturels & Historiques</span>
+        </h1>
+        
+        <p class="text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed">
+          Partez à la découverte des plus belles destinations du monde musulman. 
+          Circuits accompagnés avec guides experts pour une immersion culturelle authentique.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a 
+            href="#programmes" 
+            class="bg-gold hover:bg-yellow-600 text-deep-green px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 text-center"
+          >
+            Voir tous nos voyages
+          </a>
+          <a 
+            href="/contact" 
+            class="border-2 border-white hover:bg-white hover:text-deep-green text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 text-center"
+          >
+            Demander un devis
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Destinations Filter -->
+  <section class="py-8 bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap justify-center gap-4">
+        <button class="px-6 py-2 rounded-full bg-gold text-white font-medium">
+          Toutes destinations
+        </button>
+        {destinations.map(dest => (
+          <button class="px-6 py-2 rounded-full border-2 border-gold text-gold hover:bg-gold hover:text-white transition-all duration-200 font-medium">
+            {dest.name} ({dest.count})
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Section -->
+  <section id="programmes" class="py-16 bg-warm-beige">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+          Nos Destinations Phares
+        </h2>
+        <p class="text-xl text-gray-600 max-w-4xl mx-auto">
+          Des circuits soigneusement élaborés pour vous faire découvrir la richesse historique, 
+          culturelle et architecturale des civilisations islamiques à travers le monde.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {voyagePrograms.map(program => (
+          <ProgramCard {...program} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+          L'Excellence de nos Voyages Organisés
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center p-6">
+          <div class="w-16 h-16 bg-gradient-to-br from-gold to-deep-green rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-deep-green mb-3">Guides Experts</h3>
+          <p class="text-gray-600">Accompagnement par des guides francophones spécialisés en histoire et culture islamique</p>
+        </div>
+
+        <div class="text-center p-6">
+          <div class="w-16 h-16 bg-gradient-to-br from-gold to-deep-green rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+              <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-deep-green mb-3">Tout Inclus</h3>
+          <p class="text-gray-600">Vols, hébergements, repas, visites et transferts - profitez sans vous soucier de rien</p>
+        </div>
+
+        <div class="text-center p-6">
+          <div class="w-16 h-16 bg-gradient-to-br from-gold to-deep-green rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-deep-green mb-3">Groupes Limités</h3>
+          <p class="text-gray-600">Voyages en petits groupes pour une expérience plus authentique et personnalisée</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-r from-deep-green to-islamic-green text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+        Prêt pour votre prochaine aventure ?
+      </h2>
+      <p class="text-xl mb-8 text-gray-200">
+        Contactez nos experts voyage pour créer votre circuit sur mesure ou réserver l'un de nos programmes.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/contact" 
+          class="bg-gold hover:bg-yellow-600 text-deep-green px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+        >
+          Demander un devis sur mesure
+        </a>
+        <a 
+          href="tel:+33123456789" 
+          class="border-2 border-white hover:bg-white hover:text-deep-green text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200"
+        >
+          Parler à un conseiller
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

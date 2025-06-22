@@ -1,0 +1,246 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProgramCard from '../components/ProgramCard.astro';
+
+const hajjPrograms = [
+  {
+    title: "Hajj Premium 2024",
+    description: "Un pèlerinage complet avec hébergement 5 étoiles près du Haram. Accompagnement spirituel personnalisé et groupe restreint pour une expérience authentique.",
+    image: "https://images.pexels.com/photos/8367095/pexels-photo-8367095.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€4,990",
+    duration: "15 jours",
+    features: [
+      "Hébergement 5* face au Haram",
+      "Guide spirituel francophone",
+      "Transport climatisé",
+      "Repas halal inclus",
+      "Assistance 24h/7j",
+      "Visite guidée des lieux saints"
+    ],
+    type: 'hajj' as const
+  },
+  {
+    title: "Hajj Confort 2024",
+    description: "Programme Hajj équilibré avec un excellent rapport qualité-prix. Hébergement confortable et accompagnement professionnel.",
+    image: "https://images.pexels.com/photos/8535194/pexels-photo-8535194.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€3,490",
+    duration: "14 jours",
+    features: [
+      "Hôtel 4* proche du Haram",
+      "Guide expérimenté",
+      "Tous les transferts",
+      "Repas quotidiens",
+      "Support médical",
+      "Kit du pèlerin inclus"
+    ],
+    type: 'hajj' as const
+  }
+];
+
+const omraPrograms = [
+  {
+    title: "Omra Ramadan 2024",
+    description: "Vivez l'Omra pendant le mois béni de Ramadan. Programme spécialement conçu pour profiter pleinement des dernières nuits sacrées.",
+    image: "https://images.pexels.com/photos/8535191/pexels-photo-8535191.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€1,890",
+    duration: "10 jours",
+    features: [
+      "Période des 10 dernières nuits",
+      "Hôtel proche Masjid al-Haram",
+      "Iftar quotidien inclus",
+      "Conférences spirituelles",
+      "Visite des lieux saints",
+      "Prières de Tarawih organisées"
+    ],
+    type: 'omra' as const
+  },
+  {
+    title: "Omra Classique",
+    description: "Programme Omra traditionnel avec un excellent accompagnement. Idéal pour une première expérience du pèlerinage.",
+    image: "https://images.pexels.com/photos/8367094/pexels-photo-8367094.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€1,290",
+    duration: "7 jours",
+    features: [
+      "Hôtel 3* centre Mecque",
+      "Guide francophone",
+      "Transferts inclus",
+      "Petit-déjeuner",
+      "Formation pré-départ",
+      "Assistance sur place"
+    ],
+    type: 'omra' as const
+  },
+  {
+    title: "Omra Luxury",
+    description: "Expérience Omra haut de gamme avec services premium. Pour ceux qui recherchent le confort absolu lors de leur pèlerinage.",
+    image: "https://images.pexels.com/photos/8535190/pexels-photo-8535190.jpeg?auto=compress&cs=tinysrgb&w=800",
+    price: "€2,890",
+    duration: "12 jours",
+    features: [
+      "Hôtel 5* vue sur Haram",
+      "Chambre avec terrasse",
+      "Buffet premium",
+      "Guide privé disponible",
+      "Spa et bien-être",
+      "Concierge personnel"
+    ],
+    type: 'omra' as const
+  }
+];
+---
+
+<Layout title="Programmes Hajj & Omra - Beauséjour Voyage" description="Découvrez nos programmes de Hajj et Omra 2024. Voyages spirituels organisés avec accompagnement professionnel et hébergements de qualité.">
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-deep-green via-islamic-green to-gold text-white overflow-hidden">
+    <div class="absolute inset-0 bg-black opacity-40"></div>
+    <div class="absolute inset-0">
+      <img 
+        src="https://images.pexels.com/photos/8367095/pexels-photo-8367095.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop" 
+        alt="Kaaba in Mecca" 
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+      <div class="max-w-4xl text-center mx-auto">
+        <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+          Programmes Hajj & Omra
+          <span class="block text-gold">2024</span>
+        </h1>
+        
+        <p class="text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed">
+          Accomplissez votre pèlerinage avec sérénité. Nos programmes incluent un accompagnement spirituel 
+          et tous les services nécessaires pour un voyage sacré inoubliable.
+        </p>
+
+        <!-- Arabic Text -->
+        <div class="arabic-text text-lg mb-8 text-gold font-arabic">
+          <p>﴿وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا﴾</p>
+          <p class="text-sm text-gray-300 mt-2">"Et c'est un devoir envers Allah pour les gens qui ont les moyens, d'aller faire le pèlerinage de la Maison"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hajj Programs -->
+  <section class="py-16 bg-warm-beige">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+          Programmes Hajj 2024
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Le Hajj, cinquième pilier de l'Islam, est un pèlerinage obligatoire que tout musulman doit accomplir au moins une fois dans sa vie s'il en a les moyens.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+        {hajjPrograms.map(program => (
+          <ProgramCard {...program} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Omra Programs -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+          Programmes Omra
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          L'Omra, le "petit pèlerinage", peut être accomplie à tout moment de l'année. Une expérience spirituelle profonde dans les lieux les plus sacrés de l'Islam.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {omraPrograms.map(program => (
+          <ProgramCard {...program} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Information Section -->
+  <section class="py-16 bg-gradient-to-r from-deep-green to-islamic-green text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold mb-6">
+            Pourquoi choisir Beauséjour Voyage ?
+          </h2>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-gold mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <div>
+                <h3 class="font-semibold mb-1">Accompagnement spirituel</h3>
+                <p class="text-gray-200">Guides francophones spécialisés dans l'accompagnement religieux</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-gold mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <div>
+                <h3 class="font-semibold mb-1">Hébergements de qualité</h3>
+                <p class="text-gray-200">Hôtels soigneusement sélectionnés près des lieux saints</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-gold mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <div>
+                <h3 class="font-semibold mb-1">Service tout inclus</h3>
+                <p class="text-gray-200">Visa, transport, hébergement, repas - nous nous occupons de tout</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-6 text-center">Demandez votre devis</h3>
+          <form class="space-y-4">
+            <div>
+              <input 
+                type="text" 
+                placeholder="Nom complet"
+                class="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold"
+              />
+            </div>
+            <div>
+              <input 
+                type="email" 
+                placeholder="Email"
+                class="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold"
+              />
+            </div>
+            <div>
+              <select class="w-full px-4 py-3 rounded-lg bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold">
+                <option value="">Type de programme</option>
+                <option value="hajj">Hajj</option>
+                <option value="omra">Omra</option>
+              </select>
+            </div>
+            <div>
+              <textarea 
+                placeholder="Message (optionnel)"
+                rows="3"
+                class="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold"
+              ></textarea>
+            </div>
+            <button 
+              type="submit"
+              class="w-full bg-gold hover:bg-yellow-600 text-deep-green font-semibold py-3 rounded-lg transition-colors duration-200"
+            >
+              Demander un devis gratuit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
