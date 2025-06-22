@@ -3,8 +3,7 @@
   import tailwind from "@astrojs/tailwind";
 
   export default defineConfig({
-    site: 'https://moufatmi.github.io',
-    base: '/bs.blog/',
+    site: 'https://blog.beausejour.com',
     output: 'static',
     integrations: [tailwind()],
     build: {
