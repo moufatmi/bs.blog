@@ -4,7 +4,7 @@ import tailwind from "@astrojs/tailwind";
 import icon from "astro-icon";
 
 export default defineConfig({
-  site: 'https://blog.beausejourvoyage.com',
+  site: 'https://beausejourvoyage.com',
   output: 'static',
   integrations: [tailwind(), icon({
     include: {
