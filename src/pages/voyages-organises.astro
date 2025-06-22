@@ -5,97 +5,49 @@ import ProgramCard from '../components/ProgramCard.astro';
 const voyagePrograms = [
   {
     title: "Istanbul & Cappadoce",
-    description: "Découvrez les merveilles de la Turquie : Istanbul historique et les paysages féériques de Cappadoce. Un voyage culturel inoubliable entre Orient et Occident.",
-    image: "https://images.pexels.com/photos/2387870/pexels-photo-2387870.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "€890",
+    description: "Un voyage de rêve entre l'effervescence d'Istanbul et la magie des paysages lunaires de la Cappadoce. Une aventure inoubliable.",
+    image: "https://images.pexels.com/photos/1053748/pexels-photo-1053748.jpeg",
+    price: "€1,250",
     duration: "8 jours",
     features: [
-      "Vols A/R inclus",
-      "Hôtels 4* centre-ville",
-      "Visites guidées quotidiennes",
-      "Vol en montgolfière Cappadoce",
-      "Tous les repas inclus",
-      "Guide francophone expérimenté"
+      "Vol direct inclus",
+      "Hôtels 4* en centre-ville",
+      "Visites guidées à Istanbul",
+      "Excursion en montgolfière",
+      "Pension complète",
+      "Accompagnateur francophone"
     ],
-    type: 'voyage' as const
+    type: 'voyage' as const,
   },
   {
-    title: "Andalousie Musulmane",
-    description: "Sur les traces de l'Andalousie musulmane : Cordoue, Séville, Grenade. Découvrez l'héritage islamique exceptionnel de l'Espagne.",
-    image: "https://images.pexels.com/photos/2387866/pexels-photo-2387866.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "€1,190",
+    title: "Trésors de l'Andalousie",
+    description: "Explorez l'héritage d'Al-Andalus. Un circuit culturel à travers Séville, Cordoue et Grenade pour découvrir des joyaux architecturaux.",
+    image: "https://images.pexels.com/photos/204272/pexels-photo-204272.jpeg",
+    price: "€980",
     duration: "7 jours",
     features: [
+      "Circuit en autocar de luxe",
       "Visite de l'Alhambra",
-      "Mosquée-Cathédrale de Cordoue",
-      "Alcazar de Séville",
+      "Guide spécialisé en histoire",
       "Hôtels de charme",
-      "Transport premium",
-      "Conférences historiques"
+      "Gastronomie andalouse",
+      "Entrées aux monuments incluses"
     ],
     type: 'voyage' as const
   },
   {
-    title: "Maroc Impérial",
-    description: "Circuit complet des villes impériales : Rabat, Fès, Meknès, Marrakech. Plongez dans la richesse culturelle du royaume chérifien.",
-    image: "https://images.pexels.com/photos/2387869/pexels-photo-2387869.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "€790",
-    duration: "8 jours",
+    title: "Dubaï: Futur & Tradition",
+    description: "Découvrez les contrastes de Dubaï, entre gratte-ciels futuristes et souks traditionnels. Une expérience unique et dépaysante.",
+    image: "https://images.pexels.com/photos/3787747/pexels-photo-3787747.jpeg",
+    price: "€1,450",
+    duration: "6 jours",
     features: [
-      "Les 4 villes impériales",
-      "Riads authentiques",
-      "Excursion désert Sahara",
-      "Nuit sous les étoiles",
-      "Cuisine marocaine",
-      "Artisanat local"
-    ],
-    type: 'voyage' as const
-  },
-  {
-    title: "Jordanie Biblique",
-    description: "Découvrez les merveilles de Jordanie : Pétra la rose, Wadi Rum, Amman. Un voyage entre histoire antique et paysages spectaculaires.",
-    image: "https://images.pexels.com/photos/2387870/pexels-photo-2387870.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "€1,490",
-    duration: "8 jours",
-    features: [
-      "Pétra site UNESCO",
-      "Désert Wadi Rum",
-      "Mer Morte",
-      "Château de Kerak",
-      "Campement bédouin",
-      "Guide archéologue"
-    ],
-    type: 'voyage' as const
-  },
-  {
-    title: "Egypte des Pharaons",
-    description: "Croisière sur le Nil et découverte des pyramides. L'Egypte antique révèle tous ses secrets dans ce voyage extraordinaire.",
-    image: "https://images.pexels.com/photos/2387866/pexels-photo-2387866.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "€1,290",
-    duration: "10 jours",
-    features: [
-      "Croisière Nil 5 jours",
-      "Pyramides de Gizeh",
-      "Vallée des Rois",
-      "Temple de Karnak",
-      "Musée du Caire",
-      "Egyptologue francophone"
-    ],
-    type: 'voyage' as const
-  },
-  {
-    title: "Ouzbékistan Route de la Soie",
-    description: "Samarkand, Boukhara, Khiva : les joyaux de la Route de la Soie. Un voyage fascinant au cœur de l'Asie centrale.",
-    image: "https://images.pexels.com/photos/2387869/pexels-photo-2387869.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "€1,690",
-    duration: "9 jours",
-    features: [
-      "Samarkand et Registan",
-      "Boukhara médiévale",
-      "Khiva fortifiée",
-      "Architecture islamique",
-      "Artisanat traditionnel",
-      "Hospitalité ouzbèke"
+      "Hôtel 5* avec vue",
+      "Safari dans le désert",
+      "Billet pour Burj Khalifa",
+      "Dîner-croisière sur la Marina",
+      "Shopping dans les Malls",
+      "Temps libre pour exploration"
     ],
     type: 'voyage' as const
   }
@@ -113,7 +65,7 @@ const destinations = [
 
 <Layout title="Voyages Organisés - Beauséjour Voyage" description="Découvrez nos voyages organisés vers les destinations culturelles et historiques du monde musulman. Circuits accompagnés avec guides experts.">
   <!-- Hero Section -->
-  <section class="relative bg-gradient-to-br from-deep-green via-islamic-green to-gold text-white overflow-hidden">
+  <section class="relative bg-gradient-to-br from-brand-teal via-brand-cyan to-gold text-white overflow-hidden">
     <div class="absolute inset-0 bg-black opacity-40"></div>
     <div class="absolute inset-0">
       <img 
@@ -138,13 +90,13 @@ const destinations = [
         <div class="flex flex-col sm:flex-row gap-4">
           <a 
             href="#programmes" 
-            class="bg-gold hover:bg-yellow-600 text-deep-green px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 text-center"
+            class="bg-gold hover:bg-yellow-600 text-brand-teal px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 text-center"
           >
             Voir tous nos voyages
           </a>
           <a 
             href="/contact" 
-            class="border-2 border-white hover:bg-white hover:text-deep-green text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 text-center"
+            class="border-2 border-white hover:bg-white hover:text-brand-teal text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 text-center"
           >
             Demander un devis
           </a>
@@ -173,7 +125,7 @@ const destinations = [
   <section id="programmes" class="py-16 bg-warm-beige">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4">
           Nos Destinations Phares
         </h2>
         <p class="text-xl text-gray-600 max-w-4xl mx-auto">
@@ -194,52 +146,42 @@ const destinations = [
   <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4">
           L'Excellence de nos Voyages Organisés
         </h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="text-center p-6">
-          <div class="w-16 h-16 bg-gradient-to-br from-gold to-deep-green rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
-            </svg>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="bg-brand-teal/10 text-brand-teal rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           </div>
-          <h3 class="text-xl font-bold text-deep-green mb-3">Guides Experts</h3>
-          <p class="text-gray-600">Accompagnement par des guides francophones spécialisés en histoire et culture islamique</p>
+          <h3 class="text-xl font-bold text-gray-800 mb-2">Guides Experts</h3>
+          <p class="text-gray-600">Nos guides francophones sont des experts passionnés de l'histoire et de la culture des régions visitées.</p>
         </div>
-
-        <div class="text-center p-6">
-          <div class="w-16 h-16 bg-gradient-to-br from-gold to-deep-green rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-              <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"></path>
-            </svg>
+        <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="bg-brand-teal/10 text-brand-teal rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 4h5m-5 4h5"></path></svg>
           </div>
-          <h3 class="text-xl font-bold text-deep-green mb-3">Tout Inclus</h3>
-          <p class="text-gray-600">Vols, hébergements, repas, visites et transferts - profitez sans vous soucier de rien</p>
+          <h3 class="text-xl font-bold text-gray-800 mb-2">Hôtels de Charme</h3>
+          <p class="text-gray-600">Nous sélectionnons des hébergements de qualité alliant confort moderne et authenticité locale.</p>
         </div>
-
-        <div class="text-center p-6">
-          <div class="w-16 h-16 bg-gradient-to-br from-gold to-deep-green rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-            </svg>
+        <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="bg-brand-teal/10 text-brand-teal rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
           </div>
-          <h3 class="text-xl font-bold text-deep-green mb-3">Groupes Limités</h3>
-          <p class="text-gray-600">Voyages en petits groupes pour une expérience plus authentique et personnalisée</p>
+          <h3 class="text-xl font-bold text-gray-800 mb-2">Itinéraires Optimisés</h3>
+          <p class="text-gray-600">Nos circuits sont conçus pour vous offrir une expérience riche et fluide, sans perte de temps.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- CTA Section -->
-  <section class="py-16 bg-gradient-to-r from-deep-green to-islamic-green text-white">
+  <section class="py-16 bg-gradient-to-r from-brand-teal to-brand-cyan text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl lg:text-4xl font-bold mb-6">
-        Prêt pour votre prochaine aventure ?
+        Prêt pour une Aventure Culturelle Inoubliable ?
       </h2>
       <p class="text-xl mb-8 text-gray-200">
         Contactez nos experts voyage pour créer votre circuit sur mesure ou réserver l'un de nos programmes.
@@ -247,13 +189,13 @@ const destinations = [
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a 
           href="/contact" 
-          class="bg-gold hover:bg-yellow-600 text-deep-green px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+          class="bg-gold hover:bg-yellow-600 text-brand-teal px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
         >
           Demander un devis sur mesure
         </a>
         <a 
           href="tel:+33123456789" 
-          class="border-2 border-white hover:bg-white hover:text-deep-green text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200"
+          class="border-2 border-white hover:bg-white hover:text-brand-teal text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200"
         >
           Parler à un conseiller
         </a>

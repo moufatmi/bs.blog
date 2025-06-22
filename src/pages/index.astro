@@ -1,12 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
-import BlogCard from '../components/BlogCard.astro';
+import Welcome from '../components/Welcome.astro';
 import ProgramCard from '../components/ProgramCard.astro';
+import BlogCard from '../components/BlogCard.astro';
 
 const featuredPrograms = [
   {
     title: "Hajj Premium 2024",
+    slug: "hajj-premium-2024",
     description: "Un pèlerinage complet avec hébergement 5 étoiles près du Haram. Accompagnement spirituel personnalisé et groupe restreint pour une expérience authentique.",
     image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
     price: "€4,990",
@@ -16,12 +18,14 @@ const featuredPrograms = [
       "Guide spirituel francophone",
       "Transport climatisé",
       "Repas halal inclus",
-      "Assistance 24h/7j"
+      "Assistance 24h/7j",
+      "Visite guidée des lieux saints"
     ],
-    type: 'hajj' as const
+    type: 'hajj' as const,
   },
-  {
+    {
     title: "Omra Ramadan 2024",
+    slug: "omra-ramadan-2024",
     description: "Vivez l'Omra pendant le mois béni de Ramadan. Programme spécialement conçu pour profiter pleinement des dernières nuits sacrées.",
     image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
     price: "€1,890",
@@ -31,24 +35,27 @@ const featuredPrograms = [
       "Hôtel proche Masjid al-Haram",
       "Iftar quotidien inclus",
       "Conférences spirituelles",
-      "Visite des lieux saints"
+      "Visite des lieux saints",
+      "Prières de Tarawih organisées"
     ],
     type: 'omra' as const
   },
   {
     title: "Istanbul & Cappadoce",
-    description: "Découvrez les merveilles de la Turquie : Istanbul historique et les paysages féériques de Cappadoce. Un voyage culturel inoubliable.",
-    image: "https://images.pexels.com/photos/2387870/pexels-photo-2387870.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: "€890",
+    slug: "istanbul-et-cappadoce",
+    description: "Un voyage de rêve entre l'effervescence d'Istanbul et la magie des paysages lunaires de la Cappadoce. Une aventure inoubliable.",
+    image: "https://images.pexels.com/photos/1053748/pexels-photo-1053748.jpeg",
+    price: "€1,250",
     duration: "8 jours",
     features: [
-      "Vols A/R inclus",
-      "Hôtels 4* centre-ville",
-      "Visites guidées",
-      "Vol en montgolfière",
-      "Tous les repas inclus"
+      "Vol direct inclus",
+      "Hôtels 4* en centre-ville",
+      "Visites guidées à Istanbul",
+      "Excursion en montgolfière",
+      "Pension complète",
+      "Accompagnateur francophone"
     ],
-    type: 'voyage' as const
+    type: 'voyage' as const,
   }
 ];
 
@@ -87,7 +94,7 @@ const latestPosts = [
   <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4">
           Nos Programmes Phares
         </h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -107,7 +114,7 @@ const latestPosts = [
   <section class="py-16 bg-warm-beige">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-3xl lg:text-4xl font-bold text-deep-green mb-4">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4">
           Derniers Articles du Blog
         </h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -124,7 +131,7 @@ const latestPosts = [
       <div class="text-center mt-12">
         <a 
           href="/blog" 
-          class="inline-flex items-center bg-gold hover:bg-yellow-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+          class="inline-flex items-center bg-brand-teal hover:opacity-90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
         >
           Voir tous les articles
           <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
@@ -136,7 +143,7 @@ const latestPosts = [
   </section>
 
   <!-- CTA Section -->
-  <section class="py-16 bg-gradient-to-r from-deep-green to-islamic-green text-white">
+  <section class="py-16 bg-gradient-to-r from-brand-teal to-brand-cyan text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl lg:text-4xl font-bold mb-6">
         Prêt à commencer votre voyage ?
@@ -147,13 +154,13 @@ const latestPosts = [
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a 
           href="/contact" 
-          class="bg-gold hover:bg-yellow-600 text-deep-green px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+          class="bg-gold hover:bg-yellow-600 text-brand-teal px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
         >
           Demander un devis gratuit
         </a>
         <a 
           href="tel:+212 6 99 92 22 29" 
-          class="border-2 border-white hover:bg-white hover:text-deep-green text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200"
+          class="border-2 border-white hover:bg-white hover:text-brand-teal text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200"
         >
           Appeler maintenant
         </a>

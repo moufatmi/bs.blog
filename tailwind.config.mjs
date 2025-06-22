@@ -5,9 +5,9 @@ export default {
     extend: {
       colors: {
         gold: '#D4AF37',
-        'deep-green': '#2D5016',
+        'brand-teal': '#1ba4ae',
+        'brand-cyan': '#22c5d4',
         cream: '#F5F5DC',
-        'islamic-green': '#009639',
         'warm-beige': '#F7F3E9',
       },
       fontFamily: {

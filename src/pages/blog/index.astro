@@ -56,14 +56,14 @@ const allPosts = [
 const categories = ["Tous", "Hajj", "Omra", "Voyage", "Spiritualité"];
 ---
 
-<Layout title="Blog - Beauséjour Voyage" description="Découvrez nos guides de voyage, conseils spirituels et articles sur le Hajj, l'Omra et les destinations culturelles.">
-  <!-- Hero Section -->
-  <section class="bg-gradient-to-br from-deep-green via-islamic-green to-gold text-white py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 class="text-4xl lg:text-5xl font-bold mb-6">
-        Blog Beauséjour Voyage
-      </h1>
-      <p class="text-xl text-gray-200 mb-8">
+<Layout 
+  title="Blog - Beauséjour Voyage" 
+  description="Le blog de Beauséjour Voyage. Retrouvez nos conseils, récits de voyage et guides sur le Hajj, la Omra et nos destinations culturelles."
+>
+  <section class="bg-gradient-to-br from-brand-teal via-brand-cyan to-gold text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl lg:text-5xl font-extrabold tracking-tight">Notre Blog</h1>
+      <p class="mt-4 text-xl text-gray-200 max-w-2xl mx-auto">
         Guides spirituels, conseils de voyage et découvertes culturelles pour enrichir vos expériences
       </p>
     </div>
@@ -87,7 +87,14 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage", "Spiritualité"];
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {allPosts.map(post => (
-          <BlogCard {...post} />
+          <BlogCard 
+            title={post.title}
+            excerpt={post.excerpt}
+            image={post.image}
+            date={post.date}
+            category={post.category}
+            slug={post.slug}
+          />
         ))}
       </div>
       
@@ -113,7 +120,7 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage", "Spiritualité"];
   </section>
 
   <!-- Newsletter -->
-  <section class="py-16 bg-deep-green text-white">
+  <section class="py-16 bg-brand-teal text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl font-bold mb-4">
         Restez informé de nos derniers articles
@@ -129,7 +136,7 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage", "Spiritualité"];
         />
         <button 
           type="submit"
-          class="bg-gold hover:bg-yellow-600 text-deep-green px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+          class="bg-gold hover:bg-yellow-600 text-brand-teal px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
         >
           S'abonner
         </button>
