@@ -7,9 +7,12 @@ export interface Props {
   duration: string;
   features: string[];
   type: 'hajj' | 'omra' | 'voyage';
+  pdfUrl?: string;
+  showContactButton?: boolean;
+  availabilityNote?: string;
 }
 
-const { title, description, image, price, duration, features, type } = Astro.props;
+const { title, description, image, price, duration, features, type, pdfUrl, showContactButton = true, availabilityNote } = Astro.props;
 
 const typeLabels = {
   hajj: 'Hajj',
@@ -57,13 +60,34 @@ const typeColors = {
   </div>
 
   <div class="p-6 bg-gray-50 border-t mt-auto">
-    <div class="flex justify-between items-center">
-      <div class="text-2xl font-bold text-brand-teal">
-        {price}
+    <div class="flex justify-between items-center gap-2">
+      <div>
+        <div class="text-2xl font-bold text-brand-teal">
+          {price}
+        </div>
+        {availabilityNote && (
+          <p class="text-xs text-gray-500 mt-1">{availabilityNote}</p>
+        )}
       </div>
-       <a href="/contact" class="bg-brand-teal hover:opacity-90 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">
-        Contactez-nous
-      </a>
+      <div class="flex items-center gap-2">
+        {pdfUrl && (
+          <a 
+            href={pdfUrl}
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors duration-200"
+            title="Télécharger le programme en PDF"
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <span>Télécharger PDF</span>
+          </a>
+        )}
+        {showContactButton && (
+          <a href="/contact" class="bg-brand-teal hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-center">
+            Contactez-nous
+          </a>
+        )}
+      </div>
     </div>
   </div>
 </div>

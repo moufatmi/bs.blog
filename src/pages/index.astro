@@ -22,6 +22,8 @@ const featuredPrograms = [
       "Visite guidée des lieux saints"
     ],
     type: 'hajj' as const,
+    pdfUrl: "/pdfs/hajj-premium-2024.pdf",
+    availabilityNote: "Valable jusqu'au Hajj prochain"
   },
     {
     title: "Omra Ramadan 2024",
@@ -38,7 +40,8 @@ const featuredPrograms = [
       "Visite des lieux saints",
       "Prières de Tarawih organisées"
     ],
-    type: 'omra' as const
+    type: 'omra' as const,
+    pdfUrl: "/pdfs/omra-ramadan-2024.pdf"
   },
   {
     title: "Istanbul & Cappadoce",
@@ -56,6 +59,7 @@ const featuredPrograms = [
       "Accompagnateur francophone"
     ],
     type: 'voyage' as const,
+    pdfUrl: "/pdfs/istanbul-cappadoce.pdf"
   }
 ];
 
@@ -104,7 +108,7 @@ const latestPosts = [
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {featuredPrograms.map(program => (
-          <ProgramCard {...program} />
+          <ProgramCard {...program} showContactButton={false} />
         ))}
       </div>
     </div>

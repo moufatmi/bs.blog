@@ -53,7 +53,7 @@ const allPosts = [
   }
 ];
 
-const categories = ["Tous", "Hajj", "Omra", "Voyage", "Spiritualité"];
+const categories = ["Tous", "Hajj", "Omra", "Voyage"];
 ---
 
 <Layout 
@@ -72,9 +72,12 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage", "Spiritualité"];
   <!-- Filters -->
   <section class="py-8 bg-white border-b">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-wrap justify-center gap-4">
-        {categories.map(category => (
-          <button class="px-6 py-2 rounded-full border-2 border-gold text-gold hover:bg-gold hover:text-white transition-all duration-200 font-medium">
+      <div id="filter-buttons" class="flex flex-wrap justify-center gap-4">
+        {categories.map((category, index) => (
+          <button 
+            class={`px-6 py-2 rounded-full border-2 border-gold font-medium transition-all duration-200 ${index === 0 ? 'bg-gold text-white' : 'text-gold hover:bg-gold hover:text-white'}`}
+            data-filter={category}
+          >
             {category}
           </button>
         ))}
@@ -85,16 +88,18 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage", "Spiritualité"];
   <!-- Blog Posts -->
   <section class="py-16 bg-warm-beige">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div id="blog-posts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {allPosts.map(post => (
-          <BlogCard 
-            title={post.title}
-            excerpt={post.excerpt}
-            image={post.image}
-            date={post.date}
-            category={post.category}
-            slug={post.slug}
-          />
+          <div class="blog-post" data-category={post.category}>
+            <BlogCard 
+              title={post.title}
+              excerpt={post.excerpt}
+              image={post.image}
+              date={post.date}
+              category={post.category}
+              slug={post.slug}
+            />
+          </div>
         ))}
       </div>
       
@@ -144,3 +149,39 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage", "Spiritualité"];
     </div>
   </section>
 </Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtonsContainer = document.getElementById('filter-buttons');
+    if (!filterButtonsContainer) return;
+
+    const blogPosts = document.querySelectorAll('.blog-post');
+
+    filterButtonsContainer.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.tagName !== 'BUTTON') return;
+
+      const filter = target.dataset.filter;
+
+      // Update button styles
+      filterButtonsContainer.querySelectorAll('button').forEach(button => {
+        button.classList.remove('bg-gold', 'text-white');
+        button.classList.add('text-gold', 'hover:bg-gold', 'hover:text-white');
+      });
+      target.classList.add('bg-gold', 'text-white');
+      target.classList.remove('text-gold', 'hover:bg-gold', 'hover:text-white');
+
+      // Filter posts
+      blogPosts.forEach(post => {
+        const postElement = post as HTMLElement;
+        const postCategory = postElement.dataset.category;
+        
+        if (filter === 'Tous' || filter === postCategory) {
+          postElement.style.display = '';
+        } else {
+          postElement.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
