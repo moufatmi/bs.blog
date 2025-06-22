@@ -27,10 +27,10 @@ const typeColors = {
 };
 ---
 
-<div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full">
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full dark:bg-gray-800 dark:shadow-lg dark:hover:shadow-gray-700/50">
   <div class="relative">
     <img src={image} alt={`Image for ${title}`} class="w-full h-56 object-cover" />
-    <div class="absolute top-4 right-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+    <div class="absolute top-4 right-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold dark:bg-gray-900/80 dark:text-gray-200">
       {duration}
     </div>
      <div class="absolute top-4 left-4">
@@ -41,12 +41,12 @@ const typeColors = {
   </div>
 
   <div class="p-6 flex-grow flex flex-col">
-    <h3 class="text-2xl font-bold text-brand-teal mb-3">{title}</h3>
-    <p class="text-gray-600 mb-6 flex-grow">{description}</p>
+    <h3 class="text-2xl font-bold text-brand-teal mb-3 dark:text-cyan-400">{title}</h3>
+    <p class="text-gray-600 mb-6 flex-grow dark:text-gray-300">{description}</p>
     
     <div>
-      <h4 class="font-bold text-gray-800 mb-3">Inclus dans ce programme :</h4>
-      <ul class="space-y-2 text-gray-600">
+      <h4 class="font-bold text-gray-800 mb-3 dark:text-gray-100">Inclus dans ce programme :</h4>
+      <ul class="space-y-2 text-gray-600 dark:text-gray-300">
         {features.slice(0, 5).map(feature => (
           <li class="flex items-center">
             <svg class="w-5 h-5 text-gold mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -59,14 +59,14 @@ const typeColors = {
     </div>
   </div>
 
-  <div class="p-6 bg-gray-50 border-t mt-auto">
+  <div class="p-6 bg-gray-50 border-t mt-auto dark:bg-gray-800/50 dark:border-gray-700">
     <div class="flex justify-between items-center gap-2">
       <div>
-        <div class="text-2xl font-bold text-brand-teal">
+        <div class="text-2xl font-bold text-brand-teal dark:text-cyan-400">
           {price}
         </div>
         {availabilityNote && (
-          <p class="text-xs text-gray-500 mt-1">{availabilityNote}</p>
+          <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">{availabilityNote}</p>
         )}
       </div>
       <div class="flex items-center gap-2">
@@ -75,7 +75,7 @@ const typeColors = {
             href={pdfUrl}
             target="_blank" 
             rel="noopener noreferrer"
-            class="inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors duration-200"
+            class="inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors duration-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             title="Télécharger le programme en PDF"
           >
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
@@ -83,7 +83,7 @@ const typeColors = {
           </a>
         )}
         {showContactButton && (
-          <a href="/contact" class="bg-brand-teal hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-center">
+          <a href="/contact" class="bg-brand-teal hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-center dark:bg-cyan-500 dark:hover:bg-cyan-600">
             Contactez-nous
           </a>
         )}

@@ -70,12 +70,12 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage"];
   </section>
 
   <!-- Filters -->
-  <section class="py-8 bg-white border-b">
+  <section class="py-8 bg-white border-b dark:bg-gray-900 dark:border-gray-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div id="filter-buttons" class="flex flex-wrap justify-center gap-4">
         {categories.map((category, index) => (
           <button 
-            class={`px-6 py-2 rounded-full border-2 border-gold font-medium transition-all duration-200 ${index === 0 ? 'bg-gold text-white' : 'text-gold hover:bg-gold hover:text-white'}`}
+            class={`px-6 py-2 rounded-full border-2 border-gold font-medium transition-all duration-200 ${index === 0 ? 'bg-gold text-white dark:bg-yellow-400 dark:text-gray-900' : 'text-gold hover:bg-gold hover:text-white dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900'}`}
             data-filter={category}
           >
             {category}
@@ -86,7 +86,7 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage"];
   </section>
 
   <!-- Blog Posts -->
-  <section class="py-16 bg-warm-beige">
+  <section class="py-16 bg-warm-beige dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div id="blog-posts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {allPosts.map(post => (
@@ -106,17 +106,17 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage"];
       <!-- Pagination -->
       <div class="flex justify-center mt-12">
         <nav class="flex space-x-2">
-          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors">
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
             Précédent
           </button>
-          <button class="px-4 py-2 bg-gold text-white rounded-lg">1</button>
-          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors">
+          <button class="px-4 py-2 bg-gold text-white rounded-lg dark:bg-yellow-400 dark:text-gray-900">1</button>
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
             2
           </button>
-          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors">
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
             3
           </button>
-          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors">
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
             Suivant
           </button>
         </nav>
@@ -137,11 +137,11 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage"];
         <input 
           type="email" 
           placeholder="Votre adresse email"
-          class="flex-1 px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-gold"
+          class="flex-1 px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-gold dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
         />
         <button 
           type="submit"
-          class="bg-gold hover:bg-yellow-600 text-brand-teal px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+          class="bg-gold hover:bg-yellow-600 text-brand-teal px-6 py-3 rounded-lg font-semibold transition-colors duration-200 dark:text-gray-900"
         >
           S'abonner
         </button>
@@ -165,11 +165,11 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage"];
 
       // Update button styles
       filterButtonsContainer.querySelectorAll('button').forEach(button => {
-        button.classList.remove('bg-gold', 'text-white');
-        button.classList.add('text-gold', 'hover:bg-gold', 'hover:text-white');
+        button.classList.remove('bg-gold', 'text-white', 'dark:bg-yellow-400', 'dark:text-gray-900');
+        button.classList.add('text-gold', 'hover:bg-gold', 'hover:text-white', 'dark:text-yellow-400', 'dark:border-yellow-400', 'dark:hover:bg-yellow-400', 'dark:hover:text-gray-900');
       });
-      target.classList.add('bg-gold', 'text-white');
-      target.classList.remove('text-gold', 'hover:bg-gold', 'hover:text-white');
+      target.classList.add('bg-gold', 'text-white', 'dark:bg-yellow-400', 'dark:text-gray-900');
+      target.classList.remove('text-gold', 'hover:bg-gold', 'hover:text-white', 'dark:text-yellow-400', 'dark:border-yellow-400', 'dark:hover:bg-yellow-400', 'dark:hover:text-gray-900');
 
       // Filter posts
       blogPosts.forEach(post => {
