@@ -4,91 +4,13 @@ import Hero from '../components/Hero.astro';
 import Welcome from '../components/Welcome.astro';
 import ProgramCard from '../components/ProgramCard.astro';
 import BlogCard from '../components/BlogCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-const featuredPrograms = [
-  {
-    title: "Hajj Premium 2024",
-    slug: "hajj-premium-2024",
-    description: "Un pèlerinage complet avec hébergement 5 étoiles près du Haram. Accompagnement spirituel personnalisé et groupe restreint pour une expérience authentique.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    price: "€4,990",
-    duration: "15 jours",
-    features: [
-      "Hébergement 5* face au Haram",
-      "Guide spirituel francophone",
-      "Transport climatisé",
-      "Repas halal inclus",
-      "Assistance 24h/7j",
-      "Visite guidée des lieux saints"
-    ],
-    type: 'hajj' as const,
-    pdfUrl: "/pdfs/hajj-premium-2024.pdf",
-    availabilityNote: "Valable jusqu'au Hajj prochain"
-  },
-    {
-    title: "Omra Ramadan 2024",
-    slug: "omra-ramadan-2024",
-    description: "Vivez l'Omra pendant le mois béni de Ramadan. Programme spécialement conçu pour profiter pleinement des dernières nuits sacrées.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    price: "€1,890",
-    duration: "10 jours",
-    features: [
-      "Période des 10 dernières nuits",
-      "Hôtel proche Masjid al-Haram",
-      "Iftar quotidien inclus",
-      "Conférences spirituelles",
-      "Visite des lieux saints",
-      "Prières de Tarawih organisées"
-    ],
-    type: 'omra' as const,
-    pdfUrl: "/pdfs/omra-ramadan-2024.pdf"
-  },
-  {
-    title: "Istanbul & Cappadoce",
-    slug: "istanbul-et-cappadoce",
-    description: "Un voyage de rêve entre l'effervescence d'Istanbul et la magie des paysages lunaires de la Cappadoce. Une aventure inoubliable.",
-    image: "https://images.pexels.com/photos/1053748/pexels-photo-1053748.jpeg",
-    price: "€1,250",
-    duration: "8 jours",
-    features: [
-      "Vol direct inclus",
-      "Hôtels 4* en centre-ville",
-      "Visites guidées à Istanbul",
-      "Excursion en montgolfière",
-      "Pension complète",
-      "Accompagnateur francophone"
-    ],
-    type: 'voyage' as const,
-    pdfUrl: "/pdfs/istanbul-cappadoce.pdf"
-  }
-];
+const featuredPrograms = await getCollection('programs', ({ id }: { id: string }) => {
+  return ['hajj-premium-2024.md', 'omra-ramadan-2024.md', 'istanbul-cappadoce.md'].includes(id);
+});
 
-const latestPosts = [
-  {
-    title: "Les étapes spirituelles du Hajj : Guide complet 2024",
-    excerpt: "Découvrez les rituels sacrés du Hajj, leur signification profonde et comment vous préparer spirituellement pour ce voyage unique.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    date: "15 janvier 2024",
-    category: "Hajj",
-    slug: "etapes-spirituelles-hajj-guide-2024"
-  },
-  {
-    title: "Omra : Comment bien se préparer physiquement et spirituellement",
-    excerpt: "Conseils pratiques pour préparer votre Omra : des invocations aux préparatifs matériels, tout ce qu'il faut savoir.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    date: "10 janvier 2024",
-    category: "Omra",
-    slug: "preparation-omra-conseils-pratiques"
-  },
-  {
-    title: "Istanbul : 10 lieux incontournables à visiter",
-    excerpt: "De Sainte-Sophie au Grand Bazar, découvrez les merveilles d'Istanbul qui font de cette ville un carrefour unique entre l'Orient et l'Occident.",
-    image: "https://images.pexels.com/photos/2387870/pexels-photo-2387870.jpeg?auto=compress&cs=tinysrgb&w=600",
-    date: "5 janvier 2024",
-    category: "Voyage",
-    slug: "istanbul-lieux-incontournables"
-  }
-];
+const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
 ---
 
 <Layout title="Beauséjour Voyage - Blog de voyages, Hajj et Omra">
@@ -107,8 +29,8 @@ const latestPosts = [
       </div>
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {featuredPrograms.map(program => (
-          <ProgramCard {...program} showContactButton={false} />
+        {featuredPrograms.map((program: CollectionEntry<'programs'>) => (
+          <ProgramCard {...program.data} showContactButton={false} />
         ))}
       </div>
     </div>
@@ -127,8 +49,15 @@ const latestPosts = [
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {latestPosts.map(post => (
-          <BlogCard {...post} />
+        {latestPosts.map((post: CollectionEntry<'blog'>) => (
+          <BlogCard 
+            title={post.data.title}
+            excerpt={post.data.excerpt}
+            image={post.data.image}
+            date={post.data.date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            category={post.data.category}
+            slug={post.slug}
+          />
         ))}
       </div>
       

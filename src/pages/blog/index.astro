@@ -1,57 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import BlogCard from '../../components/BlogCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-const allPosts = [
-  {
-    title: "Les étapes spirituelles du Hajj : Guide complet 2024",
-    excerpt: "Découvrez les rituels sacrés du Hajj, leur signification profonde et comment vous préparer spirituellement pour ce voyage unique. Un guide détaillé pour comprendre chaque étape.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    date: "15 janvier 2024",
-    category: "Hajj",
-    slug: "etapes-spirituelles-hajj-guide-2024"
-  },
-  {
-    title: "Omra : Comment bien se préparer physiquement et spirituellement",
-    excerpt: "Conseils pratiques pour préparer votre Omra : des invocations aux préparatifs matériels, tout ce qu'il faut savoir pour un pèlerinage réussi.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    date: "10 janvier 2024",
-    category: "Omra",
-    slug: "preparation-omra-conseils-pratiques"
-  },
-  {
-    title: "Istanbul : 10 lieux incontournables à visiter",
-    excerpt: "De Sainte-Sophie au Grand Bazar, découvrez les merveilles d'Istanbul qui font de cette ville un carrefour unique entre l'Orient et l'Occident.",
-    image: "https://images.pexels.com/photos/2387870/pexels-photo-2387870.jpeg?auto=compress&cs=tinysrgb&w=600",
-    date: "5 janvier 2024",
-    category: "Voyage",
-    slug: "istanbul-lieux-incontournables"
-  },
-  {
-    title: "Les bienfaits spirituels du voyage religieux",
-    excerpt: "Explorez comment les voyages religieux comme le Hajj et l'Omra transforment l'âme et renforcent la foi. Témoignages et réflexions spirituelles.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    date: "28 décembre 2023",
-    category: "Spiritualité",
-    slug: "bienfaits-spirituels-voyage-religieux"
-  },
-  {
-    title: "Cappadoce : Un voyage entre ciel et terre",
-    excerpt: "Découvrez les paysages lunaires de Cappadoce, ses cheminées de fée et l'expérience magique du vol en montgolfière au lever du soleil.",
-    image: "https://images.pexels.com/photos/2387870/pexels-photo-2387870.jpeg?auto=compress&cs=tinysrgb&w=600",
-    date: "20 décembre 2023",
-    category: "Voyage",
-    slug: "cappadoce-voyage-ciel-terre"
-  },
-  {
-    title: "Médine la Lumineuse : Guide du pèlerin",
-    excerpt: "Découvrez l'histoire sacrée de Médine, la ville du Prophète (PBSL), et les lieux saints à visiter lors de votre pèlerinage.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    date: "15 décembre 2023",
-    category: "Hajj",
-    slug: "medine-guide-pelerin"
-  }
-];
+const allPosts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const categories = ["Tous", "Hajj", "Omra", "Voyage"];
 ---
@@ -89,14 +41,14 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage"];
   <section class="py-16 bg-warm-beige dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div id="blog-posts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {allPosts.map(post => (
-          <div class="blog-post" data-category={post.category}>
+        {allPosts.map((post: CollectionEntry<'blog'>) => (
+          <div class="blog-post" data-category={post.data.category}>
             <BlogCard 
-              title={post.title}
-              excerpt={post.excerpt}
-              image={post.image}
-              date={post.date}
-              category={post.category}
+              title={post.data.title}
+              excerpt={post.data.excerpt}
+              image={post.data.image}
+              date={post.data.date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+              category={post.data.category}
               slug={post.slug}
             />
           </div>

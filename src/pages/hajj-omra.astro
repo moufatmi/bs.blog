@@ -1,97 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProgramCard from '../components/ProgramCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-const hajjPrograms = [
-  {
-    title: "Hajj Premium 2024",
-    description: "Un pèlerinage complet avec hébergement 5 étoiles près du Haram. Accompagnement spirituel personnalisé et groupe restreint pour une expérience authentique.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    price: "€4,990",
-    duration: "15 jours",
-    features: [
-      "Hébergement 5* face au Haram",
-      "Guide spirituel francophone",
-      "Transport climatisé",
-      "Repas halal inclus",
-      "Assistance 24h/7j",
-      "Visite guidée des lieux saints"
-    ],
-    type: 'hajj' as const,
-    pdfUrl: "/pdfs/hajj-premium-2024.pdf",
-    availabilityNote: "Valable jusqu'au Hajj prochain"
-  },
-  {
-    title: "Hajj Confort 2024",
-    description: "Programme Hajj équilibré avec un excellent rapport qualité-prix. Hébergement confortable et accompagnement professionnel.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    price: "€3,490",
-    duration: "14 jours",
-    features: [
-      "Hôtel 4* proche du Haram",
-      "Guide expérimenté",
-      "Tous les transferts",
-      "Repas quotidiens",
-      "Support médical",
-      "Kit du pèlerin inclus"
-    ],
-    type: 'hajj' as const,
-    pdfUrl: "/pdfs/hajj-confort-2024.pdf",
-    availabilityNote: "Valable jusqu'au Hajj prochain"
-  }
-];
-
-const omraPrograms = [
-  {
-    title: "Omra Ramadan 2024",
-    description: "Vivez l'Omra pendant le mois béni de Ramadan. Programme spécialement conçu pour profiter pleinement des dernières nuits sacrées.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    price: "€1,890",
-    duration: "10 jours",
-    features: [
-      "Période des 10 dernières nuits",
-      "Hôtel proche Masjid al-Haram",
-      "Iftar quotidien inclus",
-      "Conférences spirituelles",
-      "Visite des lieux saints",
-      "Prières de Tarawih organisées"
-    ],
-    type: 'omra' as const,
-    pdfUrl: "/pdfs/omra-ramadan-2024.pdf"
-  },
-  {
-    title: "Omra Classique",
-    description: "Programme Omra traditionnel avec un excellent accompagnement. Idéal pour une première expérience du pèlerinage.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    price: "€1,290",
-    duration: "7 jours",
-    features: [
-      "Hôtel 3* centre Mecque",
-      "Guide francophone",
-      "Transferts inclus",
-      "Petit-déjeuner",
-      "Formation pré-départ",
-      "Assistance sur place"
-    ],
-    type: 'omra' as const
-  },
-  {
-    title: "Omra Luxury",
-    description: "Expérience Omra haut de gamme avec services premium. Pour ceux qui recherchent le confort absolu lors de leur pèlerinage.",
-    image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg",
-    price: "€2,890",
-    duration: "12 jours",
-    features: [
-      "Hôtel 5* vue sur Haram",
-      "Chambre avec terrasse",
-      "Buffet premium",
-      "Guide privé disponible",
-      "Spa et bien-être",
-      "Concierge personnel"
-    ],
-    type: 'omra' as const
-  }
-];
+const allPrograms = await getCollection('programs');
+const hajjPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) => program.data.type === 'hajj');
+const omraPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) => program.data.type === 'omra');
 ---
 
 <Layout title="Programmes Hajj & Omra - Beauséjour Voyage" description="Découvrez nos programmes de Hajj et Omra 2024. Voyages spirituels organisés avec accompagnement professionnel et hébergements de qualité.">
@@ -140,8 +54,8 @@ const omraPrograms = [
       </div>
       
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-        {hajjPrograms.map(program => (
-          <ProgramCard {...program} />
+        {hajjPrograms.map((program: CollectionEntry<'programs'>) => (
+          <ProgramCard {...program.data} />
         ))}
       </div>
     </div>
@@ -160,8 +74,8 @@ const omraPrograms = [
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {omraPrograms.map(program => (
-          <ProgramCard {...program} />
+        {omraPrograms.map((program: CollectionEntry<'programs'>) => (
+          <ProgramCard {...program.data} />
         ))}
       </div>
     </div>

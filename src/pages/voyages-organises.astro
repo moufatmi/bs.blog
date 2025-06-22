@@ -1,60 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProgramCard from '../components/ProgramCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-const voyagePrograms = [
-  {
-    title: "Istanbul & Cappadoce",
-    description: "Un voyage de rêve entre l'effervescence d'Istanbul et la magie des paysages lunaires de la Cappadoce. Une aventure inoubliable.",
-    image: "https://images.pexels.com/photos/1053748/pexels-photo-1053748.jpeg",
-    price: "€1,250",
-    duration: "8 jours",
-    features: [
-      "Vol direct inclus",
-      "Hôtels 4* en centre-ville",
-      "Visites guidées à Istanbul",
-      "Excursion en montgolfière",
-      "Pension complète",
-      "Accompagnateur francophone"
-    ],
-    type: 'voyage' as const,
-    pdfUrl: "/pdfs/istanbul-cappadoce.pdf"
-  },
-  {
-    title: "Trésors de l'Andalousie",
-    description: "Explorez l'héritage d'Al-Andalus. Un circuit culturel à travers Séville, Cordoue et Grenade pour découvrir des joyaux architecturaux.",
-    image: "https://images.pexels.com/photos/204272/pexels-photo-204272.jpeg",
-    price: "€980",
-    duration: "7 jours",
-    features: [
-      "Circuit en autocar de luxe",
-      "Visite de l'Alhambra",
-      "Guide spécialisé en histoire",
-      "Hôtels de charme",
-      "Gastronomie andalouse",
-      "Entrées aux monuments incluses"
-    ],
-    type: 'voyage' as const,
-    pdfUrl: "/pdfs/andalousie.pdf"
-  },
-  {
-    title: "Dubaï: Futur & Tradition",
-    description: "Découvrez les contrastes de Dubaï, entre gratte-ciels futuristes et souks traditionnels. Une expérience unique et dépaysante.",
-    image: "https://images.pexels.com/photos/3787747/pexels-photo-3787747.jpeg",
-    price: "€1,450",
-    duration: "6 jours",
-    features: [
-      "Hôtel 5* avec vue",
-      "Safari dans le désert",
-      "Billet pour Burj Khalifa",
-      "Dîner-croisière sur la Marina",
-      "Shopping dans les Malls",
-      "Temps libre pour exploration"
-    ],
-    type: 'voyage' as const,
-    pdfUrl: "/pdfs/dubai.pdf"
-  }
-];
+const allPrograms = await getCollection('programs');
+const voyagePrograms = allPrograms.filter((p: CollectionEntry<'programs'>) => p.data.type === 'voyage');
 
 const destinations = [
   { name: "Turquie", count: 3 },
@@ -138,8 +88,8 @@ const destinations = [
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {voyagePrograms.map(program => (
-          <ProgramCard {...program} />
+        {voyagePrograms.map((program: CollectionEntry<'programs'>) => (
+          <ProgramCard {...program.data} />
         ))}
       </div>
     </div>
