@@ -1,5 +1,5 @@
 ---
-title: "Hajj Premium 2024"
+title: "الحج"
 description: "Un pèlerinage complet avec hébergement 5 étoiles près du Haram. Accompagnement spirituel personnalisé et groupe restreint pour une expérience authentique."
 image: "https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg"
 price: "€4,990"

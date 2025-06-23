@@ -1,5 +1,5 @@
 ---
-title: "Istanbul & Cappadoce"
+title: "إسطنبول"
 description: "Un voyage de rêve entre l'effervescence d'Istanbul et la magie des paysages lunaires de la Cappadoce. Une aventure inoubliable."
 image: "https://images.pexels.com/photos/1053748/pexels-photo-1053748.jpeg"
 price: "€1,250"
