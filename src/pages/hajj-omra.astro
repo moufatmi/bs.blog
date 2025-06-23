@@ -14,9 +14,9 @@ const omraPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) =
     <div class="absolute inset-0 bg-black opacity-40"></div>
     <div class="absolute inset-0">
       <img 
-        src="https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg" 
-        alt="La Kaaba" 
-        class="w-full h-full object-cover"
+        src="" 
+        alt="" 
+        class=""
       />
     </div>
 
@@ -41,26 +41,6 @@ const omraPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) =
     </div>
   </section>
 
-  <!-- Hajj Programs -->
-  <section class="py-16 bg-warm-beige dark:bg-gray-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400">
-          Programmes Hajj 2024
-        </h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300">
-          Le Hajj, cinquième pilier de l'Islam, est un pèlerinage obligatoire que tout musulman doit accomplir au moins une fois dans sa vie s'il en a les moyens.
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-        {hajjPrograms.map((program: CollectionEntry<'programs'>) => (
-          <ProgramCard {...program.data} />
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- Omra Programs -->
   <section class="py-16 bg-white dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,6 +55,25 @@ const omraPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) =
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {omraPrograms.map((program: CollectionEntry<'programs'>) => (
+          <ProgramCard {...program.data} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Hajj Programs -->
+  <section class="py-16 bg-warm-beige dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400">
+          Programmes Hajj 2024
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300">
+          Le Hajj, cinquième pilier de l'Islam, est un pèlerinage obligatoire que tout musulman doit accomplir au moins une fois dans sa vie s'il en a les moyens.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">        {hajjPrograms.map((program: CollectionEntry<'programs'>) => (
           <ProgramCard {...program.data} />
         ))}
       </div>

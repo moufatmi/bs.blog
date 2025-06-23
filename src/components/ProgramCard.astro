@@ -27,25 +27,17 @@ const typeColors = {
 };
 ---
 
-<div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full dark:bg-gray-800 dark:shadow-lg dark:hover:shadow-gray-700/50" x-data="{ showModal: false }">
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full dark:bg-gray-800 dark:shadow-lg dark:hover:shadow-gray-700/50">
   <div class="relative">
-    <img src={image} alt={`Image for ${title}`} class="w-full h-56 object-cover cursor-pointer" x-on:click="showModal = true" />
+    <img src={image} alt={`Image for ${title}`} class="w-full h-56 object-cover" />
     <div class="absolute top-4 right-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold dark:bg-gray-900/80 dark:text-gray-200">
       {duration}
     </div>
-     <div class="absolute top-4 left-4">
-      <span class={`px-3 py-1 rounded-full text-sm font-semibold ${typeColors[type]}`}>
+    <div class="absolute top-4 left-1/2 -translate-x-1/2">
+      <span class={`px-3 py-1 rounded-full text-sm font-semibold ${typeColors[type]}`}> 
         {typeLabels[type]}
       </span>
     </div>
-    <template x-if="showModal">
-      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
-        <div class="relative" @click.away="showModal = false">
-          <img src={image} alt={`Image for ${title}`} class="max-h-[90vh] max-w-[90vw] rounded-lg shadow-2xl border-4 border-white" x-on:click.stop />
-          <button class="absolute top-6 right-6 text-white text-3xl font-bold bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-80 transition" x-on:click="showModal = false" aria-label="Fermer">&times;</button>
-        </div>
-      </div>
-    </template>
   </div>
 
   <div class="p-6 flex-grow flex flex-col">
@@ -78,23 +70,18 @@ const typeColors = {
         )}
       </div>
       <div class="flex items-center gap-2">
-        {pdfUrl && (
-          <a 
-            href={pdfUrl}
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors duration-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-            title="Télécharger le programme en PDF"
-          >
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-            <span>Télécharger PDF</span>
-          </a>
-        )}
-        {showContactButton && (
-          <a href="/contact" class="bg-brand-teal hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-center dark:bg-cyan-500 dark:hover:bg-cyan-600">
-            Contactez-nous
-          </a>
-        )}
+        <a 
+          href={pdfUrl ? pdfUrl : "#"}
+          target={pdfUrl ? "_blank" : undefined}
+          rel={pdfUrl ? "noopener noreferrer" : undefined}
+          class={`inline-flex items-center bg-gray-200 ${pdfUrl ? "hover:bg-gray-300" : "opacity-50 cursor-not-allowed"} text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors duration-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600`}
+          title={pdfUrl ? "Télécharger le programme en PDF" : "PDF bientôt disponible"}
+          tabindex={pdfUrl ? undefined : -1}
+        >
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          <span>Télécharger PDF</span>
+        </a>
+       
       </div>
     </div>
   </div>
