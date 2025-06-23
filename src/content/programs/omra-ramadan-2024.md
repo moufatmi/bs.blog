@@ -12,5 +12,5 @@ features:
   - "Visite des lieux saints"
   - "Prières de Tarawih organisées"
 type: 'omra'
-pdfUrl: "/pdfs/omra-ramadan-2024.pdf"
+pdfUrl: "pdfs/omra-ramadan-2024.pdf"
 --- 
