@@ -2,15 +2,10 @@
 title: "إسطنبول"
 description: "Un voyage de rêve entre l'effervescence d'Istanbul et la magie des paysages lunaires de la Cappadoce. Une aventure inoubliable."
 image: "https://i.imgur.com/f92IKLrg.jpg"
-price: "€1,250"
-duration: "8 jours"
+price: "€-"
+duration: "-"
 features:
-  - "Vol direct inclus"
-  - "Hôtels 4* en centre-ville"
-  - "Visites guidées à Istanbul"
-  - "Excursion en montgolfière"
-  - "Pension complète"
-  - "Accompagnateur francophone"
+  - "قيد الإنجاز"
 type: 'voyage'
-pdfUrl: "/pdfs/istanbul-cappadoce.pdf"
+pdfUrl: "/"
 --- 
