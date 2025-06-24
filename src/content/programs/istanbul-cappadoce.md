@@ -1,11 +1,11 @@
 ---
-title: "إسطنبول"
-description: "Un voyage de rêve entre l'effervescence d'Istanbul et la magie des paysages lunaires de la Cappadoce. Une aventure inoubliable."
-image: "https://i.imgur.com/f92IKLrg.jpg"
-price: "€-"
-duration: "-"
+title: "عمرة مع رحلة إلى تركيا"
+description: "من 09 يوليوز إلى 28 يوليوز 2025 - عمرة عبر تركيا ، الإقامة في تركيا بفندق في وسط إسطنبول يبعد عن البحر ب 4 كلم، وبالقرب منه البازار الكبير أو السوق الكبير و الذي يعتبر من أكبر و أقدم الأسواق المغطاة في العالم"
+image: "https://i.imgur.com/cNJ0ykg.png"
+price: "15 000 درهم"
+duration: "20 يوم"
 features:
   - "قيد الإنجاز"
 type: 'voyage'
-pdfUrl: "/"
+pdfUrl: "https://drive.google.com/file/d/1KXSX3FDLL7U9T1rKsMvFAvExrr0RMeV6/view?usp=sharing"
 --- 
