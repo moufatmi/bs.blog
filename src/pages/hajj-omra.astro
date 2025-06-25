@@ -3,12 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import ProgramCard from '../components/ProgramCard.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-const allPrograms = await getCollection('programs');
-const hajjPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) => program.data.type === 'hajj');
-const omraPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) => program.data.type === 'omra');
+const hajjPrograms = await getCollection('hajj');
+const omraPrograms = await getCollection('omra');
 ---
 
-<Layout title="Programmes Hajj & Omra - Beauséjour Voyage" description="Découvrez nos programmes de Hajj et Omra 2024. Voyages spirituels organisés avec accompagnement professionnel et hébergements de qualité.">
+<Layout title="Programmes Hajj & Omra - Beauséjour Voyage" description="Découvrez nos programmes de Hajj et Omra 2025. Voyages spirituels organisés avec accompagnement professionnel et hébergements de qualité.">
   <!-- Hero Section -->
   <section class="relative bg-gradient-to-br from-brand-teal via-brand-cyan to-gold text-white overflow-hidden">
     <div class="absolute inset-0 bg-black opacity-40"></div>
@@ -24,7 +23,7 @@ const omraPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) =
       <div class="max-w-4xl text-center mx-auto">
         <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
           Programmes Hajj & Omra
-          <span class="block text-gold">2024</span>
+          <span class="block text-gold">2025</span>
         </h1>
         
         <p class="text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed">
@@ -54,7 +53,7 @@ const omraPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) =
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {omraPrograms.map((program: CollectionEntry<'programs'>) => (
+        {omraPrograms.map((program) => (
           <ProgramCard {...program.data} />
         ))}
       </div>
@@ -66,14 +65,15 @@ const omraPrograms = allPrograms.filter((program: CollectionEntry<'programs'>) =
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400">
-          Programmes Hajj 2024
+          Programmes Hajj 2025
         </h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300">
           Le Hajj, cinquième pilier de l'Islam, est un pèlerinage obligatoire que tout musulman doit accomplir au moins une fois dans sa vie s'il en a les moyens.
         </p>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">        {hajjPrograms.map((program: CollectionEntry<'programs'>) => (
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+        {hajjPrograms.map((program) => (
           <ProgramCard {...program.data} />
         ))}
       </div>

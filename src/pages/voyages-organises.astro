@@ -3,8 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import ProgramCard from '../components/ProgramCard.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-const allPrograms = await getCollection('programs');
-const voyagePrograms = allPrograms.filter((p: CollectionEntry<'programs'>) => p.data.type === 'voyage');
+const voyagePrograms = await getCollection('voyages');
 
 const destinations = [
   { name: "Turquie", count: 3 },
@@ -88,7 +87,7 @@ const destinations = [
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {voyagePrograms.map((program: CollectionEntry<'programs'>) => (
+        {voyagePrograms.map((program) => (
           <ProgramCard {...program.data} />
         ))}
       </div>

@@ -1,18 +1,29 @@
 import { defineCollection, z } from 'astro:content';
 
-const programsCollection = defineCollection({
+const programSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  image: z.string(),
+  price: z.string(),
+  duration: z.string(),
+  features: z.array(z.string()),
+  pdfUrl: z.string().optional(),
+  availabilityNote: z.string().optional(),
+});
+
+const hajjCollection = defineCollection({
   type: 'content',
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    image: z.string(),
-    price: z.string(),
-    duration: z.string(),
-    features: z.array(z.string()),
-    type: z.enum(['hajj', 'omra', 'voyage']),
-    pdfUrl: z.string().optional(),
-    availabilityNote: z.string().optional(),
-  }),
+  schema: programSchema,
+});
+
+const omraCollection = defineCollection({
+  type: 'content',
+  schema: programSchema,
+});
+
+const voyagesCollection = defineCollection({
+  type: 'content',
+  schema: programSchema,
 });
 
 const blogCollection = defineCollection({
@@ -27,6 +38,8 @@ const blogCollection = defineCollection({
 });
 
 export const collections = {
-  'programs': programsCollection,
+  'hajj': hajjCollection,
+  'omra': omraCollection,
+  'voyages': voyagesCollection,
   'blog': blogCollection,
 }; 

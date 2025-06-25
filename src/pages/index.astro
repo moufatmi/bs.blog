@@ -6,9 +6,12 @@ import ProgramCard from '../components/ProgramCard.astro';
 import BlogCard from '../components/BlogCard.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-const featuredPrograms = await getCollection('programs', ({ id }: { id: string }) => {
-  return ['istanbul-cappadoce.md', 'عمرة غشت.md',/ 'Haj-2026.md'/ ].includes(id);
-});
+const featuredProgramIds = ['إسطنبول-غشت.md', 'عمرة-غشت.md', 'Haj-2026.md'];
+const hajjPrograms = await getCollection('hajj');
+const omraPrograms = await getCollection('omra');
+const voyagePrograms = await getCollection('voyages');
+const allPrograms = [...hajjPrograms, ...omraPrograms, ...voyagePrograms];
+const featuredPrograms = allPrograms.filter(program => featuredProgramIds.includes(program.id));
 
 const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
 ---
@@ -29,7 +32,7 @@ const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog
       </div>
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {featuredPrograms.map((program: CollectionEntry<'programs'>) => (
+        {featuredPrograms.map((program) => (
           <ProgramCard {...program.data} showContactButton={false} />
         ))}
       </div>
