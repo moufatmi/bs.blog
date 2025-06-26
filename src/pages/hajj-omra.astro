@@ -2,62 +2,19 @@
 import Layout from '../layouts/Layout.astro';
 import ProgramCard from '../components/ProgramCard.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
+import Hero from '../components/Hero.astro';
+import heroImage from '../assets/pics/3.png';
 
 const hajjPrograms = await getCollection('hajj');
 const omraPrograms = await getCollection('omra');
 ---
 
-<Layout title="Programmes Hajj & Omra - Beauséjour Voyage" description="Découvrez nos programmes de Hajj et Omra 2025. Voyages spirituels organisés avec accompagnement professionnel et hébergements de qualité.">
-  <section class="relative bg-gradient-to-br from-brand-teal via-brand-teal to-cyan-700 text-white overflow-hidden">
-    <div class="absolute inset-0 bg-black opacity-30"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
-
-    <!-- Background Image -->
-    <div class="absolute inset-0">
-      <img 
-        src="https://i.imgur.com/xnpAB6g.png"  
-        alt="Beausejour Voyage hero banner" 
-        class="w-full h-auto"
-      />
-    </div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-      <div class="max-w-3xl">
-        <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-          رحلتك الروحية
-          <span class="block text-gold">تبدأ من هنا </span>
-        </h1>
-        
-        <p class="text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed">
-          إستكشف برامجنا المخصصة للحج والعمرة, و بأرخص الأسعار
-        </p>
-
-        <!-- Arabic Text -->
-        <div class="arabic-text text-lg mb-8 text-gold font-arabic mr-12">
-          <p>﴿وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا﴾</p>
-          <p class="text-sm text-gray-300 mt-2"></p>
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a 
-            href="/hajj-omra" 
-            class="bg-gold hover:bg-yellow-600 text-deep-green px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 text-center"
-          >
-            Voir nos programmes Hajj & Omra
-          </a>
-          <a 
-            href="/voyages-organises" 
-            class="border-2 border-white hover:bg-white hover:text-deep-green text-white px-8 py-4 rounded-lg font-semibold text-white transition-all duration-300 text-center"
-          >
-            Voyages Organisés
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Decorative Elements -->
-    <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-warm-beige to-transparent"></div>
-  </section>
+<Layout title="Hajj & Omra | B&S Travel">
+    <Hero
+        img={heroImage}
+        title="Hajj & Omra"
+        desc="Découvrez nos programmes Hajj et Omra, conçus pour vous offrir une expérience spirituelle inoubliable. Nous nous occupons de tous les détails pour que vous puissiez vous concentrer sur l'essentiel."
+    />
 
   <!-- Omra Programs -->
   <section class="py-16 bg-white dark:bg-gray-900">
