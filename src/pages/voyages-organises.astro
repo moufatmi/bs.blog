@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import ProgramCard from '../components/ProgramCard.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import heroImage from '../assets/sliders/3.png';
 
 const voyagePrograms = await getCollection('voyages');
 
@@ -17,43 +19,19 @@ const destinations = [
 
 <Layout title="Voyages Organisés - Beauséjour Voyage" description="Découvrez nos voyages organisés vers les destinations culturelles et historiques du monde musulman. Circuits accompagnés avec guides experts.">
   <!-- Hero Section -->
-  <section class="relative bg-gradient-to-br from-brand-teal via-brand-cyan to-gold text-white overflow-hidden">
+  <section class="relative bg-gradient-to-br from-brand-teal via-brand-cyan to-gold text-white overflow-hidden h-[60vh] md:h-[70vh] lg:h-[85vh]">
     <div class="absolute inset-0 bg-black opacity-40"></div>
     <div class="absolute inset-0">
-      <img 
-        src="https://images.pexels.com/photos/2387870/pexels-photo-2387870.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop" 
-        alt="Istanbul Turkey" 
+      <Image 
+        src={heroImage}
+        alt="A grand mosque under a clear sky" 
         class="w-full h-full object-cover"
+        quality="max"
       />
     </div>
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-      <div class="max-w-4xl">
-        <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-          Voyages Organisés
-          <span class="block text-gold">Culturels & Historiques</span>
-        </h1>
-        
-        <p class="text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed">
-          Partez à la découverte des plus belles destinations du monde musulman. 
-          Circuits accompagnés avec guides experts pour une immersion culturelle authentique.
-        </p>
-
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a 
-            href="#programmes" 
-            class="bg-gold hover:bg-yellow-600 text-brand-teal px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 text-center"
-          >
-            Voir tous nos voyages
-          </a>
-          <a 
-            href="/contact" 
-            class="border-2 border-white hover:bg-white hover:text-brand-teal text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 text-center"
-          >
-            Demander un devis
-          </a>
-        </div>
-      </div>
+      <!-- Text and buttons removed -->
     </div>
   </section>
 

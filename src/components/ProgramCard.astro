@@ -6,7 +6,7 @@ export interface Props {
   price: string;
   duration: string;
   features: string[];
-  type: 'hajj' | 'omra' | 'voyage';
+  type?: 'hajj' | 'omra' | 'voyage';
   pdfUrl?: string;
   showContactButton?: boolean;
   availabilityNote?: string;
@@ -33,11 +33,13 @@ const typeColors = {
     <div class="absolute top-4 right-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold dark:bg-gray-900/80 dark:text-gray-200">
       {duration}
     </div>
-    <div class="absolute top-4 left-1/2 -translate-x-1/2">
-      <span class={`px-3 py-1 rounded-full text-sm font-semibold ${typeColors[type]}`}>
-        {typeLabels[type]}
-      </span>
-    </div>
+    {type && (
+      <div class="absolute top-4 left-1/2 -translate-x-1/2">
+        <span class={`px-3 py-1 rounded-full text-sm font-semibold ${typeColors[type]}`}>
+          {typeLabels[type]}
+        </span>
+      </div>
+    )}
   </div>
 
   <div class="p-6 flex-grow flex flex-col">

@@ -4,14 +4,14 @@ import sliderImg2 from '../assets/sliders/2.png';
 import sliderImg3 from '../assets/sliders/3.png';
 
 const images = [
-  { src: sliderImg2, alt: 'A serene view of a holy site for pilgrimage.' },
   { src: sliderImg3, alt: 'Pilgrims gathered for a religious ceremony.' },
+  { src: sliderImg2, alt: 'A serene view of a holy site for pilgrimage.' },
 ];
 ---
 <section 
   x-data="{ activeSlide: 0, slideCount: 2 }" 
   x-init="() => { setInterval(() => { activeSlide = (activeSlide + 1) % slideCount }, 7000) }"
-  class="relative h-[60vh] md:h-[70vh] lg:h-[85vh] overflow-hidden"
+  class="relative h-[50vh] md:h-[70vh] lg:h-[85vh] overflow-hidden"
 >
   <!-- <div class="absolute inset-0 bg-black opacity-30 z-10"></div> -->
 
