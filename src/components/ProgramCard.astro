@@ -34,7 +34,7 @@ const typeColors = {
       {duration}
     </div>
     <div class="absolute top-4 left-1/2 -translate-x-1/2">
-      <span class={`px-3 py-1 rounded-full text-sm font-semibold ${typeColors[type]}`}> 
+      <span class={`px-3 py-1 rounded-full text-sm font-semibold ${typeColors[type]}`}>
         {typeLabels[type]}
       </span>
     </div>
@@ -70,17 +70,17 @@ const typeColors = {
         )}
       </div>
       <div class="flex items-center gap-2">
-        <a 
+          <a 
           href={pdfUrl ? pdfUrl : "#"}
           target={pdfUrl ? "_blank" : undefined}
           rel={pdfUrl ? "noopener noreferrer" : undefined}
           class={`inline-flex items-center bg-gray-200 ${pdfUrl ? "hover:bg-gray-300" : "opacity-50 cursor-not-allowed"} text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors duration-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600`}
           title={pdfUrl ? "Télécharger le programme en PDF" : "PDF bientôt disponible"}
           tabindex={pdfUrl ? undefined : -1}
-        >
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-          <span>Télécharger PDF</span>
-        </a>
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <span>Télécharger PDF</span>
+          </a>
        
       </div>
     </div>

@@ -1,53 +1,72 @@
 ---
+import { Image } from 'astro:assets';
+import sliderImg2 from '../assets/sliders/2.png';
+import sliderImg3 from '../assets/sliders/3.png';
+
+const images = [
+  { src: sliderImg2, alt: 'A serene view of a holy site for pilgrimage.' },
+  { src: sliderImg3, alt: 'Pilgrims gathered for a religious ceremony.' },
+];
 ---
+<section 
+  x-data="{ activeSlide: 0, slideCount: 2 }" 
+  x-init="() => { setInterval(() => { activeSlide = (activeSlide + 1) % slideCount }, 7000) }"
+  class="relative h-[60vh] md:h-[70vh] lg:h-[85vh] overflow-hidden"
+>
+  <!-- <div class="absolute inset-0 bg-black opacity-30 z-10"></div> -->
 
-<section class="relative bg-gradient-to-br from-brand-teal via-brand-teal to-cyan-700 text-white overflow-hidden">
-  <div class="absolute inset-0 bg-black opacity-30"></div>
-  <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
-
-  <!-- Background Image -->
-  <div class="absolute inset-0">
-    <img 
-      src="https://i.imgur.com/8ELnPn6.png"  
-      alt="Beausejour Voyage hero banner" 
-      class="w-full h-auto"
-    />
-  </div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-    <div class="max-w-3xl">
-      <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-        رحلتك الروحية
-        <span class="block text-gold">تبدأ من هنا </span>
-      </h1>
-      
-      <p class="text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed">
-        إستكشف برامجنا المخصصة للحج والعمرة, و بأرخص الأسعار
-      </p>
-
-      <!-- Arabic Text -->
-      <div class="arabic-text text-lg mb-8 text-gold font-arabic mr-12">
-        <p>﴿وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا﴾</p>
-        <p class="text-sm text-gray-300 mt-2"></p>
-      </div>
-
-      <div class="flex flex-col sm:flex-row gap-4">
-        <a 
-          href="/hajj-omra" 
-          class="bg-gold hover:bg-yellow-600 text-deep-green px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 text-center"
-        >
-          Voir nos programmes Hajj & Omra
-        </a>
-        <a 
-          href="/voyages-organises" 
-          class="border-2 border-white hover:bg-white hover:text-deep-green text-white px-8 py-4 rounded-lg font-semibold text-white transition-all duration-300 text-center"
-        >
-          Voyages Organisés
-        </a>
-      </div>
+  {images.map((image, index) => (
+    <div 
+      x-show={`activeSlide === ${index}`}
+      x-transition:enter="transition-opacity ease-in-out duration-1000"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition-opacity ease-in-out duration-1000"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      class="absolute inset-0 w-full h-full"
+    >
+      <Image 
+        src={image.src}
+        alt={image.alt}
+        class="w-full h-full object-cover object-center"
+        loading="eager"
+        quality="max"
+      />
     </div>
+  ))}
+
+  <!-- Navigation Dots -->
+  <div class="absolute bottom-5 z-20 w-full flex justify-center items-center space-x-3">
+    {images.map((_, index) => (
+      <button
+        type="button"
+        @click={`activeSlide = ${index}`}
+        class="w-3 h-3 rounded-full transition-colors duration-300"
+        class:list={[
+          `group`,
+          { 'bg-black': `activeSlide === ${index}`, 'bg-black/50 hover:bg-black': `activeSlide !== ${index}` }
+        ]}
+        aria-label={`Go to slide ${index + 1}`}
+      ></button>
+    ))}
   </div>
 
-  <!-- Decorative Elements -->
-  <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-warm-beige to-transparent"></div>
+  <!-- <div class="relative z-20 flex flex-col items-center justify-center h-full text-center text-white p-4">
+    <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-4 text-shadow">
+      Votre Voyage Spirituel Commence Ici
+    </h1>
+    <p class="text-lg md:text-2xl max-w-3xl text-shadow-md">
+        Découvrez nos destinations et accomplissez votre pèlerinage avec sérénité.
+    </p>
+  </div> -->
 </section>
+
+<style>
+  /* .text-shadow {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  }
+  .text-shadow-md {
+    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
+  } */
+</style>

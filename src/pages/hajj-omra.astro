@@ -8,36 +8,55 @@ const omraPrograms = await getCollection('omra');
 ---
 
 <Layout title="Programmes Hajj & Omra - Beauséjour Voyage" description="Découvrez nos programmes de Hajj et Omra 2025. Voyages spirituels organisés avec accompagnement professionnel et hébergements de qualité.">
-  <!-- Hero Section -->
-  <section class="relative bg-gradient-to-br from-brand-teal via-brand-cyan to-gold text-white overflow-hidden">
-    <div class="absolute inset-0 bg-black opacity-40"></div>
+  <section class="relative bg-gradient-to-br from-brand-teal via-brand-teal to-cyan-700 text-white overflow-hidden">
+    <div class="absolute inset-0 bg-black opacity-30"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
+
+    <!-- Background Image -->
     <div class="absolute inset-0">
       <img 
-        src="" 
-        alt="" 
-        class=""
+        src="https://i.imgur.com/xnpAB6g.png"  
+        alt="Beausejour Voyage hero banner" 
+        class="w-full h-auto"
       />
     </div>
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-      <div class="max-w-4xl text-center mx-auto">
+      <div class="max-w-3xl">
         <h1 class="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-          Programmes Hajj & Omra
-          <span class="block text-gold">2025</span>
+          رحلتك الروحية
+          <span class="block text-gold">تبدأ من هنا </span>
         </h1>
         
         <p class="text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed">
-          Accomplissez votre pèlerinage avec sérénité. Nos programmes incluent un accompagnement spirituel 
-          et tous les services nécessaires pour un voyage sacré inoubliable.
+          إستكشف برامجنا المخصصة للحج والعمرة, و بأرخص الأسعار
         </p>
 
         <!-- Arabic Text -->
-        <div class="arabic-text text-lg mb-8 text-gold font-arabic mr-8">
+        <div class="arabic-text text-lg mb-8 text-gold font-arabic mr-12">
           <p>﴿وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا﴾</p>
-          <p class="text-sm text-gray-300 mt-2">"Et c'est un devoir envers Allah pour les gens qui ont les moyens, d'aller faire le pèlerinage de la Maison"</p>
+          <p class="text-sm text-gray-300 mt-2"></p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a 
+            href="/hajj-omra" 
+            class="bg-gold hover:bg-yellow-600 text-deep-green px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 text-center"
+          >
+            Voir nos programmes Hajj & Omra
+          </a>
+          <a 
+            href="/voyages-organises" 
+            class="border-2 border-white hover:bg-white hover:text-deep-green text-white px-8 py-4 rounded-lg font-semibold text-white transition-all duration-300 text-center"
+          >
+            Voyages Organisés
+          </a>
         </div>
       </div>
     </div>
+
+    <!-- Decorative Elements -->
+    <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-warm-beige to-transparent"></div>
   </section>
 
   <!-- Omra Programs -->
