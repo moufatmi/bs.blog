@@ -12,6 +12,7 @@
     "update": "git add . && git commit -m 'update' && git push && npm run build && npm run deploy"
   },
   "dependencies": {
+    "@astrojs/partytown": "^2.1.4",
     "@astrojs/tailwind": "^5.1.2",
     "alpinejs": "^3.14.9",
     "astro": "^5.2.5",
