@@ -8,12 +8,6 @@ export default defineConfig({
   base: '/',
   output: 'static',
   build: {
-    inlineStylesheets: 'never',
-    assets: '_astro'
-  },
-  vite: {
-    build: {
-      assetsInlineLimit: 0
-    }
+    inlineStylesheets: 'never'
   }
 });
