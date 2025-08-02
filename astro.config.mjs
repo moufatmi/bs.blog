@@ -5,7 +5,6 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [tailwind()],
   site: 'https://beausejourvoyage.com',
-  base: '/',
   output: 'static',
   build: {
     inlineStylesheets: 'never'
