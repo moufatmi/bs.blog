@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+const allPosts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const categories = ["Tous", "Hajj", "Omra", "Voyage"];
+---
+
+<Layout 
+  title="Blog - Beauséjour Voyage" 
+  description="Le blog de Beauséjour Voyage. Retrouvez nos conseils, récits de voyage et guides sur le Hajj, la Omra et nos destinations culturelles."
+>
+  <section class="bg-gradient-to-br from-brand-teal via-brand-cyan to-gold text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl lg:text-5xl font-extrabold tracking-tight">Notre Blog</h1>
+      <p class="mt-4 text-xl text-gray-200 max-w-2xl mx-auto">
+        Guides spirituels, conseils de voyage et découvertes culturelles pour enrichir vos expériences
+      </p>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="py-8 bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="filter-buttons" class="flex flex-wrap justify-center gap-4">
+        {categories.map((category, index) => (
+          <button 
+            class={`px-6 py-2 rounded-full border-2 border-gold font-medium transition-all duration-200 ${index === 0 ? 'bg-gold text-white dark:bg-yellow-400 dark:text-gray-900' : 'text-gold hover:bg-gold hover:text-white dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900'}`}
+            data-filter={category}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Posts -->
+  <section class="py-16 bg-warm-beige dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="blog-posts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {allPosts.map((post: CollectionEntry<'blog'>) => (
+          <div class="blog-post" data-category={post.data.category}>
+            <BlogCard 
+              title={post.data.title}
+              excerpt={post.data.excerpt}
+              image={post.data.image}
+              date={post.data.date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+              category={post.data.category}
+              slug={post.slug}
+            />
+          </div>
+        ))}
+      </div>
+      
+      <!-- Pagination -->
+      <div class="flex justify-center mt-12">
+        <nav class="flex space-x-2">
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
+            Précédent
+          </button>
+          <button class="px-4 py-2 bg-gold text-white rounded-lg dark:bg-yellow-400 dark:text-gray-900">1</button>
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
+            2
+          </button>
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
+            3
+          </button>
+          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
+            Suivant
+          </button>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="py-16 bg-brand-teal text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold mb-4">
+        Restez informé de nos derniers articles
+      </h2>
+      <p class="text-xl text-gray-200 mb-8">
+        Recevez nos guides spirituels et conseils de voyage directement dans votre boîte mail
+      </p>
+      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+        <input 
+          type="email" 
+          placeholder="Votre adresse email"
+          class="flex-1 px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-gold dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
+        />
+        <button 
+          type="submit"
+          class="bg-gold hover:bg-yellow-600 text-brand-teal px-6 py-3 rounded-lg font-semibold transition-colors duration-200 dark:text-gray-900"
+        >
+          S'abonner
+        </button>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtonsContainer = document.getElementById('filter-buttons');
+    if (!filterButtonsContainer) return;
+
+    const blogPosts = document.querySelectorAll('.blog-post');
+
+    filterButtonsContainer.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.tagName !== 'BUTTON') return;
+
+      const filter = target.dataset.filter;
+
+      // Update button styles
+      filterButtonsContainer.querySelectorAll('button').forEach(button => {
+        button.classList.remove('bg-gold', 'text-white', 'dark:bg-yellow-400', 'dark:text-gray-900');
+        button.classList.add('text-gold', 'hover:bg-gold', 'hover:text-white', 'dark:text-yellow-400', 'dark:border-yellow-400', 'dark:hover:bg-yellow-400', 'dark:hover:text-gray-900');
+      });
+      target.classList.add('bg-gold', 'text-white', 'dark:bg-yellow-400', 'dark:text-gray-900');
+      target.classList.remove('text-gold', 'hover:bg-gold', 'hover:text-white', 'dark:text-yellow-400', 'dark:border-yellow-400', 'dark:hover:bg-yellow-400', 'dark:hover:text-gray-900');
+
+      // Filter posts
+      blogPosts.forEach(post => {
+        const postElement = post as HTMLElement;
+        const postCategory = postElement.dataset.category;
+        
+        if (filter === 'Tous' || filter === postCategory) {
+          postElement.style.display = '';
+        } else {
+          postElement.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

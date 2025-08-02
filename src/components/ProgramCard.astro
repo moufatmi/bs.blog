@@ -1,0 +1,90 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  image: string;
+  price: string;
+  duration: string;
+  features: string[];
+  type?: 'hajj' | 'omra' | 'voyage';
+  pdfUrl?: string;
+  showContactButton?: boolean;
+  availabilityNote?: string;
+}
+
+const { title, description, image, price, duration, features, type, pdfUrl, showContactButton = true, availabilityNote } = Astro.props;
+
+const typeLabels = {
+  hajj: 'Hajj',
+  omra: 'Omra',
+  voyage: 'Voyage'
+};
+
+const typeColors = {
+  hajj: 'bg-red-500 text-white',
+  omra: 'bg-blue-500 text-white',
+  voyage: 'bg-green-500 text-white'
+};
+---
+
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full dark:bg-gray-800 dark:shadow-lg dark:hover:shadow-gray-700/50">
+  <div class="relative">
+    <img src={image} alt={`Image for ${title}`} class="w-full h-56 object-cover" />
+    <div class="absolute top-4 right-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold dark:bg-gray-900/80 dark:text-gray-200">
+      {duration}
+    </div>
+    {type && (
+      <div class="absolute top-4 left-1/2 -translate-x-1/2">
+      <span class={`px-3 py-1 rounded-full text-sm font-semibold ${typeColors[type]}`}>
+        {typeLabels[type]}
+      </span>
+    </div>
+    )}
+  </div>
+
+  <div class="p-6 flex-grow flex flex-col">
+    <h3 class="text-2xl font-bold text-brand-teal mb-3 dark:text-cyan-400">{title}</h3>
+    <p class="text-gray-600 mb-6 flex-grow dark:text-gray-300">{description}</p>
+    
+    <div>
+      <h4 class="font-bold text-gray-800 mb-3 dark:text-gray-100">Inclus dans ce programme :</h4>
+      <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+        {features.slice(0, 5).map(feature => (
+          <li class="flex items-center">
+            <svg class="w-5 h-5 text-gold mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="p-6 bg-gray-50 border-t mt-auto dark:bg-gray-800/50 dark:border-gray-700">
+    <div class="flex justify-between items-center gap-2">
+      <div>
+        <div class="text-2xl font-bold text-brand-teal dark:text-cyan-400">
+          {price}
+        </div>
+        {availabilityNote && (
+          <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">{availabilityNote}</p>
+        )}
+      </div>
+      <div class="flex items-center gap-2">
+          <a 
+          href={pdfUrl ? pdfUrl : "#"}
+          target={pdfUrl ? "_blank" : undefined}
+          rel={pdfUrl ? "noopener noreferrer" : undefined}
+          class={`inline-flex items-center bg-gray-200 ${pdfUrl ? "hover:bg-gray-300" : "opacity-50 cursor-not-allowed"} text-gray-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors duration-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600`}
+          title={pdfUrl ? "Télécharger le programme en PDF" : "PDF bientôt disponible"}
+          tabindex={pdfUrl ? undefined : -1}
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <span>Télécharger PDF</span>
+          </a>
+       
+      </div>
+    </div>
+  </div>
+</div>

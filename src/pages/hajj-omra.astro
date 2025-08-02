@@ -1,0 +1,166 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProgramCard from '../components/ProgramCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Hero from '../components/Hero.astro';
+import heroImage from '../assets/pics/3.png';
+
+const hajjPrograms = await getCollection('hajj');
+const omraPrograms = await getCollection('omra');
+---
+
+<Layout title="Hajj & Omra | B&S Travel">
+    <Hero
+        img={heroImage}
+        title="Hajj & Omra"
+        desc="Découvrez nos programmes Hajj et Omra, conçus pour vous offrir une expérience spirituelle inoubliable. Nous nous occupons de tous les détails pour que vous puissiez vous concentrer sur l'essentiel."
+    />
+
+  <!-- Omra Programs -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400">
+          Programmes Omra
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300">
+          L'Omra, le "petit pèlerinage", peut être accomplie à tout moment de l'année. Une expérience spirituelle profonde dans les lieux les plus sacrés de l'Islam.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {omraPrograms.map((program) => (
+          <ProgramCard {...program.data} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Hajj Programs -->
+  <section class="py-16 bg-warm-beige dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400">
+          Programmes Hajj 2025
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300">
+          Le Hajj, cinquième pilier de l'Islam, est un pèlerinage obligatoire que tout musulman doit accomplir au moins une fois dans sa vie s'il en a les moyens.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+        {hajjPrograms.map((program) => (
+          <ProgramCard {...program.data} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Information Section -->
+  <section class="py-16 bg-gradient-to-r from-brand-teal to-brand-cyan text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold mb-6">
+            Pourquoi choisir Beauséjour Voyage ?
+          </h2>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-gold mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <div>
+                <h3 class="font-semibold mb-1">Accompagnement spirituel</h3>
+                <p class="text-gray-200">Guides francophones spécialisés dans l'accompagnement religieux</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-gold mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <div>
+                <h3 class="font-semibold mb-1">Hébergements de qualité</h3>
+                <p class="text-gray-200">Hôtels soigneusement sélectionnés près des lieux saints</p>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-gold mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <div>
+                <h3 class="font-semibold mb-1">Service tout inclus</h3>
+                <p class="text-gray-200">Visa, transport, hébergement, repas - nous nous occupons de tout</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 dark:bg-gray-800/20">
+          <h3 class="text-2xl font-bold mb-6 text-center">Demandez votre devis</h3>
+          <form class="space-y-4">
+            <div>
+              <input 
+                type="text" 
+                placeholder="Nom complet"
+                class="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold dark:bg-gray-900/50"
+              />
+            </div>
+            <div>
+              <input 
+                type="email" 
+                placeholder="Email"
+                class="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold dark:bg-gray-900/50"
+              />
+            </div>
+            <div>
+              <select class="w-full px-4 py-3 rounded-lg bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold dark:bg-gray-900/50 dark:text-gray-300">
+                <option value="">Type de programme</option>
+                <option value="hajj">Hajj</option>
+                <option value="omra">Omra</option>
+              </select>
+            </div>
+            <div>
+              <textarea 
+                placeholder="Message (optionnel)"
+                rows="3"
+                class="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold dark:bg-gray-900/50"
+              ></textarea>
+            </div>
+            <button 
+              type="submit"
+              class="w-full bg-gold hover:bg-yellow-600 text-brand-teal font-semibold py-3 rounded-lg transition-colors duration-200 dark:text-gray-900"
+            >
+              Demander un devis gratuit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-6 dark:text-cyan-400">
+        Prêt pour votre voyage spirituel ?
+      </h2>
+      <p class="text-xl mb-8 text-gray-600">
+        Contactez nos experts pour un accompagnement personnalisé et un devis sur mesure.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/contact" 
+          class="bg-brand-teal hover:opacity-90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200"
+        >
+          Demander un devis personnalisé
+        </a>
+        <a 
+          href="tel:+212699922229" 
+          class="bg-white hover:bg-white-600 text-brand-teal px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+        >
+          Parler à un conseiller
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

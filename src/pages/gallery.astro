@@ -1,0 +1,294 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all gallery items
+const galleryItems = await getCollection('gallery');
+
+// Sort by date (newest first)
+const sortedGalleryItems = galleryItems.sort((a, b) => {
+  const dateA = a.data.date ? new Date(a.data.date) : new Date(0);
+  const dateB = b.data.date ? new Date(b.data.date) : new Date(0);
+  return dateB.getTime() - dateA.getTime();
+});
+---
+
+<Layout title="Galerie - Beauséjour Voyage | Nos Voyages en Images">
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-r from-brand-teal to-cyan-600 dark:from-cyan-700 dark:to-cyan-900 py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl lg:text-6xl font-bold text-white mb-6">
+        Galerie Photos
+      </h1>
+      <p class="text-xl lg:text-2xl text-cyan-100 max-w-3xl mx-auto mb-8">
+        Découvrez les moments inoubliables de nos voyageurs à travers le monde
+      </p>
+      <div class="w-24 h-1 bg-gold mx-auto"></div>
+    </div>
+  </section>
+
+  <!-- Gallery Grid -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        
+        {sortedGalleryItems.map((item) => (
+          <div class="gallery-item group cursor-pointer">
+            <div class="relative overflow-hidden rounded-lg shadow-lg aspect-square">
+              {item.data.mediaType === 'video' ? (
+                <>
+                  <video 
+                    src={item.data.mediaUrl} 
+                    poster={item.data.thumbnailUrl}
+                    class="w-full h-full object-cover"
+                    muted
+                    loop
+                    preload="metadata"
+                  ></video>
+                  <!-- Play button overlay -->
+                  <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 group-hover:bg-opacity-50 transition-all duration-300">
+                    <div class="bg-white bg-opacity-80 rounded-full p-3 group-hover:scale-110 transition-transform duration-300">
+                      <svg class="w-8 h-8 text-brand-teal" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </>
+              ) : item.data.mediaType === 'carousel' && item.data.mediaUrls ? (
+                <>
+                  <img 
+                    src={item.data.thumbnailUrl || item.data.mediaUrls[0]} 
+                    alt={item.data.title} 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <!-- Carousel indicator overlay -->
+                  <div class="absolute top-3 right-3 bg-black bg-opacity-60 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11.5-6L8 13.5l2.5 3.01L14 12.5l3 4H9l1.5-2.5z"/>
+                      <path d="M2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/>
+                    </svg>
+                    {item.data.mediaUrls.length}
+                  </div>
+                </>
+              ) : (
+                <img 
+                  src={item.data.mediaUrl} 
+                  alt={item.data.title} 
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              )}
+              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                <p class="text-white text-sm font-medium">{item.data.title}</p>
+                {item.data.location && (
+                  <p class="text-gray-300 text-xs">{item.data.location}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Upload Section -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-6 dark:text-cyan-400">
+        Partagez Vos Souvenirs
+      </h2>
+      <p class="text-xl text-gray-600 mb-8 dark:text-gray-300">
+        Vous avez voyagé avec nous ? Partagez vos plus belles photos et aidez d'autres voyageurs à découvrir nos destinations !
+      </p>
+      <a href="/contact" class="inline-block bg-gold hover:bg-yellow-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200 dark:text-gray-900 dark:bg-yellow-400 dark:hover:bg-yellow-500">
+        Envoyer Mes Photos
+      </a>
+    </div>
+  </section>
+
+  <!-- Modal for image/video viewing -->
+  <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+    <div class="relative max-w-4xl max-h-full">
+      <button id="close-modal" class="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      
+      <!-- Single Image -->
+      <img id="modal-image" src="" alt="" class="max-w-full max-h-full object-contain hidden">
+      
+      <!-- Video -->
+      <video id="modal-video" controls class="max-w-full max-h-full object-contain hidden">
+        <source src="" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      
+      <!-- Carousel Container -->
+      <div id="modal-carousel" class="hidden relative">
+        <div class="flex items-center justify-center">
+          <img id="carousel-image" src="" alt="" class="max-w-full max-h-full object-contain">
+        </div>
+        
+        <!-- Carousel Navigation -->
+        <button id="prev-image" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        
+        <button id="next-image" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+        
+        <!-- Image Counter -->
+        <div id="image-counter" class="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
+          <span id="current-image-num">1</span> / <span id="total-images">1</span>
+        </div>
+      </div>
+      
+      <div id="modal-caption" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4 text-center"></div>
+    </div>
+  </div>
+</Layout>
+
+<script define:vars={{galleryData: sortedGalleryItems}}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const modal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalVideo = document.getElementById('modal-video');
+    const modalCarousel = document.getElementById('modal-carousel');
+    const carouselImage = document.getElementById('carousel-image');
+    const modalCaption = document.getElementById('modal-caption');
+    const closeModal = document.getElementById('close-modal');
+    const prevButton = document.getElementById('prev-image');
+    const nextButton = document.getElementById('next-image');
+    const currentImageNum = document.getElementById('current-image-num');
+    const totalImages = document.getElementById('total-images');
+
+    let currentCarouselIndex = 0;
+    let currentCarouselUrls = [];
+
+    // Modal functionality
+    galleryItems.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        const img = item.querySelector('img');
+        const video = item.querySelector('video');
+        const caption = item.querySelector('p');
+        
+        // Get data from the gallery items array
+        const itemData = galleryData[index];
+        
+        if (modal && modalCaption) {
+          modalCaption.textContent = caption?.textContent || '';
+          
+          // Hide all modal content first
+          modalImage.classList.add('hidden');
+          modalVideo.classList.add('hidden');
+          modalCarousel.classList.add('hidden');
+          
+          if (itemData?.data?.mediaType === 'carousel' && itemData?.data?.mediaUrls) {
+            // Handle carousel
+            currentCarouselUrls = itemData.data.mediaUrls;
+            currentCarouselIndex = 0;
+            
+            carouselImage.src = currentCarouselUrls[0];
+            carouselImage.alt = itemData.data.title;
+            currentImageNum.textContent = '1';
+            totalImages.textContent = currentCarouselUrls.length.toString();
+            
+            modalCarousel.classList.remove('hidden');
+          } else if (video) {
+            // Handle video
+            modalVideo.src = video.src;
+            modalVideo.classList.remove('hidden');
+            modalVideo.play();
+          } else if (img) {
+            // Handle single image
+            modalImage.src = img.src || '';
+            modalImage.alt = img.alt || '';
+            modalImage.classList.remove('hidden');
+          }
+          
+          modal.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Carousel navigation
+    if (prevButton && nextButton) {
+      prevButton.addEventListener('click', () => {
+        if (currentCarouselUrls.length > 0) {
+          currentCarouselIndex = (currentCarouselIndex - 1 + currentCarouselUrls.length) % currentCarouselUrls.length;
+          carouselImage.src = currentCarouselUrls[currentCarouselIndex];
+          currentImageNum.textContent = (currentCarouselIndex + 1).toString();
+        }
+      });
+
+      nextButton.addEventListener('click', () => {
+        if (currentCarouselUrls.length > 0) {
+          currentCarouselIndex = (currentCarouselIndex + 1) % currentCarouselUrls.length;
+          carouselImage.src = currentCarouselUrls[currentCarouselIndex];
+          currentImageNum.textContent = (currentCarouselIndex + 1).toString();
+        }
+      });
+    }
+
+    // Keyboard navigation for carousel
+    document.addEventListener('keydown', (e) => {
+      if (!modal.classList.contains('hidden') && !modalCarousel.classList.contains('hidden')) {
+        if (e.key === 'ArrowLeft') {
+          prevButton.click();
+        } else if (e.key === 'ArrowRight') {
+          nextButton.click();
+        }
+      }
+    });
+
+    // Close modal function
+    function closeModalFunction() {
+      if (modal) {
+        modal.classList.add('hidden');
+        modalVideo.pause();
+        modalVideo.src = '';
+        currentCarouselUrls = [];
+        currentCarouselIndex = 0;
+      }
+    }
+
+    // Close modal
+    if (closeModal) {
+      closeModal.addEventListener('click', closeModalFunction);
+    }
+
+    // Close modal on background click
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModalFunction();
+        }
+      });
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+        closeModalFunction();
+      }
+    });
+  });
+</script>
+
+<style>
+  .gallery-item {
+    transition: transform 0.3s ease;
+  }
+  
+  .gallery-item:hover {
+    transform: scale(1.02);
+  }
+</style>

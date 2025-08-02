@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Welcome from '../components/Welcome.astro';
+import ProgramCard from '../components/ProgramCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+const featuredProgramIds = ['إسطنبول-غشت.md', 'عمرة-غشت.md', 'Haj-2026.md'];
+const hajjPrograms = await getCollection('hajj');
+const omraPrograms = await getCollection('omra');
+const voyagePrograms = await getCollection('voyages');
+const allPrograms = [...hajjPrograms, ...omraPrograms, ...voyagePrograms];
+const featuredPrograms = allPrograms.filter(program => featuredProgramIds.includes(program.id));
+
+const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
+---
+
+<Layout title="Beauséjour Voyage - Blog de voyages, Hajj et Omra">
+  <Hero />
+  
+  <!-- Programs Section -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400">
+          Nos Programmes Phares
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300">
+          Découvrez nos programmes soigneusement conçus pour vous offrir une expérience spirituelle et culturelle exceptionnelle
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {featuredPrograms.map((program) => (
+          <ProgramCard {...program.data} showContactButton={false} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section class="py-16 bg-warm-beige dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400">
+          Derniers Articles du Blog
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300">
+          Conseils, guides spirituels et découvertes culturelles pour enrichir vos voyages
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {latestPosts.map((post: CollectionEntry<'blog'>) => (
+          <BlogCard 
+            title={post.data.title}
+            excerpt={post.data.excerpt}
+            image={post.data.image}
+            date={post.data.date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            category={post.data.category}
+            slug={post.slug}
+          />
+        ))}
+      </div>
+      
+      <div class="text-center mt-12">
+        <a 
+          href="/blog" 
+          class="inline-flex items-center bg-brand-teal hover:opacity-90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200 dark:bg-cyan-500 dark:hover:bg-cyan-600"
+        >
+          Voir tous les articles
+          <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-r from-brand-teal to-brand-cyan text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+        Prêt à commencer votre voyage ?
+      </h2>
+      <p class="text-xl mb-8 text-gray-200">
+        Contactez-nous pour un devis personnalisé et commencez à planifier votre prochaine aventure spirituelle ou culturelle.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/contact" 
+          class="bg-black hover:bg-black-600 text-brand-teal px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+        >
+          Demander un devis gratuit
+        </a>
+        <a 
+          href="tel:+212 6 99 92 22 29" 
+          class="border-2 border-white hover:bg-white hover:text-brand-teal text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200"
+        >
+          Appeler maintenant
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

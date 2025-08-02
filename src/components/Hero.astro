@@ -1,0 +1,93 @@
+---
+import { Image } from 'astro:assets';
+import slider1 from "../assets/sliders/1.png";
+import slider2 from "../assets/sliders/2.png";
+
+
+const sliderImages = [
+  { src: slider1.src, alt: 'A serene view of a holy site for pilgrimage.' },
+  { src: slider2.src, alt: 'A beautiful mosque with intricate architecture.' },
+];
+
+export interface Props {
+    img?: any;
+    title?: string;
+    desc?: string;
+}
+
+const { img, title, desc } = Astro.props;
+const isSlider = !img;
+---
+<section
+  x-data={`{
+    isSlider: ${isSlider},
+    slideIndex: 0,
+    slides: ${JSON.stringify(sliderImages)}
+  }`}
+  x-init="() => {
+    if (isSlider && slides.length > 1) {
+        setInterval(() => {
+            slideIndex = (slideIndex + 1) % slides.length;
+        }, 7000);
+    }
+  }"
+  class="relative h-[50vh] md:h-[70vh] lg:h-[85vh] overflow-hidden"
+>
+    {isSlider ? (
+        <!-- Slider for Homepage -->
+        <div x-show="isSlider">
+            <template x-for="(slide, index) in slides" :key="index">
+                <div
+                    x-show="slideIndex === index"
+                    class="absolute inset-0 transition-opacity duration-1000"
+                    x-bind:class="{'opacity-100': slideIndex === index, 'opacity-0': slideIndex !== index}"
+                >
+                    <img
+                        x-bind:src="slide.src"
+                        x-bind:alt="slide.alt"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+            </template>
+        </div>
+    ) : (
+        <!-- Static Image for other pages -->
+        <div x-show="!isSlider" class="absolute inset-0">
+            <Image
+                src={img}
+                alt={title ?? ''}
+                class="w-full h-full object-cover"
+                quality="max"
+            />
+        </div>
+    )}
+
+    <!-- Overlay -->
+    <!-- <div class="absolute inset-0 bg-black/60"></div> -->
+
+    <!-- Text Content -->
+    <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
+        <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-4 text-shadow" x-text="isSlider ?  : title"></h1>
+        <p class="text-lg md:text-2xl max-w-3xl text-shadow-md" x-text="isSlider ?  : desc"></p>
+    </div>
+
+    <!-- Navigation Dots for slider -->
+    <div x-show="isSlider && slides.length > 1" class="absolute bottom-5 z-20 w-full flex justify-center items-center space-x-3">
+        <template x-for="(slide, index) in slides" :key="index">
+            <button
+                @click="slideIndex = index"
+                class="w-3 h-3 rounded-full transition"
+                x-bind:class="{'bg-black': slideIndex === index, 'bg-black/50 hover:bg-black': slideIndex !== index}"
+            ></button>
+        </template>
+    </div>
+</section>
+
+<style>
+.text-shadow {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+}
+.text-shadow-md {
+    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
+}
+</style>
