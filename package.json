@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "astro build && echo 'beausejourvoyage.com' > dist/CNAME && gh-pages -d dist"
+  "update": "git add . && git commit -m 'update' && git push && npm run build && npm run deploy"
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.4",
