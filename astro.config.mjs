@@ -5,8 +5,15 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [tailwind()],
   site: 'https://beausejourvoyage.com',
-  base: '/',  // Root path for custom domain
+  base: '/',
+  output: 'static',
   build: {
-    assets: 'assets'
+    inlineStylesheets: 'never',
+    assets: '_astro'
+  },
+  vite: {
+    build: {
+      assetsInlineLimit: 0
+    }
   }
 });

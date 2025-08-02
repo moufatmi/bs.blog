@@ -6,34 +6,21 @@ import '../styles/global.css';
 
 interface Props {
   title: string;
-  description?: string;
 }
 
-const { title, description = "Beauséjour Voyage - Programmes de Hajj, Omra et voyages organisés" } = Astro.props;
+const { title } = Astro.props;
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content="Beauséjour Voyage - Votre partenaire voyage" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href={favicon.src} />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- Google tag (gtag.js) -->
-    <script type="text/partytown" async src="https://www.googletagmanager.com/gtag/js?id=G-QLH2SXRTEX"></script>
-    <script type="text/partytown">
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-QLH2SXRTEX');
-    </script>
   </head>
-  <body class="bg-white text-gray-800 antialiased dark:bg-gray-900 dark:text-gray-200">
+  <body>
     <Header />
     <main class="min-h-screen">
       <slot />
