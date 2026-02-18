@@ -11,6 +11,8 @@ const sortedGalleryItems = galleryItems.sort((a, b) => {
   const dateB = b.data.date ? new Date(b.data.date) : new Date(0);
   return dateB.getTime() - dateA.getTime();
 });
+
+console.log('Gallery Items:', sortedGalleryItems);
 ---
 
 <Layout title="Galerie - Beauséjour Voyage | Nos Voyages en Images">
@@ -32,61 +34,68 @@ const sortedGalleryItems = galleryItems.sort((a, b) => {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         
-        {sortedGalleryItems.map((item) => (
-          <div class="gallery-item group cursor-pointer">
-            <div class="relative overflow-hidden rounded-lg shadow-lg aspect-square">
-              {item.data.mediaType === 'video' ? (
-                <>
-                  <video 
-                    src={item.data.mediaUrl} 
-                    poster={item.data.thumbnailUrl}
-                    class="w-full h-full object-cover"
-                    muted
-                    loop
-                    preload="metadata"
-                  ></video>
-                  <!-- Play button overlay -->
-                  <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 group-hover:bg-opacity-50 transition-all duration-300">
-                    <div class="bg-white bg-opacity-80 rounded-full p-3 group-hover:scale-110 transition-transform duration-300">
-                      <svg class="w-8 h-8 text-brand-teal" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
+        {sortedGalleryItems.map((item) => {
+          const videoSrc = item.data.videoFile || item.data.mediaUrl || (item.data.mediaUrls && item.data.mediaUrls[0]);
+          const images = item.data.galleryImages && item.data.galleryImages.length > 0 ? item.data.galleryImages : item.data.mediaUrls;
+          const isCarousel = item.data.mediaType === 'carousel' || (images && images.length > 1);
+          const isVideo = item.data.mediaType === 'video' || !!item.data.videoFile;
+          
+          return (
+            <div class="gallery-item group cursor-pointer">
+              <div class="relative overflow-hidden rounded-lg shadow-lg aspect-square">
+                {isVideo ? (
+                  <>
+                    <video 
+                      src={videoSrc} 
+                      poster={item.data.thumbnailUrl}
+                      class="w-full h-full object-cover"
+                      muted
+                      loop
+                      preload="metadata"
+                    ></video>
+                    {/* Play button overlay */}
+                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 group-hover:bg-opacity-50 transition-all duration-300">
+                      <div class="bg-white bg-opacity-80 rounded-full p-3 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-8 h-8 text-brand-teal" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </div>
                     </div>
-                  </div>
-                </>
-              ) : item.data.mediaType === 'carousel' && item.data.mediaUrls ? (
-                <>
+                  </>
+                ) : isCarousel && images ? (
+                  <>
+                    <img 
+                      src={item.data.thumbnailUrl || images[0]} 
+                      alt={item.data.title} 
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    {/* Carousel indicator overlay */}
+                    <div class="absolute top-3 right-3 bg-black bg-opacity-60 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11.5-6L8 13.5l2.5 3.01L14 12.5l3 4H9l1.5-2.5z"/>
+                        <path d="M2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/>
+                      </svg>
+                      {images.length}
+                    </div>
+                  </>
+                ) : (
                   <img 
-                    src={item.data.thumbnailUrl || item.data.mediaUrls[0]} 
+                    src={item.data.mediaUrl} 
                     alt={item.data.title} 
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <!-- Carousel indicator overlay -->
-                  <div class="absolute top-3 right-3 bg-black bg-opacity-60 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11.5-6L8 13.5l2.5 3.01L14 12.5l3 4H9l1.5-2.5z"/>
-                      <path d="M2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/>
-                    </svg>
-                    {item.data.mediaUrls.length}
-                  </div>
-                </>
-              ) : (
-                <img 
-                  src={item.data.mediaUrl} 
-                  alt={item.data.title} 
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              )}
-              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                <p class="text-white text-sm font-medium">{item.data.title}</p>
-                {item.data.location && (
-                  <p class="text-gray-300 text-xs">{item.data.location}</p>
                 )}
+                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                  <p class="text-white text-sm font-medium">{item.data.title}</p>
+                  {item.data.location && (
+                    <p class="text-gray-300 text-xs">{item.data.location}</p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
       </div>
     </div>
@@ -120,7 +129,7 @@ const sortedGalleryItems = galleryItems.sort((a, b) => {
       <img id="modal-image" src="" alt="" class="max-w-full max-h-full object-contain hidden">
       
       <!-- Video -->
-      <video id="modal-video" controls class="max-w-full max-h-full object-contain hidden">
+      <video id="modal-video" controls class="w-full max-w-full max-h-full object-contain hidden shadow-lg rounded-lg">
         <source src="" type="video/mp4">
         Your browser does not support the video tag.
       </video>
@@ -182,6 +191,7 @@ const sortedGalleryItems = galleryItems.sort((a, b) => {
         
         // Get data from the gallery items array
         const itemData = galleryData[index];
+        const galleryImages = itemData?.data?.galleryImages?.length > 0 ? itemData.data.galleryImages : itemData?.data?.mediaUrls;
         
         if (modal && modalCaption) {
           modalCaption.textContent = caption?.textContent || '';
@@ -191,9 +201,9 @@ const sortedGalleryItems = galleryItems.sort((a, b) => {
           modalVideo.classList.add('hidden');
           modalCarousel.classList.add('hidden');
           
-          if (itemData?.data?.mediaType === 'carousel' && itemData?.data?.mediaUrls) {
+          if (galleryImages && galleryImages.length > 1) {
             // Handle carousel
-            currentCarouselUrls = itemData.data.mediaUrls;
+            currentCarouselUrls = galleryImages;
             currentCarouselIndex = 0;
             
             carouselImage.src = currentCarouselUrls[0];
