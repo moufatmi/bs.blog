@@ -5,7 +5,12 @@ import keystatic from '@keystatic/astro';
 import markdoc from '@astrojs/markdoc';
 
 export default defineConfig({
-  integrations: [tailwind(), react(), keystatic(), markdoc()],
+  integrations: [
+    tailwind(),
+    react(),
+    ...(process.env.NODE_ENV === 'development' ? [keystatic()] : []),
+    markdoc()
+  ],
   site: 'https://beausejourvoyage.com',
   output: 'static',
   build: {
