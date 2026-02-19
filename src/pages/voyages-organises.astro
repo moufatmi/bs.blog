@@ -8,33 +8,52 @@ import heroImage from '../assets/sliders/1.png';
 const voyagePrograms = await getCollection('voyages');
 
 const destinations = [
-  { name: "Turquie", count: 3 },
-  { name: "Espagne", count: 2 },
-  { name: "Maroc", count: 4 },
-  { name: "Jordanie", count: 2 },
-  { name: "Egypte", count: 3 },
-  { name: "Ouzbékistan", count: 1 }
+  { name: "Turquie", value: "Turquie" },
+  { name: "Espagne", value: "Espagne" },
+  { name: "Maroc", value: "Maroc" },
+  { name: "Jordanie", value: "Jordanie" },
+  { name: "Egypte", value: "Egypte" },
+  { name: "Ouzbékistan", value: "Ouzbékistan" },
+  { name: "Malaisie", value: "Malaisie" },
+  { name: "Indonésie", value: "Indonésie" },
+  { name: "Thaïlande", value: "Thaïlande" },
+  { name: "Dubai", value: "Dubai" },
 ];
+
+const voyagesWithCounts = destinations.map(dest => ({
+  ...dest,
+  count: voyagePrograms.filter(p => p.data.destination === dest.value).length
+}));
 ---
 
-<Layout title="Voyages Organisés | B&S Travel">
-    <Hero
-        img={heroImage}
-        title="Voyages Organisés"
-        desc="Explorez le monde avec nos voyages organisés. Des destinations exotiques aux circuits culturels, nous avons le voyage de vos rêves."
-    />
+<Layout 
+  title="Voyages Organisés - Beauséjour Voyage" 
+  description="Découvrez nos voyages organisés vers les plus belles destinations : Turquie, Espagne, Maroc, Egypte et plus encore."
+>
+  <section class="bg-gradient-to-br from-brand-teal via-brand-cyan to-gold text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl lg:text-5xl font-extrabold tracking-tight">Nos Voyages Organisés</h1>
+      <p class="mt-4 text-xl text-gray-200 max-w-2xl mx-auto">
+        Des destinations de rêve sélectionnées pour vous offrir des expériences inoubliables
+      </p>
+    </div>
+  </section>
 
-    <div class="container mx-auto px-2 sm:px-4 py-6 sm:py-8">
-        <div class="grid grid-cols-1 gap-6 sm:gap-8">
-  <!-- Destinations Filter -->
-  <section class="py-6 sm:py-8 bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-      <div class="flex flex-wrap justify-center gap-2 sm:gap-4">
-        <button class="px-4 sm:px-6 py-2 rounded-full bg-gold text-white font-medium text-sm sm:text-base">
+  <!-- Filters -->
+  <section class="py-8 bg-white border-b dark:bg-gray-900 dark:border-gray-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="filter-buttons" class="flex flex-wrap justify-center gap-3">
+        <button 
+          class="filter-btn active px-6 py-2 rounded-full border-2 border-gold font-medium transition-all duration-200 bg-gold text-white dark:bg-yellow-400 dark:text-gray-900"
+          data-filter="all"
+        >
           Toutes destinations
         </button>
-        {destinations.map(dest => (
-          <button class="px-4 sm:px-6 py-2 rounded-full border-2 border-gold text-gold hover:bg-gold hover:text-white transition-all duration-200 font-medium text-sm sm:text-base dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
+        {voyagesWithCounts.map((dest) => (
+          <button 
+            class="filter-btn px-6 py-2 rounded-full border-2 border-gold font-medium transition-all duration-200 text-gold hover:bg-gold hover:text-white dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900"
+            data-filter={dest.value}
+          >
             {dest.name} ({dest.count})
           </button>
         ))}
@@ -42,23 +61,23 @@ const destinations = [
     </div>
   </section>
 
-  <!-- Programs Section -->
-  <section id="programmes" class="py-10 sm:py-16 bg-warm-beige dark:bg-gray-800">
-    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-      <div class="text-center mb-8 sm:mb-12">
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-teal mb-3 sm:mb-4 dark:text-cyan-400">
-          Nos Destinations Phares
-        </h2>
-        <p class="text-base sm:text-xl text-gray-600 max-w-2xl sm:max-w-4xl mx-auto dark:text-gray-300">
-          Des circuits soigneusement élaborés pour vous faire découvrir la richesse historique, 
-          culturelle et architecturale des civilisations islamiques à travers le monde.
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+  <section class="py-16 bg-warm-beige dark:bg-gray-800 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="voyages-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {voyagePrograms.map((program) => (
-          <ProgramCard {...program.data} />
+          <div class="voyage-card transition-all duration-300 transform hover:-translate-y-1" data-destination={program.data.destination || 'other'}>
+            <ProgramCard {...program.data} type="voyage" />
+          </div>
         ))}
+        {voyagePrograms.length === 0 && (
+            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-20">
+            <p class="text-2xl text-gray-500 font-medium">Aucun voyage programmé pour le moment.</p>
+            <p class="mt-2 text-gray-400">Revenez bientôt pour découvrir nos nouvelles offres.</p>
+            </div>
+        )}
+      </div>
+      <div id="no-results" class="hidden text-center py-20">
+        <p class="text-2xl text-gray-500 font-medium">Aucun voyage trouvé pour cette destination.</p>
       </div>
     </div>
   </section>
@@ -116,11 +135,62 @@ const destinations = [
         </a>
         <a 
           href="tel:+33123456789" 
-          class="border-2 border-white hover:bg-white hover:text-brand-teal text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all duration-200"
-        >
-          Parler à un conseiller
+         
         </a>
       </div>
     </div>
   </section>
 </Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const voyageCards = document.querySelectorAll('.voyage-card');
+    const noResults = document.getElementById('no-results');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', (event) => {
+        const target = event.currentTarget as HTMLElement;
+        
+        // Update active state
+        filterButtons.forEach(btn => {
+            btn.classList.remove('bg-gold', 'text-white', 'dark:bg-yellow-400', 'dark:text-gray-900');
+            btn.classList.add('text-gold', 'hover:bg-gold', 'hover:text-white', 'dark:text-yellow-400', 'dark:border-yellow-400', 'dark:hover:bg-yellow-400', 'dark:hover:text-gray-900');
+            btn.classList.remove('active');
+        });
+        target.classList.add('bg-gold', 'text-white', 'dark:bg-yellow-400', 'dark:text-gray-900');
+        target.classList.remove('text-gold', 'hover:bg-gold', 'hover:text-white', 'dark:text-yellow-400', 'dark:border-yellow-400', 'dark:hover:bg-yellow-400', 'dark:hover:text-gray-900');
+        target.classList.add('active');
+
+        const filterValue = target.dataset.filter;
+        let visibleCount = 0;
+
+        voyageCards.forEach(card => {
+            const cardEl = card as HTMLElement;
+            const destination = cardEl.dataset.destination;
+          
+            if (filterValue === 'all' || destination === filterValue) {
+                cardEl.style.display = '';
+                visibleCount++;
+                // Add fade-in animation
+                cardEl.style.opacity = '0';
+                setTimeout(() => {
+                    cardEl.style.opacity = '1';
+                }, 50);
+            } else {
+                cardEl.style.display = 'none';
+            }
+        });
+
+        // Show/hide no results message
+        if (noResults) {
+            if (visibleCount > 0) {
+                noResults.classList.add('hidden');
+            } else {
+                noResults.classList.remove('hidden');
+            }
+        }
+      });
+    });
+  });
+</script>

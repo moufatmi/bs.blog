@@ -56,19 +56,15 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage"];
       </div>
       
       <!-- Pagination -->
-      <div class="flex justify-center mt-12">
+      <div id="pagination-container" class="flex justify-center mt-12 hidden">
         <nav class="flex space-x-2">
-          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
+          <button id="prev-page" class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed">
             Précédent
           </button>
-          <button class="px-4 py-2 bg-gold text-white rounded-lg dark:bg-yellow-400 dark:text-gray-900">1</button>
-          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
-            2
-          </button>
-          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
-            3
-          </button>
-          <button class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900">
+          <div id="page-numbers" class="flex space-x-2">
+            <!-- Page numbers will be injected here -->
+          </div>
+          <button id="next-page" class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-white transition-colors dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed">
             Suivant
           </button>
         </nav>
@@ -105,17 +101,86 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage"];
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const filterButtonsContainer = document.getElementById('filter-buttons');
-    if (!filterButtonsContainer) return;
+    const blogPostsContainer = document.getElementById('blog-posts');
+    const paginationContainer = document.getElementById('pagination-container');
+    const pageNumbersContainer = document.getElementById('page-numbers');
+    const prevPageBtn = document.getElementById('prev-page') as HTMLButtonElement;
+    const nextPageBtn = document.getElementById('next-page') as HTMLButtonElement;
 
-    const blogPosts = document.querySelectorAll('.blog-post');
+    if (!filterButtonsContainer || !blogPostsContainer) return;
 
+    const allPosts = Array.from(document.querySelectorAll('.blog-post')) as HTMLElement[];
+    const itemsPerPage = 6;
+    let currentPage = 1;
+    let currentCategory = 'Tous';
+    let visiblePosts = allPosts;
+
+    function renderPosts() {
+      // Hide all posts first
+      allPosts.forEach(post => post.style.display = 'none');
+
+      // Calculate pagination
+      const totalPages = Math.ceil(visiblePosts.length / itemsPerPage);
+      
+      // Ensure current page is valid
+      if (currentPage > totalPages) currentPage = totalPages || 1;
+      if (currentPage < 1) currentPage = 1;
+
+      // Determine posts to show for current page
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const postsToShow = visiblePosts.slice(start, end);
+
+      // Show relevant posts
+      postsToShow.forEach(post => post.style.display = '');
+
+      // Update Pagination UI
+      updatePaginationUI(totalPages);
+    }
+
+    function updatePaginationUI(totalPages: number) {
+      if (!paginationContainer || !pageNumbersContainer || !prevPageBtn || !nextPageBtn) return;
+
+      if (totalPages <= 1) {
+        paginationContainer.classList.add('hidden');
+        return;
+      }
+
+      paginationContainer.classList.remove('hidden');
+      pageNumbersContainer.innerHTML = '';
+
+      // Previous/Next Buttons
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = currentPage === totalPages;
+
+      // Page Numbers
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i.toString();
+        btn.className = `px-4 py-2 rounded-lg transition-colors ${
+          i === currentPage 
+            ? 'bg-gold text-white dark:bg-yellow-400 dark:text-gray-900' 
+            : 'border border-gold text-gold hover:bg-gold hover:text-white dark:text-yellow-400 dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-gray-900'
+        }`;
+        
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          renderPosts();
+          window.scrollTo({ top: blogPostsContainer!.offsetTop - 100, behavior: 'smooth' });
+        });
+
+        pageNumbersContainer.appendChild(btn);
+      }
+    }
+
+    // Filter Logic
     filterButtonsContainer.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
       if (target.tagName !== 'BUTTON') return;
 
-      const filter = target.dataset.filter;
+      currentCategory = target.dataset.filter || 'Tous';
 
-      // Update button styles
+      // Update filter button styles
       filterButtonsContainer.querySelectorAll('button').forEach(button => {
         button.classList.remove('bg-gold', 'text-white', 'dark:bg-yellow-400', 'dark:text-gray-900');
         button.classList.add('text-gold', 'hover:bg-gold', 'hover:text-white', 'dark:text-yellow-400', 'dark:border-yellow-400', 'dark:hover:bg-yellow-400', 'dark:hover:text-gray-900');
@@ -123,17 +188,36 @@ const categories = ["Tous", "Hajj", "Omra", "Voyage"];
       target.classList.add('bg-gold', 'text-white', 'dark:bg-yellow-400', 'dark:text-gray-900');
       target.classList.remove('text-gold', 'hover:bg-gold', 'hover:text-white', 'dark:text-yellow-400', 'dark:border-yellow-400', 'dark:hover:bg-yellow-400', 'dark:hover:text-gray-900');
 
-      // Filter posts
-      blogPosts.forEach(post => {
-        const postElement = post as HTMLElement;
-        const postCategory = postElement.dataset.category;
-        
-        if (filter === 'Tous' || filter === postCategory) {
-          postElement.style.display = '';
-        } else {
-          postElement.style.display = 'none';
-        }
-      });
+      // Filter visible posts list
+      if (currentCategory === 'Tous') {
+        visiblePosts = allPosts;
+      } else {
+        visiblePosts = allPosts.filter(post => post.dataset.category === currentCategory);
+      }
+
+      currentPage = 1; // Reset to first page
+      renderPosts();
     });
+
+    // Pagination Button Logic
+    prevPageBtn?.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPosts();
+        window.scrollTo({ top: blogPostsContainer!.offsetTop - 100, behavior: 'smooth' });
+      }
+    });
+
+    nextPageBtn?.addEventListener('click', () => {
+      const totalPages = Math.ceil(visiblePosts.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderPosts();
+        window.scrollTo({ top: blogPostsContainer!.offsetTop - 100, behavior: 'smooth' });
+      }
+    });
+
+    // Initial Render
+    renderPosts();
   });
 </script>

@@ -74,6 +74,23 @@ export default config({
                 pdfUrl: fields.text({ label: 'URL du PDF (Optionnel)' }),
                 availabilityNote: fields.text({ label: 'Note de disponibilité (Optionnel)' }),
                 content: fields.markdoc({ label: 'Contenu (Optionnel)' }),
+                destination: fields.select({
+                    label: 'Destination',
+                    description: 'Sélectionnez la destination pour le filtrage',
+                    options: [
+                        { label: 'Turquie', value: 'Turquie' },
+                        { label: 'Espagne', value: 'Espagne' },
+                        { label: 'Maroc', value: 'Maroc' },
+                        { label: 'Jordanie', value: 'Jordanie' },
+                        { label: 'Egypte', value: 'Egypte' },
+                        { label: 'Ouzbékistan', value: 'Ouzbékistan' },
+                        { label: 'Malaisie', value: 'Malaisie' },
+                        { label: 'Indonésie', value: 'Indonésie' },
+                        { label: 'Thaïlande', value: 'Thaïlande' },
+                        { label: 'Dubai', value: 'Dubai' },
+                    ],
+                    defaultValue: 'Turquie',
+                }),
             },
         }),
         gallery: collection({

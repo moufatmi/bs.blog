@@ -9,6 +9,7 @@ const programSchema = z.object({
   features: z.array(z.string()),
   pdfUrl: z.string().optional(),
   availabilityNote: z.string().optional(),
+  destination: z.string().optional(),
 });
 
 const hajjCollection = defineCollection({
