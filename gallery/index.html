@@ -124,7 +124,7 @@ imm esaada، Bloc D rdc، rue farhat hachad zerktouni, Oujda
     setupThemeToggle('theme-toggle', 'theme-toggle-dark-icon', 'theme-toggle-light-icon');
     setupThemeToggle('mobile-theme-toggle', 'mobile-theme-toggle-dark-icon', 'mobile-theme-toggle-light-icon');
   });
-</script>  <script>(function(){const galleryData = [{"id":"fydyw-emrt-2026.mdoc","data":{"title":"فيديو عمرة 2026","description":"تسييستي ثصث ص","mediaUrl":"https://www.rgtrustschool.net/ar/wp-content/uploads/2026/02/%D8%B9%D8%A8%D8%A7%D8%B1%D8%A7%D8%AA-%D8%AA%D9%87%D9%86%D8%A6%D8%A9-%D8%A8%D8%B4%D9%87%D8%B1-%D8%B1%D9%85%D8%B6%D8%A7%D9%86-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B1%D9%83-2026-%D8%B1%D8%B3%D8%A7%D8%A6%D9%84-%D9%88%D8%AA%D9%87%D8%A7%D9%86%D9%8A-%D8%B1%D9%85%D8%B6%D8%A7%D9%86-1447-%D9%87%D9%80.jpg","galleryImages":["../../assets/pics/fydyw-emrt-2026/galleryImages/0.png"],"mediaUrls":[],"mediaType":"image"},"filePath":"src/content/gallery/fydyw-emrt-2026.mdoc","digest":"1e95447a0a1f846e","deferredRender":true,"collection":"gallery","slug":"fydyw-emrt-2026"}];
+</script>  <script>(function(){const galleryData = [{"id":"fydyw-emrt-2026.mdoc","data":{"title":"فيديو عمرة 2026","description":"تسييستي ثصث ص","media":{"discriminant":"image-external","value":"https://www.rgtrustschool.net/ar/wp-content/uploads/2026/02/%D8%B9%D8%A8%D8%A7%D8%B1%D8%A7%D8%AA-%D8%AA%D9%87%D9%86%D8%A6%D8%A9-%D8%A8%D8%B4%D9%87%D8%B1-%D8%B1%D9%85%D8%B6%D8%A7%D9%86-%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%B1%D9%83-2026-%D8%B1%D8%B3%D8%A7%D8%A6%D9%84-%D9%88%D8%AA%D9%87%D8%A7%D9%86%D9%8A-%D8%B1%D9%85%D8%B6%D8%A7%D9%86-1447-%D9%87%D9%80.jpg"}},"filePath":"src/content/gallery/fydyw-emrt-2026.mdoc","digest":"d9a3e6d6df934168","deferredRender":true,"collection":"gallery","slug":"fydyw-emrt-2026"}];
 
   document.addEventListener('DOMContentLoaded', () => {
     const galleryItems = document.querySelectorAll('.gallery-item');
@@ -152,7 +152,8 @@ imm esaada، Bloc D rdc، rue farhat hachad zerktouni, Oujda
         
         // Get data from the gallery items array
         const itemData = galleryData[index];
-        const galleryImages = itemData?.data?.galleryImages?.length > 0 ? itemData.data.galleryImages : itemData?.data?.mediaUrls;
+        const media = itemData?.data?.media;
+        const galleryImages = media?.discriminant === 'carousel' ? media.value : [];
         
         if (modal && modalCaption) {
           modalCaption.textContent = caption?.textContent || '';
@@ -162,7 +163,7 @@ imm esaada، Bloc D rdc، rue farhat hachad zerktouni, Oujda
           modalVideo.classList.add('hidden');
           modalCarousel.classList.add('hidden');
           
-          if (galleryImages && galleryImages.length > 1) {
+          if (media?.discriminant === 'carousel' && galleryImages.length > 0) {
             // Handle carousel
             currentCarouselUrls = galleryImages;
             currentCarouselIndex = 0;
