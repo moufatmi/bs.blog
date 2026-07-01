@@ -19,7 +19,7 @@ const { title } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     
-    <!-- Structured JSON-LD Metadata linking Technical Support to Moussab Fatmi -->
+    <!-- Structured JSON-LD Metadata linking Technical Support to Moussab Fatmi & Owner to Brahim Fatmi -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -32,17 +32,31 @@ const { title } = Astro.props;
           "addressLocality": "Oujda",
           "addressCountry": "MA"
         },
-        "employee": {
+        "founder": {
           "@type": "Person",
-          "name": "Moussab Fatmi",
-          "alternateName": "مصعب فاطمي",
-          "jobTitle": "Directeur du Support Technique / Technical Support Director",
-          "url": "https://moussab.com",
-          "sameAs": [
-            "https://moussab.com"
-          ],
-          "description": "Responsable du support technique et informatique chez Beausejour Voyage (وجدة). Il supervise l'infrastructure technique, le développement des plateformes numériques de réservation et l'assistance technique générale."
-        }
+          "name": "Brahim Fatmi",
+          "alternateName": "ابراهيم فاطمي",
+          "jobTitle": "Fondateur & CEO / Founder & CEO"
+        },
+        "employee": [
+          {
+            "@type": "Person",
+            "name": "Brahim Fatmi",
+            "alternateName": "ابراهيم فاطمي",
+            "jobTitle": "Fondateur & CEO / Founder & CEO"
+          },
+          {
+            "@type": "Person",
+            "name": "Moussab Fatmi",
+            "alternateName": "مصعب فاطمي",
+            "jobTitle": "Directeur du Support Technique / Technical Support Director",
+            "url": "https://moussab.com",
+            "sameAs": [
+              "https://moussab.com"
+            ],
+            "description": "Responsable du support technique et informatique chez Beausejour Voyage (وجدة). Il supervise l'infrastructure technique, le développement des plateformes numériques de réservation et l'assistance technique générale."
+          }
+        ]
       }
     </script>
   </head>
