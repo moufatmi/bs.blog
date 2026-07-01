@@ -1,141 +1,135 @@
 import { config, fields, collection } from '@keystatic/core';
 
+// Shared schema for travel programs (Hajj, Omra, Voyages)
+const commonProgramFields = {
+    title: fields.slug({ name: { label: 'Titre / العنوان' } }),
+    description: fields.text({ label: 'Description courte / وصف قصير' }),
+    image: fields.text({ label: 'Lien de l\'image (URL) / رابط الصورة' }),
+    price: fields.text({ label: 'Prix (ex: 21000 DH) / السعر' }),
+    duration: fields.text({ label: 'Durée (ex: 15 jours) / المدة' }),
+    features: fields.array(fields.text({ label: 'Caractéristique / ميزة أو خدمة' }), {
+        label: 'Caractéristiques du programme / مميزات البرنامج',
+        itemLabel: (props) => props.value || 'Caractéristique / ميزة',
+    }),
+    pdfUrl: fields.text({ label: 'Lien du PDF du programme (Optionnel) / رابط ملف البرنامج PDF (اختياري)' }),
+    availabilityNote: fields.text({ label: 'Note de disponibilité (ex: Places limitées) / ملاحظة حول التوفر (اختياري)' }),
+    content: fields.markdoc({ label: 'Description détaillée (Contenu) / التفاصيل الكاملة للبرنامج' }),
+};
+
 export default config({
     storage: {
         kind: 'local',
     },
     collections: {
         blog: collection({
-            label: 'Blog',
+            label: 'Blog / المدونة',
             slugField: 'title',
             path: 'src/content/blog/*',
             format: { data: 'yaml', contentField: 'content' },
             schema: {
-                title: fields.slug({ name: { label: 'Titre' } }),
-                excerpt: fields.text({ label: 'Extrait' }),
-                image: fields.text({ label: 'URL de l\'image' }),
-                date: fields.date({ label: 'Date' }),
-                category: fields.text({ label: 'Catégorie' }),
-                content: fields.markdoc({ label: 'Contenu' }),
+                title: fields.slug({ name: { label: 'Titre / العنوان' } }),
+                excerpt: fields.text({ label: 'Extrait / مقتطف قصير' }),
+                image: fields.text({ label: 'Lien de l\'image (URL) / رابط الصورة' }),
+                date: fields.date({ label: 'Date / التاريخ' }),
+                category: fields.text({ label: 'Catégorie / التصنيف' }),
+                content: fields.markdoc({ label: 'Contenu de l\'article / محتوى المقال' }),
             },
         }),
         hajj: collection({
-            label: 'Hajj',
+            label: 'Hajj / الحج',
             slugField: 'title',
             path: 'src/content/hajj/*',
             format: { data: 'yaml', contentField: 'content' },
-            schema: {
-                title: fields.slug({ name: { label: 'Titre' } }),
-                description: fields.text({ label: 'Description' }),
-                image: fields.text({ label: 'URL de l\'image' }),
-                price: fields.text({ label: 'Prix' }),
-                duration: fields.text({ label: 'Durée' }),
-                features: fields.array(fields.text({ label: 'Caractéristique' }), {
-                    itemLabel: (props) => props.value,
-                }),
-                pdfUrl: fields.text({ label: 'URL du PDF (Optionnel)' }),
-                availabilityNote: fields.text({ label: 'Note de disponibilité (Optionnel)' }),
-                content: fields.markdoc({ label: 'Contenu (Optionnel)' }),
-            },
+            schema: commonProgramFields,
         }),
         omra: collection({
-            label: 'Omra',
+            label: 'Omra / العمرة',
             slugField: 'title',
             path: 'src/content/omra/*',
             format: { data: 'yaml', contentField: 'content' },
-            schema: {
-                title: fields.slug({ name: { label: 'Titre' } }),
-                description: fields.text({ label: 'Description' }),
-                image: fields.text({ label: 'URL de l\'image' }),
-                price: fields.text({ label: 'Prix' }),
-                duration: fields.text({ label: 'Durée' }),
-                features: fields.array(fields.text({ label: 'Caractéristique' }), {
-                    itemLabel: (props) => props.value,
-                }),
-                pdfUrl: fields.text({ label: 'URL du PDF (Optionnel)' }),
-                availabilityNote: fields.text({ label: 'Note de disponibilité (Optionnel)' }),
-                content: fields.markdoc({ label: 'Contenu (Optionnel)' }),
-            },
+            schema: commonProgramFields,
         }),
         voyages: collection({
-            label: 'Voyages',
+            label: 'Voyages Organisés / الرحلات المنظمة',
             slugField: 'title',
             path: 'src/content/voyages/*',
             format: { data: 'yaml', contentField: 'content' },
             schema: {
-                title: fields.slug({ name: { label: 'Titre' } }),
-                description: fields.text({ label: 'Description' }),
-                image: fields.text({ label: 'URL de l\'image' }),
-                price: fields.text({ label: 'Prix' }),
-                duration: fields.text({ label: 'Durée' }),
-                features: fields.array(fields.text({ label: 'Caractéristique' }), {
-                    itemLabel: (props) => props.value,
-                }),
-                pdfUrl: fields.text({ label: 'URL du PDF (Optionnel)' }),
-                availabilityNote: fields.text({ label: 'Note de disponibilité (Optionnel)' }),
-                content: fields.markdoc({ label: 'Contenu (Optionnel)' }),
+                ...commonProgramFields,
                 destination: fields.select({
-                    label: 'Destination',
-                    description: 'Sélectionnez la destination pour le filtrage',
+                    label: 'Destination / الوجهة',
+                    description: 'Sélectionnez la destination pour le filtrage / اختر وجهة السفر لتصفية النتائج',
                     options: [
-                        { label: 'Turquie', value: 'Turquie' },
-                        { label: 'Espagne', value: 'Espagne' },
-                        { label: 'Maroc', value: 'Maroc' },
-                        { label: 'Jordanie', value: 'Jordanie' },
-                        { label: 'Egypte', value: 'Egypte' },
-                        { label: 'Ouzbékistan', value: 'Ouzbékistan' },
-                        { label: 'Malaisie', value: 'Malaisie' },
-                        { label: 'Indonésie', value: 'Indonésie' },
-                        { label: 'Thaïlande', value: 'Thaïlande' },
-                        { label: 'Dubai', value: 'Dubai' },
+                        { label: 'Turquie / تركيا', value: 'Turquie' },
+                        { label: 'Espagne / إسبانيا', value: 'Espagne' },
+                        { label: 'Maroc / المغرب', value: 'Maroc' },
+                        { label: 'Jordanie / الأردن', value: 'Jordanie' },
+                        { label: 'Egypte / مصر', value: 'Egypte' },
+                        { label: 'Ouzbékistan / أوزبكستان', value: 'Ouzbékistan' },
+                        { label: 'Malaisie / ماليزيا', value: 'Malaisie' },
+                        { label: 'Indonésie / إندونيسيا', value: 'Indonésie' },
+                        { label: 'Thaïlande / تايلاند', value: 'Thaïlande' },
+                        { label: 'Dubai / دبي', value: 'Dubai' },
                     ],
                     defaultValue: 'Turquie',
                 }),
             },
         }),
         gallery: collection({
-            label: 'Galerie',
+            label: 'Galerie Photos & Vidéos / معرض الصور والفيديوهات',
             slugField: 'title',
             path: 'src/content/gallery/*',
             format: { data: 'yaml', contentField: 'content' },
             schema: {
-                title: fields.slug({ name: { label: 'Titre' } }),
-                description: fields.text({ label: 'Description (Optionnel)' }),
-                mediaUrl: fields.text({ label: 'Lien Vidéo/Image (URL externe)' }),
-                videoFile: fields.file({
-                    label: 'Fichier Vidéo (Upload direct)',
-                    directory: 'public/uploads/videos',
-                    publicPath: '/uploads/videos/',
-                }),
-                galleryImages: fields.array(
-                    fields.image({
-                        label: 'Image',
-                        directory: 'src/assets/pics',
-                        publicPath: '../../assets/pics/',
+                title: fields.slug({ name: { label: 'Titre / العنوان' } }),
+                description: fields.text({ label: 'Description (Optionnel) / وصف قصير (اختياري)' }),
+                media: fields.conditional(
+                    fields.select({
+                        label: 'Type de média / نوع الوسائط',
+                        options: [
+                            { label: 'Image unique (Upload local) / صورة واحدة (تحميل من جهازك)', value: 'image-local' },
+                            { label: 'Image unique (Lien URL) / صورة واحدة (رابط من الإنترنت)', value: 'image-external' },
+                            { label: 'Vidéo (Upload local) / فيديو (تحميل من جهازك)', value: 'video-local' },
+                            { label: 'Vidéo (Lien URL) / فيديو (رابط من الإنترنت)', value: 'video-external' },
+                            { label: 'Galerie d\'images (Carrousel) / مجموعة صور (تحميل)', value: 'carousel' },
+                        ],
+                        defaultValue: 'image-local',
                     }),
                     {
-                        label: 'Galerie d\'images (Upload direct)',
-                        itemLabel: (props) => 'Image',
+                        'image-local': fields.image({
+                            label: 'Sélectionner l\'image / اختر الصورة للتحميل',
+                            directory: 'src/assets/pics',
+                            publicPath: '../../assets/pics/',
+                        }),
+                        'image-external': fields.text({
+                            label: 'Lien direct de l\'image (URL) / اكتب رابط الصورة هنا',
+                        }),
+                        'video-local': fields.file({
+                            label: 'Fichier Vidéo (MP4) / اختر ملف الفيديو للتحميل',
+                            directory: 'public/uploads/videos',
+                            publicPath: '/uploads/videos/',
+                        }),
+                        'video-external': fields.text({
+                            label: 'Lien direct de la vidéo (URL) / اكتب رابط الفيديو هنا',
+                        }),
+                        'carousel': fields.array(
+                            fields.image({
+                                label: 'Image / صورة',
+                                directory: 'src/assets/pics',
+                                publicPath: '../../assets/pics/',
+                            }),
+                            {
+                                label: 'Images du carrousel / اختر مجموعة صور للتحميل',
+                                itemLabel: (props) => 'Image',
+                            }
+                        ),
                     }
                 ),
-                mediaUrls: fields.array(fields.text({ label: 'URL Média' }), {
-                    label: 'Liens Médias (Multiples URLs)',
-                    itemLabel: (props) => props.value,
-                }),
-                mediaType: fields.select({
-                    label: 'Type de média',
-                    options: [
-                        { label: 'Image', value: 'image' },
-                        { label: 'Vidéo', value: 'video' },
-                        { label: 'Carousel', value: 'carousel' },
-                    ],
-                    defaultValue: 'image',
-                }),
-                thumbnailUrl: fields.text({ label: 'URL de la miniature (Optionnel)' }),
-                category: fields.text({ label: 'Catégorie (Optionnel)' }),
-                location: fields.text({ label: 'Lieu (Optionnel)' }),
-                date: fields.date({ label: 'Date (Optionnel)' }),
-                content: fields.markdoc({ label: 'Contenu (Optionnel)' }),
+                thumbnailUrl: fields.text({ label: 'URL de la miniature (Optionnel) / رابط غلاف الفيديو أو المعرض (اختياري)' }),
+                category: fields.text({ label: 'Catégorie (ex: العمرة 2026) / التصنيف (اختياري)' }),
+                location: fields.text({ label: 'Lieu (ex: مكة المكرمة) / المكان (اختياري)' }),
+                date: fields.date({ label: 'Date (Optionnel) / التاريخ (اختياري)' }),
+                content: fields.markdoc({ label: 'Détails ou contenu supplémentaire (Optionnel) / تفاصيل إضافية (اختياري)' }),
             },
         }),
     },

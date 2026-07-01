@@ -43,15 +43,17 @@ const galleryCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    mediaUrl: z.string().optional(), // Single image/video URL (for backward compatibility)
-    videoFile: z.string().optional(), // Uploaded video file (path)
-    galleryImages: z.array(z.string()).optional(), // Uploaded gallery images (paths)
-    mediaUrls: z.array(z.string()).optional(), // Multiple image URLs (manual entry)
-    mediaType: z.enum(['image', 'video', 'carousel']), // Added 'carousel' type
-    thumbnailUrl: z.string().optional(), // For video thumbnails or carousel cover
-    category: z.string().optional(), // Optional category (hajj-omra, istanbul, etc.)
-    location: z.string().optional(), // Location where photo/video was taken
-    date: z.date().optional(), // When the media was captured
+    media: z.discriminatedUnion('discriminant', [
+      z.object({ discriminant: z.literal('image-local'), value: z.string() }),
+      z.object({ discriminant: z.literal('image-external'), value: z.string() }),
+      z.object({ discriminant: z.literal('video-local'), value: z.string() }),
+      z.object({ discriminant: z.literal('video-external'), value: z.string() }),
+      z.object({ discriminant: z.literal('carousel'), value: z.array(z.string()) }),
+    ]),
+    thumbnailUrl: z.string().optional(),
+    category: z.string().optional(),
+    location: z.string().optional(),
+    date: z.date().optional(),
   }),
 });
 

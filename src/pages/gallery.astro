@@ -35,10 +35,12 @@ console.log('Gallery Items:', sortedGalleryItems);
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         
         {sortedGalleryItems.map((item) => {
-          const videoSrc = item.data.videoFile || item.data.mediaUrl || (item.data.mediaUrls && item.data.mediaUrls[0]);
-          const images = item.data.galleryImages && item.data.galleryImages.length > 0 ? item.data.galleryImages : item.data.mediaUrls;
-          const isCarousel = item.data.mediaType === 'carousel' || (images && images.length > 1);
-          const isVideo = item.data.mediaType === 'video' || !!item.data.videoFile;
+          const media = item.data.media;
+          const isVideo = media.discriminant === 'video-local' || media.discriminant === 'video-external';
+          const isCarousel = media.discriminant === 'carousel';
+          const videoSrc = isVideo ? media.value : '';
+          const images = isCarousel ? media.value : [];
+          const imageSrc = (media.discriminant === 'image-local' || media.discriminant === 'image-external') ? media.value : '';
           
           return (
             <div class="gallery-item group cursor-pointer">
@@ -62,7 +64,7 @@ console.log('Gallery Items:', sortedGalleryItems);
                       </div>
                     </div>
                   </>
-                ) : isCarousel && images ? (
+                ) : isCarousel && images.length > 0 ? (
                   <>
                     <img 
                       src={item.data.thumbnailUrl || images[0]} 
@@ -80,7 +82,7 @@ console.log('Gallery Items:', sortedGalleryItems);
                   </>
                 ) : (
                   <img 
-                    src={item.data.mediaUrl} 
+                    src={imageSrc} 
                     alt={item.data.title} 
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -191,7 +193,8 @@ console.log('Gallery Items:', sortedGalleryItems);
         
         // Get data from the gallery items array
         const itemData = galleryData[index];
-        const galleryImages = itemData?.data?.galleryImages?.length > 0 ? itemData.data.galleryImages : itemData?.data?.mediaUrls;
+        const media = itemData?.data?.media;
+        const galleryImages = media?.discriminant === 'carousel' ? media.value : [];
         
         if (modal && modalCaption) {
           modalCaption.textContent = caption?.textContent || '';
@@ -201,7 +204,7 @@ console.log('Gallery Items:', sortedGalleryItems);
           modalVideo.classList.add('hidden');
           modalCarousel.classList.add('hidden');
           
-          if (galleryImages && galleryImages.length > 1) {
+          if (media?.discriminant === 'carousel' && galleryImages.length > 0) {
             // Handle carousel
             currentCarouselUrls = galleryImages;
             currentCarouselIndex = 0;
