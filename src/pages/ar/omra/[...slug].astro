@@ -1,0 +1,210 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+export async function getStaticPaths() {
+  const programs = await getCollection('omra');
+  return programs.map((program) => ({
+    params: { slug: program.slug },
+    props: { program },
+  }));
+}
+
+const { program } = Astro.props;
+const { Content } = await program.render();
+
+// Generate dynamic Trip / Product Schema
+const tripSchema = {
+  "@context": "https://schema.org",
+  "@type": "Trip",
+  "name": program.data.title,
+  "description": program.data.description,
+  "image": program.data.image,
+  "provider": {
+    "@type": "TravelAgency",
+    "name": "Beauséjour Voyage",
+    "url": "https://beausejourvoyage.com"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": program.data.price.replace(/[^\d]/g, ''),
+    "priceCurrency": "MAD",
+    "availability": "https://schema.org/InStock",
+    "url": Astro.url.href
+  },
+  "itinerary": {
+    "@type": "City",
+    "name": "Makkah & Madinah"
+  },
+  "offersStartCity": {
+    "@type": "City",
+    "name": "Oujda",
+    "description": "Départ direct de l'Aéroport Oujda Angads (OUD)"
+  },
+  "subTrip": [
+    {
+      "@type": "Trip",
+      "name": "Vol direct Omra depuis Oujda",
+      "description": "Vols opérés par Royal Air Maroc ou Saudi Airlines"
+    }
+  ]
+};
+---
+
+<Layout 
+  title={`${program.data.title} - وكالة أسفار عمرة وجدة`} 
+  description={`${program.data.description} | السعر: ${program.data.price} | طيران مباشر من مطار وجدة.`}
+  schemaMarkup={tripSchema}
+  lang="ar"
+>
+  <div class="container mx-auto px-4 py-8 max-w-5xl text-right" dir="rtl">
+    <!-- Breadcrumb -->
+    <nav class="mb-8" aria-label="Breadcrumb">
+      <ol class="flex flex-wrap items-center space-x-reverse space-x-2 text-sm text-gray-600 dark:text-gray-400">
+        <li><a href="/ar" class="hover:text-brand-teal transition-colors font-arabic">الرئيسية</a></li>
+        <li class="text-gray-400">/</li>
+        <li><a href="/ar/omra" class="hover:text-brand-teal transition-colors font-arabic">العمرة</a></li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 dark:text-gray-200 font-semibold font-arabic" aria-current="page">{program.data.title}</li>
+      </ol>
+    </nav>
+
+    <!-- Main Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Left Column: Package Details (8 Cols) -->
+      <div class="lg:col-span-8 space-y-8">
+        <!-- Hero Section Inside Detail -->
+        <div class="relative rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px]">
+          <Image 
+            src={program.data.image} 
+            alt={`Agence de voyage Beauséjour Voyage Omra Oujda - ${program.data.title}`} 
+            width={800}
+            height={450}
+            class="w-full h-full object-cover"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <div class="absolute top-4 left-4 bg-gold text-gray-900 px-4 py-1.5 rounded-full font-bold text-sm shadow-md font-arabic">
+            {program.data.duration}
+          </div>
+          {program.data.availabilityNote && (
+            <div class="absolute bottom-4 right-4 bg-red-600 text-white px-4 py-1 rounded-full text-xs font-semibold shadow-md animate-pulse font-arabic">
+              {program.data.availabilityNote}
+            </div>
+          )}
+        </div>
+
+        <!-- Heading / Intro -->
+        <div>
+          <span class="text-brand-teal font-semibold text-sm uppercase tracking-wider dark:text-cyan-400 font-arabic">رحلات عمرة حصرية من وجدة</span>
+          <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mt-1 mb-4 font-arabic">
+            {program.data.title}
+          </h1>
+          <div class="text-2xl font-black text-brand-teal dark:text-cyan-400 mb-6 bg-brand-teal/5 p-4 rounded-xl inline-block font-arabic">
+            السعر : {program.data.price}
+          </div>
+          <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6 font-arabic">
+            {program.data.description}
+          </p>
+        </div>
+
+        <!-- Inclusions -->
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-arabic">الخدمات المدرجة في البرنامج</h2>
+          <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {(program.data.features || []).map((feature) => (
+              <li class="flex items-start text-gray-700 dark:text-gray-300 text-sm font-arabic justify-start">
+                <svg class="w-5 h-5 text-gold ml-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Program Content -->
+        <article class="prose prose-lg dark:prose-invert max-w-none text-right">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 font-arabic">تفاصيل وتفاصيل الرحلة</h2>
+          <div class="content-body text-gray-700 dark:text-gray-300 space-y-4 font-arabic">
+            <Content />
+          </div>
+        </article>
+      </div>
+
+      <!-- Right Column: Booking Form (4 Cols) -->
+      <div class="lg:col-span-4">
+        <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6 shadow-xl sticky top-24 text-right">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 text-center font-arabic">
+            احجز مكانك في هذا البرنامج
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 text-center font-arabic">
+            تأكيد حجزك يبدأ بملء هذا الطلب البسيط. سنتواصل معكم في غضون دقائق.
+          </p>
+
+          <form class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 font-arabic">الاسم الكامل</label>
+              <input 
+                type="text" 
+                placeholder="مثال: محمد العلمي"
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal text-right font-arabic"
+                required
+              />
+            </div>
+            
+            <div>
+              <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 font-arabic">رقم الواتساب</label>
+              <input 
+                type="tel" 
+                placeholder="مثال: +212 661 234567"
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal text-right font-arabic"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 font-arabic">عدد المعتمرين</label>
+              <input 
+                type="number" 
+                min="1" 
+                value="1" 
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal text-right font-arabic"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 font-arabic">ملاحظات أو طلبات خاصة</label>
+              <textarea 
+                rows="3" 
+                placeholder="حددوا تفضيلاتكم (غرفة ثنائية، ثلاثية، مع وجبات أو بدونها، إلخ)"
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal text-right font-arabic"
+              ></textarea>
+            </div>
+
+            <button 
+              type="submit" 
+              class="w-full bg-gold hover:bg-yellow-600 text-gray-900 font-bold py-3 rounded-lg transition-colors duration-200 shadow-md text-sm uppercase tracking-wider font-arabic"
+            >
+              إرسال طلب الحجز
+            </button>
+          </form>
+
+          <!-- Contact details short list -->
+          <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 space-y-2 font-arabic">
+            <p class="flex items-center justify-start">
+              <svg class="w-4 h-4 ml-2 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+              مساعدة هاتفية : +212 6 99 92 22 29
+            </p>
+            <p class="flex items-center justify-start">
+              <svg class="w-4 h-4 ml-2 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              العنوان : عمارة السعادة، شارع فرحات حشاد، وجدة
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

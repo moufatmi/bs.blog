@@ -13,7 +13,10 @@ export default defineConfig({
   ],
   site: 'https://beausejourvoyage.com',
   output: 'static',
+  image: {
+    domains: ['i.imgur.com', 'imgur.com', 'upload.wikimedia.org'],
+  },
   build: {
-    inlineStylesheets: 'never'
+    inlineStylesheets: 'always'
   }
 });

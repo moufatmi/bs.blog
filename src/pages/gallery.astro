@@ -69,6 +69,10 @@ console.log('Gallery Items:', sortedGalleryItems);
                     <img 
                       src={item.data.thumbnailUrl || images[0]} 
                       alt={item.data.title} 
+                      width="300"
+                      height="300"
+                      loading="lazy"
+                      decoding="async"
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     {/* Carousel indicator overlay */}
@@ -84,6 +88,10 @@ console.log('Gallery Items:', sortedGalleryItems);
                   <img 
                     src={imageSrc} 
                     alt={item.data.title} 
+                    width="300"
+                    height="300"
+                    loading="lazy"
+                    decoding="async"
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 )}

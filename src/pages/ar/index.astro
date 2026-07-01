@@ -1,0 +1,169 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import PromoVideo from '../../components/PromoVideo.astro';
+import ProgramCard from '../../components/ProgramCard.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+const featuredProgramIds = ['إسطنبول-غشت.md', 'عمرة-غشت.md', 'Haj-2026.md'];
+const hajjPrograms = await getCollection('hajj');
+const omraPrograms = await getCollection('omra');
+const voyagePrograms = await getCollection('voyages');
+const allPrograms = [...hajjPrograms, ...omraPrograms, ...voyagePrograms];
+const featuredPrograms = allPrograms.filter(program => featuredProgramIds.includes(program.id));
+
+const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
+---
+
+<Layout 
+  title="وكالة أسفار عمرة وجدة | بوسيجور للاسفار" 
+  description="أفضل وكالة أسفار للعمرة بوجدة. اكتشفوا عروض عمرة رمضان 2026، أسعار العمرة بالمغرب، ورحلاتنا المباشرة من مطار وجدة أنجاد."
+  lang="ar"
+>
+  <Hero 
+    title="أفضل وكالة أسفار لتنظيم العمرة بوجدة" 
+    desc="نرافقكم لأداء مناسك العمرة والحج بكل راحة وطمأنينة. رحلات مباشرة من مطار وجدة أنجاد، فنادق قريبة من الحرمين الشريفين، ومرافقة دينية ممتازة." 
+  />
+  <PromoVideo />
+  
+  <!-- Programs Section -->
+  <section class="py-16 bg-white dark:bg-gray-900 text-right">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400 font-arabic">
+          أهم برامجنا السياحية والدينية
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300 font-arabic">
+          اكتشفوا عروضنا المصممة بعناية لتوفر لكم تجربة روحية وثقافية استثنائية
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {featuredPrograms.map((program) => (
+          <ProgramCard 
+            title={program.data.title}
+            description={program.data.description}
+            image={program.data.image}
+            price={program.data.price}
+            duration={program.data.duration}
+            features={program.data.features}
+            type={program.collection === 'omra' ? 'omra' : undefined}
+            slug={program.collection === 'omra' ? program.slug : undefined}
+            pdfUrl={program.data.pdfUrl}
+            availabilityNote={program.data.availabilityNote}
+            showContactButton={false}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Local SEO / Info Section -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800 text-right">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400 font-arabic">
+          خدمات العمرة بوجدة مع بوسيجور للاسفار
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300 font-arabic">
+          وكالتنا هي الخيار الأمثل لكم لرحلات العمرة والحج في الجهة الشرقية.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-right" dir="rtl">
+        <div class="bg-white p-8 rounded-2xl shadow-md dark:bg-gray-900 border-t-4 border-gold">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-arabic">
+            عمرة رمضان وجدة
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 font-arabic text-sm leading-relaxed">
+            استمتعوا بالروحانيات الخاصة بشهر رمضان في مكة المكرمة والمدينة المنورة. برامج شاملة ومنظمة للتفرغ للعبادة في هذا الشهر الفضيل.
+          </p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-2xl shadow-md dark:bg-gray-900 border-t-4 border-gold">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-arabic">
+            أسعار العمرة 2026 بالمغرب
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 font-arabic text-sm leading-relaxed">
+            نوفر لكم أسعاراً تنافسية تلائم جميع الميزانيات (من البرامج الاقتصادية إلى البرامج الفاخرة) مع الحفاظ على أعلى معايير الجودة والإقامة.
+          </p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-2xl shadow-md dark:bg-gray-900 border-t-4 border-gold">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 font-arabic">
+            رحلات مباشرة من مطار وجدة
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 font-arabic text-sm leading-relaxed">
+            نسقنا لكم رحلات مباشرة مريحة دون الحاجة للتوقف، لتنطلقوا من مطار وجدة أنجاد إلى الديار المقدسة مباشرة مع أفضل شركات الطيران.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section class="py-16 bg-warm-beige dark:bg-gray-800 text-right">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400 font-arabic">
+          آخر مقالات المدونة
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300 font-arabic">
+          نصائح، إرشادات دينية وتوجيهات عملية لإثراء رحلاتكم الدينية والسياحية
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {latestPosts.map((post: CollectionEntry<'blog'>) => (
+          <BlogCard 
+            title={post.data.title}
+            excerpt={post.data.excerpt}
+            image={post.data.image}
+            date={post.data.date.toLocaleDateString('ar-MA', { year: 'numeric', month: 'long', day: 'numeric' })}
+            category={post.data.category}
+            slug={post.slug}
+          />
+        ))}
+      </div>
+      
+      <div class="text-center mt-12">
+        <a 
+          href="/blog" 
+          class="inline-flex items-center bg-brand-teal hover:opacity-90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200 dark:bg-cyan-500 dark:hover:bg-cyan-600 font-arabic"
+        >
+          عرض جميع المقالات
+          <svg class="w-5 h-5 mr-2 rotate-180" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-r from-brand-teal to-brand-cyan text-white text-center">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl lg:text-4xl font-bold mb-6 font-arabic">
+        هل أنتم مستعدون لبدء رحلتكم ؟
+      </h2>
+      <p class="text-xl mb-8 text-gray-200 font-arabic">
+        تواصلوا معنا للحصول على استشارة مجانية وتسعيرة مخصصة لرحلتكم القادمة.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/contact" 
+          class="bg-black hover:bg-black-600 text-brand-teal px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200 font-arabic"
+        >
+          طلب تسعيرة
+        </a>
+        <a 
+          href="tel:+212699922229" 
+          class="border-2 border-white hover:bg-white hover:text-brand-teal text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 font-arabic"
+        >
+          اتصل بنا الآن
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

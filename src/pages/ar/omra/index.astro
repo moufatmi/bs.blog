@@ -1,0 +1,218 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import ProgramCard from '../../../components/ProgramCard.astro';
+import { getCollection } from 'astro:content';
+import Hero from '../../../components/Hero.astro';
+import heroImage from '../../../assets/pics/hajj-omra-hero.png';
+
+const omraPrograms = await getCollection('omra');
+---
+
+<Layout 
+  title="وكالة أسفار عمرة وجدة | بوسيجور للاسفار" 
+  description="أفضل وكالة أسفار للعمرة بوجدة. اكتشفوا عروض عمرة رمضان 2026، أسعار العمرة بالمغرب، ورحلاتنا المباشرة من مطار وجدة أنجاد مع الخطوط الملكية المغربية والخطوط السعودية."
+  lang="ar"
+>
+  <Hero
+    img={heroImage}
+    title="عمرة وجدة - أفضل وكالة أسفار لتنظيم رحلات العمرة"
+    desc="أدوا مناسك العمرة بكل طمأنينة وراحة مع وكالة أسفار بوسيجور. رحلات مباشرة من مطار وجدة أنجاد، فنادق ممتازة قريبة من الحرمين الشريفين، ومرافقة دينية وإدارية مميزة."
+  />
+
+  <!-- Keyword-driven Intro Section -->
+  <section class="py-12 bg-warm-beige dark:bg-gray-800 text-right">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 lg:p-12">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+          <h2 class="text-3xl font-extrabold text-brand-teal dark:text-cyan-400 mb-4 font-arabic">
+            شريككم الموثوق لأداء مناسك العمرة والحج بوجدة
+          </h2>
+          <div class="w-16 h-1 bg-gold mx-auto mb-6"></div>
+          <p class="text-lg text-gray-600 dark:text-gray-300 font-arabic">
+            بفضل خبرتنا الممتدة لسنوات، تعتبر وكالة <strong>بوسيجور للاسفار</strong> (Beauséjour Voyage) المرجع الأول لتنظيم رحلات الحج والعمرة في الجهة الشرقية. نحرص على أدق التفاصيل لتكون رحلتكم الإيمانية مريحة وميسرة من البداية وحتى العودة.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="space-y-3">
+            <div class="text-gold dark:text-yellow-400 font-bold text-lg flex items-center justify-end font-arabic">
+              عمرة رمضان وجدة
+              <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-arabic">
+              نظمنا لكم رحلات خاصة طيلة شهر رمضان المبارك. عيشوا أجواء إيمانية استثنائية في العشر الأواخر من رمضان بجوار الحرم المكي الشريف مع برامج متكاملة ومدروسة.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="text-gold dark:text-yellow-400 font-bold text-lg flex items-center justify-end font-arabic">
+              أسعار العمرة 2026 بالمغرب
+              <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-arabic">
+              نتفاوض مباشرة مع كبريات الفنادق وشركات الطيران لنقدم لكم أفضل أسعار العمرة بالمغرب لعام 2026، مع ضمان جودة الخدمات والإقامة المريحة لجميع زوار بيت الله الحرام.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="text-gold dark:text-yellow-400 font-bold text-lg flex items-center justify-end font-arabic">
+              رحلات مباشرة من مطار وجدة أنجاد
+              <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-arabic">
+              توفيرًا لراحتكم وتفاديًا لتعب التوقفات (الescale)، تشمل جميع برامجنا رحلات جوية مباشرة ذهابًا وإيابًا انطلاقًا من مطار وجدة بالتعاون مع الخطوط الملكية المغربية والخطوط السعودية.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Grid Section -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400 font-arabic">
+          برامجنا لعمرة 2026
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300 font-arabic">
+          اختاروا العرض الذي يناسب ميزانيتكم وتطلعاتكم الروحية.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {omraPrograms.map((program) => (
+          <ProgramCard 
+            title={program.data.title}
+            description={program.data.description}
+            image={program.data.image}
+            price={program.data.price}
+            duration={program.data.duration}
+            features={program.data.features}
+            type="omra"
+            slug={program.slug}
+            pdfUrl={program.data.pdfUrl}
+            availabilityNote={program.data.availabilityNote}
+          />
+        ))}
+        {omraPrograms.length === 0 && (
+          <div class="col-span-full text-center py-20">
+            <p class="text-2xl text-gray-500 font-medium dark:text-gray-400 font-arabic">لا توجد برامج عمرة متوفرة حالياً.</p>
+            <p class="mt-2 text-gray-400 font-arabic">يرجى الاتصال بنا مباشرة لمعرفة مواعيد الرحلات القادمة.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Information Section (FAQ/Benefits) -->
+  <section class="py-16 bg-gradient-to-r from-brand-teal to-brand-cyan text-white text-right">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold mb-4 font-arabic">
+          لماذا تختارون وكالتنا لأداء العمرة ؟
+        </h2>
+        <p class="text-xl text-gray-200 max-w-3xl mx-auto font-arabic">
+          نحن نبذل قصارى جهدنا لنجعل رحلتكم الروحية ناجحة ومريحة ومباركة.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-gray-900">
+        <div class="bg-white/95 dark:bg-gray-800 dark:text-white p-8 rounded-2xl shadow-lg">
+          <h3 class="font-bold text-xl mb-3 text-brand-teal dark:text-cyan-400 font-arabic">تأطير ومرافقة دينية</h3>
+          <p class="text-gray-600 dark:text-gray-300 font-arabic text-sm leading-relaxed">
+            يرافقكم مرشدون ذوو كفاءة عالية خلال مناسك العمرة، ويقدمون دروساً علمية وتوجيهات عملية في مكة المكرمة والمدينة المنورة.
+          </p>
+        </div>
+
+        <div class="bg-white/95 dark:bg-gray-800 dark:text-white p-8 rounded-2xl shadow-lg">
+          <h3 class="font-bold text-xl mb-3 text-brand-teal dark:text-cyan-400 font-arabic">فنادق قريبة ومختارة</h3>
+          <p class="text-gray-600 dark:text-gray-300 font-arabic text-sm leading-relaxed">
+            جميع الفنادق مختارة بعناية فائقة لتضمن لكم القرب والنظافة والراحة التامة للذهاب سيراً على الأقدام إلى المسجد الحرام والمسجد النبوي.
+          </p>
+        </div>
+
+        <div class="bg-white/95 dark:bg-gray-800 dark:text-white p-8 rounded-2xl shadow-lg">
+          <h3 class="font-bold text-xl mb-3 text-brand-teal dark:text-cyan-400 font-arabic">سفر مباشر ومريح</h3>
+          <p class="text-gray-600 dark:text-gray-300 font-arabic text-sm leading-relaxed">
+            رحلات مباشرة ومريحة دون عناء التوقف من مطار وجدة أنجاد إلى جدة أو المدينة المنورة، خيار مثالي للعائلات وكبار السن.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Form Section -->
+  <section class="py-16 bg-white dark:bg-gray-900 text-right" dir="rtl">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 md:p-12 shadow-2xl border border-gray-100 dark:border-gray-700">
+        <h2 class="text-3xl font-bold text-center text-brand-teal mb-4 dark:text-cyan-400 font-arabic">
+          اطلبوا تسعيرة العمرة المخصصة لكم
+        </h2>
+        <p class="text-center text-gray-600 mb-8 dark:text-gray-300 font-arabic">
+          املأوا الاستمارة أسفله وسنتواصل معكم لتقديم عرض مناسب لاحتياجاتكم.
+        </p>
+
+        <form class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 font-arabic">الاسم الكامل</label>
+              <input 
+                type="text" 
+                placeholder="مثال: محمد العلمي"
+                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-teal text-right font-arabic"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 font-arabic">رقم الهاتف (يفضل واتساب)</label>
+              <input 
+                type="tel" 
+                placeholder="مثال: +212 661 234567"
+                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-teal text-right font-arabic"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 font-arabic">البرنامج المطلوب</label>
+              <select class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-teal font-arabic">
+                <option value="ramadan">عمرة رمضان</option>
+                <option value="direct">عمرة رحلة مباشرة (عادي)</option>
+                <option value="premium">عمرة ممتازة (فنادق 5 نجوم)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 font-arabic">عدد الأفراد</label>
+              <input 
+                type="number" 
+                min="1" 
+                value="1"
+                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-teal text-right font-arabic"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 font-arabic">رسالة أو طلبات خاصة</label>
+            <textarea 
+              rows="4" 
+              placeholder="حددوا متطلباتكم الخاصة (مثل نوع الغرفة، تواريخ السفر المفضلة، إلخ)"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-teal text-right font-arabic"
+            ></textarea>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full bg-gold hover:bg-yellow-600 text-gray-900 font-bold py-4 rounded-xl transition-all duration-300 hover:shadow-lg text-lg uppercase tracking-wider font-arabic"
+          >
+            إرسال الطلب
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+</Layout>

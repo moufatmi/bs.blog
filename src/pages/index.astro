@@ -17,8 +17,11 @@ const featuredPrograms = allPrograms.filter(program => featuredProgramIds.includ
 const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
 ---
 
-<Layout title="Beauséjour Voyage - Blog de voyages, Hajj et Omra">
-  <Hero />
+<Layout title="Agence de Voyage Omra Oujda | Beauséjour Voyage" description="Meilleure Agence de Voyage pour l'Omra à Oujda. Offres d'Omra Ramadan 2026, prix compétitifs au Maroc, vols directs depuis l'aéroport de Oujda-Angads.">
+  <Hero 
+    title="Meilleure Agence de Voyage pour l'Omra à Oujda" 
+    desc="Votre partenaire de confiance pour des pèlerinages réussis. Vols directs depuis l'aéroport d'Oujda-Angads et accompagnement religieux." 
+  />
   <PromoVideo />
   
   <!-- Programs Section -->
@@ -35,8 +38,56 @@ const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {featuredPrograms.map((program) => (
-          <ProgramCard {...program.data} showContactButton={false} />
+          <ProgramCard 
+            {...program.data} 
+            showContactButton={false} 
+            type={program.collection === 'omra' ? 'omra' : undefined}
+            slug={program.collection === 'omra' ? program.slug : undefined}
+          />
         ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Local SEO / Info Section -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-brand-teal mb-4 dark:text-cyan-400">
+          Votre Partenaire Omra & Hajj à Oujda
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto dark:text-gray-300">
+          Beauséjour Voyage vous accompagne dans l'accomplissement de votre pèlerinage avec professionnalisme, dévouement et confort.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-2xl shadow-md dark:bg-gray-900 border-t-4 border-gold">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            Omra Ramadan Oujda
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            Vivez le mois sacré de Ramadan dans les lieux saints grâce à nos offres d'Omra Ramadan au départ de Oujda. Des programmes complets adaptés à la spiritualité de ce mois béni.
+          </p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-2xl shadow-md dark:bg-gray-900 border-t-4 border-gold">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            Prix Omra 2026 Maroc
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            Découvrez les meilleurs rapports qualité-prix du marché pour l'Omra 2026 au Maroc. Nous proposons des forfaits économiques, standards et premium adaptés à tous les budgets.
+          </p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-2xl shadow-md dark:bg-gray-900 border-t-4 border-gold">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            Vols directs Omra depuis Aéroport Oujda Angads
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            Évitez la fatigue des escales grâce à nos formules incluant des vols directs pour l'Omra au départ de l'Aéroport Oujda Angads (vols assurés par RAM et Saudi Airlines).
+          </p>
+        </div>
       </div>
     </div>
   </section>

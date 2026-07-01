@@ -5,68 +5,158 @@ import '../styles/global.css';
 
 interface Props {
   title: string;
+  description?: string;
+  lang?: 'fr' | 'ar';
+  schemaMarkup?: Record<string, any> | Record<string, any>[];
 }
 
-const { title } = Astro.props;
+const { 
+  title, 
+  description = "Beauséjour Voyage - Agence de voyage à Oujda spécialisée dans l'Omra (عمرة وجدة) et Hajj. Vols directs, hébergements proches du Haram et accompagnement de qualité.", 
+  lang = 'fr', 
+  schemaMarkup 
+} = Astro.props;
+
+const isRtl = lang === 'ar';
+const dir = isRtl ? 'rtl' : 'ltr';
+
+// Get current URLs for canonical and alternates
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+const pathname = Astro.url.pathname;
+let alternateFr = '';
+let alternateAr = '';
+
+if (pathname.startsWith('/ar')) {
+  alternateFr = new URL(pathname.replace(/^\/ar/, '') || '/', Astro.site).href;
+  alternateAr = canonicalUrl;
+} else {
+  alternateFr = canonicalUrl;
+  alternateAr = new URL('/ar' + (pathname === '/' ? '' : pathname), Astro.site).href;
+}
+
+// Combine schema markups
+const baseLocalBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Beauséjour Voyage",
+  "image": "https://beausejourvoyage.com/favicon.svg",
+  "@id": "https://beausejourvoyage.com/#localbusiness",
+  "url": "https://beausejourvoyage.com",
+  "telephone": "+212699922229",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Immeuble Essaada, Rue Farhat Hachad",
+    "addressLocality": "Oujda",
+    "postalCode": "60000",
+    "addressCountry": "MA"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 34.6867,
+    "longitude": -1.9114
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "18:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "09:00",
+      "closes": "13:00"
+    }
+  ],
+  "sameAs": [
+    "https://www.facebook.com/beausejourvoyage"
+  ]
+};
+
+const baseTravelAgencySchema = {
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  "name": "Beauséjour Voyage",
+  "url": "https://beausejourvoyage.com",
+  "logo": "https://beausejourvoyage.com/favicon.svg",
+  "telephone": "+212699922229",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Immeuble Essaada, Rue Farhat Hachad",
+    "addressLocality": "Oujda",
+    "addressCountry": "MA"
+  },
+  "founder": {
+    "@type": "Person",
+    "name": "Brahim Fatmi",
+    "alternateName": "ابراهيم فاطمي",
+    "jobTitle": "Fondateur & CEO / Founder & CEO"
+  },
+  "employee": [
+    {
+      "@type": "Person",
+      "name": "Brahim Fatmi",
+      "alternateName": "ابراهيم فاطمي",
+      "jobTitle": "Fondateur & CEO / Founder & CEO"
+    },
+    {
+      "@type": "Person",
+      "name": "Moussab Fatmi",
+      "alternateName": "مصعب فاطمي",
+      "jobTitle": "Directeur du Support Technique / Technical Support Director",
+      "url": "https://moussab.com",
+      "image": "https://moussab.com/profile.jpg",
+      "sameAs": [
+        "https://moussab.com"
+      ],
+      "description": "Responsable du support technique et informatique chez Beausejour Voyage (وجدة). Il supervise l'infrastructure technique, le développement des plateformes numériques de réservation et l'assistance technique générale."
+    }
+  ]
+};
+
+const schemas = [baseLocalBusinessSchema, baseTravelAgencySchema];
+if (schemaMarkup) {
+  if (Array.isArray(schemaMarkup)) {
+    schemas.push(...schemaMarkup);
+  } else {
+    schemas.push(schemaMarkup);
+  }
+}
 ---
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang={lang} dir={dir}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Beauséjour Voyage - Votre partenaire voyage" />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- SEO Alternates (hreflang) -->
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="fr" href={alternateFr} />
+    <link rel="alternate" hreflang="ar" href={alternateAr} />
+    <link rel="alternate" hreflang="x-default" href={alternateFr} />
+
     <title>{title}</title>
     
-    <!-- Structured JSON-LD Metadata linking Technical Support to Moussab Fatmi & Owner to Brahim Fatmi -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "TravelAgency",
-        "name": "Beausejour Voyage",
-        "url": "https://beausejourvoyage.com",
-        "logo": "https://beausejourvoyage.com/favicon.svg",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Oujda",
-          "addressCountry": "MA"
-        },
-        "founder": {
-          "@type": "Person",
-          "name": "Brahim Fatmi",
-          "alternateName": "ابراهيم فاطمي",
-          "jobTitle": "Fondateur & CEO / Founder & CEO"
-        },
-        "employee": [
-          {
-            "@type": "Person",
-            "name": "Brahim Fatmi",
-            "alternateName": "ابراهيم فاطمي",
-            "jobTitle": "Fondateur & CEO / Founder & CEO"
-          },
-          {
-            "@type": "Person",
-            "name": "Moussab Fatmi",
-            "alternateName": "مصعب فاطمي",
-            "jobTitle": "Directeur du Support Technique / Technical Support Director",
-            "url": "https://moussab.com",
-            "image": "https://moussab.com/profile.jpg",
-            "sameAs": [
-              "https://moussab.com"
-            ],
-            "description": "Responsable du support technique et informatique chez Beausejour Voyage (وجدة). Il supervise l'infrastructure technique, le développement des plateformes numériques de réservation et l'assistance technique générale."
-          }
-        ]
-      }
-    </script>
+    {schemas.map((schema) => (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+    ))}
   </head>
-  <body>
-    <Header />
+  <body class={isRtl ? "arabic-text" : ""}>
+    <Header lang={lang} />
     <main class="min-h-screen">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
     <script>
       import Alpine from 'alpinejs';
     
