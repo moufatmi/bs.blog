@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Host & Sitemap
+Sitemap: https://beausejourvoyage.com/sitemap.xml
+Host: https://beausejourvoyage.com
