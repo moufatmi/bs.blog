@@ -14,8 +14,8 @@ const t = {
   fr: {
     booking: "Booking",
     accueil: "Accueil",
-    omra: "Omra Oujda",
-    hajjOmra: "Hajj & Omra",
+    omra: "Omra",
+    hajjOmra: "Hajj",
     voyages: "Voyages Organisés",
     blog: "Blog",
     gallery: "Galerie",
@@ -32,7 +32,7 @@ const t = {
   ar: {
     booking: "حجز تذاكر",
     accueil: "الرئيسية",
-    omra: "عمرة وجدة",
+    omra: "العمرة",
     hajjOmra: "الحج والعمرة",
     voyages: "رحلات منظمة",
     blog: "المدونة",
@@ -63,58 +63,58 @@ if (isAr) {
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-20">
       <!-- Logo -->
-      <a href={t.homeLink} class="flex items-center space-x-3">
+      <a href={t.homeLink} class="flex items-center space-x-3 flex-shrink-0">
         <Image src={logo} alt="Beauséjour Voyage Logo" width={48} height={48} class="w-12 h-12" />
         <div class="dark:text-gray-100">
-          <span class="text-2xl font-bold text-deep-green dark:text-white block">Beauséjour Voyage</span>
-          <span class="text-sm text-gray-600 dark:text-gray-400 block">{t.tagline}</span>
+          <span class="text-xl xl:text-2xl font-bold text-deep-green dark:text-white block leading-tight">Beauséjour Voyage</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400 block">{t.tagline}</span>
         </div>
       </a>
 
       <!-- Navigation -->
-      <div class="hidden md:flex items-center space-x-6">
-        <a href="https://ticket.beausejourvoyage.com" target="_blank" rel="noopener noreferrer" class="bg-brand-teal hover:opacity-90 text-white px-5 py-2 rounded-lg transition-colors duration-200 font-medium dark:bg-cyan-500 dark:hover:bg-cyan-600">
+      <div class="hidden lg:flex items-center space-x-2.5 xl:space-x-5 text-sm xl:text-base font-medium">
+        <a href="https://ticket.beausejourvoyage.com" target="_blank" rel="noopener noreferrer" class="bg-brand-teal hover:opacity-90 text-white px-4 py-2 rounded-lg transition-colors duration-200 dark:bg-cyan-500 dark:hover:bg-cyan-600 text-xs xl:text-sm">
           {t.booking}
         </a>
-        <a href={t.homeLink} class="text-gray-700 hover:text-gold transition-colors duration-200 font-medium dark:text-gray-300 dark:hover:text-gold">{t.accueil}</a>
-        <a href={t.omraLink} class="text-gray-700 hover:text-gold transition-colors duration-200 font-medium dark:text-gray-300 dark:hover:text-gold font-semibold text-brand-teal dark:text-cyan-400">{t.omra}</a>
-        <a href={t.hajjOmraLink} class="text-gray-700 hover:text-gold transition-colors duration-200 font-medium dark:text-gray-300 dark:hover:text-gold">{t.hajjOmra}</a>
-        <a href={t.voyagesLink} class="text-gray-700 hover:text-gold transition-colors duration-200 font-medium dark:text-gray-300 dark:hover:text-gold">{t.voyages}</a>
-        <a href={t.blogLink} class="text-gray-700 hover:text-gold transition-colors duration-200 font-medium dark:text-gray-300 dark:hover:text-gold">{t.blog}</a>
-        <a href={t.galleryLink} class="text-gray-700 hover:text-gold transition-colors duration-200 font-medium dark:text-gray-300 dark:hover:text-gold">{t.gallery}</a>
+        <a href={t.homeLink} class="text-gray-700 hover:text-gold transition-colors duration-200 dark:text-gray-300 dark:hover:text-gold">{t.accueil}</a>
+        <a href={t.omraLink} class="text-gray-700 hover:text-gold transition-colors duration-200 dark:text-gray-300 dark:hover:text-gold font-semibold text-brand-teal dark:text-cyan-400">{t.omra}</a>
+        <a href={t.hajjOmraLink} class="text-gray-700 hover:text-gold transition-colors duration-200 dark:text-gray-300 dark:hover:text-gold">{t.hajjOmra}</a>
+        <a href={t.voyagesLink} class="text-gray-700 hover:text-gold transition-colors duration-200 dark:text-gray-300 dark:hover:text-gold">{t.voyages}</a>
+        <a href={t.blogLink} class="text-gray-700 hover:text-gold transition-colors duration-200 dark:text-gray-300 dark:hover:text-gold">{t.blog}</a>
+        <a href={t.galleryLink} class="text-gray-700 hover:text-gold transition-colors duration-200 dark:text-gray-300 dark:hover:text-gold">{t.gallery}</a>
         
         <!-- Language Switcher -->
-        <a href={langSwitchLink} class="text-sm font-semibold border-2 border-brand-teal hover:bg-brand-teal hover:text-white px-3 py-1.5 rounded-lg text-brand-teal transition-all duration-200 dark:border-cyan-400 dark:text-cyan-400 dark:hover:bg-cyan-400 dark:hover:text-gray-900">
+        <a href={langSwitchLink} class="text-xs font-semibold border-2 border-brand-teal hover:bg-brand-teal hover:text-white px-2.5 py-1.5 rounded-lg text-brand-teal transition-all duration-200 dark:border-cyan-400 dark:text-cyan-400 dark:hover:bg-cyan-400 dark:hover:text-gray-900">
           {isAr ? "Français" : "العربية"}
         </a>
 
         <!-- Theme Toggle -->
-        <button id="theme-toggle" class="text-gray-700 dark:text-gray-300 hover:text-gold dark:hover:text-gold">
-          <svg id="theme-toggle-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20">
+        <button id="theme-toggle" class="text-gray-700 dark:text-gray-300 hover:text-gold dark:hover:text-gold p-1 focus:outline-none">
+          <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
           </svg>
-          <svg id="theme-toggle-light-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20">
+          <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
           </svg>
         </button>
 
-        <a href={t.contactLink} class="bg-gold hover:bg-yellow-600 text-white px-5 py-2 rounded-lg transition-colors duration-200 font-medium dark:text-gray-900 dark:bg-yellow-400 dark:hover:bg-yellow-500">
+        <a href={t.contactLink} class="bg-gold hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 font-semibold dark:text-gray-900 dark:bg-yellow-400 dark:hover:bg-yellow-500 text-xs xl:text-sm">
           {t.contact}
         </a>
       </div>
 
       <!-- Mobile menu button -->
-      <div class="md:hidden flex items-center gap-3">
+      <div class="lg:hidden flex items-center gap-3">
         <!-- Language Switcher for Mobile -->
         <a href={langSwitchLink} class="text-xs font-semibold border border-brand-teal px-2.5 py-1 rounded text-brand-teal dark:border-cyan-400 dark:text-cyan-400">
           {isAr ? "FR" : "AR"}
         </a>
         <!-- Theme Toggle for Mobile -->
-        <button id="mobile-theme-toggle" class="text-gray-700 dark:text-gray-300 hover:text-gold dark:hover:text-gold">
-          <svg id="mobile-theme-toggle-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+        <button id="mobile-theme-toggle" class="text-gray-700 dark:text-gray-300 hover:text-gold dark:hover:text-gold p-1 focus:outline-none">
+          <svg id="mobile-theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
           <svg id="mobile-theme-toggle-light-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
         </button>
-        <button id="mobile-menu-button" class="text-gray-700 hover:text-gold dark:text-gray-300 dark:hover:text-gold">
+        <button id="mobile-menu-button" class="text-gray-700 hover:text-gold dark:text-gray-300 dark:hover:text-gold focus:outline-none">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
@@ -123,7 +123,7 @@ if (isAr) {
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden">
+    <div id="mobile-menu" class="hidden lg:hidden">
       <div class="pt-2 pb-3 space-y-1 sm:px-3">
         <a href="https://ticket.beausejourvoyage.com" target="_blank" rel="noopener noreferrer" class="bg-brand-teal text-white block px-3 py-2 rounded-md text-base font-medium text-center dark:bg-cyan-500">{t.booking}</a>
         <a href={t.homeLink} class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gold hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">{t.accueil}</a>

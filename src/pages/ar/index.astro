@@ -21,10 +21,21 @@ const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog
   description="أفضل وكالة أسفار للعمرة بوجدة. اكتشفوا عروض عمرة رمضان 2026، أسعار العمرة بالمغرب، ورحلاتنا المباشرة من مطار وجدة أنجاد."
   lang="ar"
 >
-  <Hero 
-    title="أفضل وكالة أسفار لتنظيم العمرة بوجدة" 
-    desc="نرافقكم لأداء مناسك العمرة والحج بكل راحة وطمأنينة. رحلات مباشرة من مطار وجدة أنجاد، فنادق قريبة من الحرمين الشريفين، ومرافقة دينية ممتازة." 
-  />
+  <Hero />
+
+  <!-- Welcome / H1 SEO Section in Arabic -->
+  <section class="py-16 bg-white dark:bg-gray-900 border-b dark:border-gray-800 text-center">
+    <div class="max-w-4xl mx-auto px-4">
+      <h1 class="text-3xl md:text-5xl font-black text-brand-teal dark:text-cyan-400 mb-6 leading-tight font-arabic">
+        أفضل وكالة أسفار لتنظيم العمرة بوجدة
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-arabic font-medium">
+        شريككم الموثوق لرحلات الحج والعمرة. نرافقكم لأداء المناسك بكل طمأنينة ويسر، مع تنظيم رحلات مباشرة من مطار وجدة أنجاد بالتعاون مع الخطوط الملكية المغربية والخطوط السعودية.
+      </p>
+      <div class="w-24 h-1 bg-gradient-to-r from-brand-teal to-gold mx-auto mt-6 rounded-full"></div>
+    </div>
+  </section>
+
   <PromoVideo />
   
   <!-- Programs Section -->

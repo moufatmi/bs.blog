@@ -17,11 +17,22 @@ const featuredPrograms = allPrograms.filter(program => featuredProgramIds.includ
 const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
 ---
 
-<Layout title="Agence de Voyage Omra Oujda | Beauséjour Voyage" description="Meilleure Agence de Voyage pour l'Omra à Oujda. Offres d'Omra Ramadan 2026, prix compétitifs au Maroc, vols directs depuis l'aéroport de Oujda-Angads.">
-  <Hero 
-    title="Meilleure Agence de Voyage pour l'Omra à Oujda" 
-    desc="Votre partenaire de confiance pour des pèlerinages réussis. Vols directs depuis l'aéroport d'Oujda-Angads et accompagnement religieux." 
-  />
+<Layout title="Agence de Voyage Omra Oujda | Beauséjour Voyage" description=". Offres d'Omra Ramadan 2026, prix compétitifs au Maroc, vols directs depuis l'aéroport de Oujda-Angads.">
+  <Hero />
+
+  <!-- Welcome / H1 SEO Section -->
+  <section class="py-16 bg-white dark:bg-gray-900 border-b dark:border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h1 class="text-3xl md:text-5xl font-black text-brand-teal dark:text-cyan-400 mb-6 leading-tight">
+        
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-medium">
+        Votre partenaire de confiance pour des pèlerinages réussis. Nous organisons des vols directs depuis l'aéroport d'Oujda-Angads avec Royal Air Maroc et Saudi Airlines, en vous offrant un accompagnement de qualité à chaque étape.
+      </p>
+      <div class="w-24 h-1 bg-gradient-to-r from-brand-teal to-gold mx-auto mt-6 rounded-full"></div>
+    </div>
+  </section>
+
   <PromoVideo />
   
   <!-- Programs Section -->
