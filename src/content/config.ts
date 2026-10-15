@@ -10,6 +10,7 @@ const programSchema = z.object({
   pdfUrl: z.string().optional(),
   availabilityNote: z.string().optional(),
   destination: z.string().optional(),
+  supabaseId: z.string().optional(),
 });
 
 const hajjCollection = defineCollection({

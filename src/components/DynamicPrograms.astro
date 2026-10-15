@@ -1,0 +1,368 @@
+---
+// src/components/DynamicPrograms.astro
+import { supabase, type Program } from '../lib/supabase';
+
+interface Props {
+  lang?: 'ar' | 'fr';
+}
+
+const { lang = 'ar' } = Astro.props;
+const isAr = lang === 'ar';
+
+// وظيفة لتنظيف وتصحيح رابط الصورة في حال كان كائن JSON
+function cleanImageUrl(url: string | null): string {
+  if (!url) return '';
+  if (url.includes('{"Key"')) {
+    try {
+      const match = url.match(/"Key":"([^"]+)"/);
+      if (match && match[1]) {
+        return `https://vfmsusxvlzmpvygnsnex.supabase.co/storage/v1/object/public/${match[1]}`;
+      }
+    } catch (e) {
+      // fallback
+    }
+  }
+  // إصلاح التكرار في مسار program-images إذا وجد
+  return url.replace('/program-images/program-images/', '/program-images/');
+}
+
+// مميزات افتراضية احترافية في حال لم يحدد الوالد نصاً مفصلاً
+const defaultFeaturesAr = [
+  'طيران مباشر من مطار وجدة أنجاد (RAM أو السعودية)',
+  'فنادق قريبة وممتازة بجوار الحرمين الشريفين',
+  'مرافقة وتأطير ديني وإداري طيلة الرحلة',
+  'تأشيرة العمرة والنقل بحافلات مريحة ومكيفة',
+];
+
+const defaultFeaturesFr = [
+  'Vol direct depuis Aéroport Oujda Angads (RAM / Saudia)',
+  'Hôtels sélectionnés très proches du Haram',
+  'Accompagnement religieux et assistance complète',
+  'Visa et transferts internes en bus grand confort',
+];
+
+const defaultFeatures = isAr ? defaultFeaturesAr : defaultFeaturesFr;
+
+// جلب البيانات الأولية من Supabase
+let initialPrograms: Program[] = [];
+try {
+  const { data, error } = await supabase
+    .from('programs')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (!error && data) {
+    initialPrograms = data as Program[];
+  }
+} catch (e) {
+  console.error('Error fetching initial programs from Supabase:', e);
+}
+---
+
+<div class="dynamic-programs-wrapper my-4" dir={isAr ? "rtl" : "ltr"}>
+  
+  <!-- ترويسة القسم -->
+  <div class="text-center mb-10">
+    <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-brand-teal/10 text-brand-teal dark:bg-cyan-500/10 dark:text-cyan-400 mb-3 tracking-wider uppercase">
+      {isAr ? "مباشرة من الوكالة • تحديث فوري" : "Direct de l'agence • Mis à jour"}
+    </span>
+    <h2 class="text-3xl lg:text-4xl font-extrabold text-brand-teal dark:text-cyan-400">
+      {isAr ? "أحدث برامج العمرة المعلنة" : "Nos Dernières Offres Publiées"}
+    </h2>
+    <p class="mt-2 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-sm md:text-base">
+      {isAr 
+        ? "برامج ورحلات حصرية ومباشرة من مطار وجدة أنجاد. اضغط على أي إعلان لعرض التفاصيل الكاملة أو الحجز المباشر." 
+        : "Programmes exclusifs avec vols directs depuis Oujda. Cliquez sur l'affiche pour agrandir ou réservez directement."}
+    </p>
+    <div class="w-20 h-1 bg-gradient-to-r from-brand-teal to-gold mx-auto mt-4 rounded-full"></div>
+  </div>
+
+  <!-- شبكة عرض البرامج -->
+  <div id="dynamic-programs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {initialPrograms.map((program) => {
+      const fixedImageUrl = cleanImageUrl(program.image_url);
+      const programTitle = program.title || (isAr ? "برنامج عمرة وجدة" : "Programme Omra Oujda");
+      const programPrice = program.price || (isAr ? "اتصل للمزيد" : "Sur demande");
+      const whatsappMsg = encodeURIComponent(
+        isAr 
+          ? `السلام عليكم ورحمة الله، أود الاستفسار والحجز بخصوص: ${programTitle}` 
+          : `Bonjour, je souhaite réserver pour le programme: ${programTitle}`
+      );
+
+      return (
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full dark:bg-gray-800 dark:shadow-lg dark:hover:shadow-gray-700/50 border border-gray-100 dark:border-gray-700">
+          
+          <!-- صورة البرنامج مع الشارات (ارتفاع ثابت + object-cover يمنع التمدد والتشويه) -->
+          <div class="relative overflow-hidden bg-gray-900 group/img">
+            {fixedImageUrl ? (
+              <img 
+                src={fixedImageUrl} 
+                alt={programTitle} 
+                loading="lazy"
+                decoding="async"
+                class="w-full h-48 sm:h-56 object-cover rounded-t-xl group-hover:scale-105 transition-transform duration-500 cursor-pointer program-flyer-thumb" 
+                data-full-img={fixedImageUrl}
+                data-title={programTitle}
+              />
+            ) : (
+              <div class="w-full h-48 sm:h-56 flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400">
+                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              </div>
+            )}
+
+            <!-- شارة الفئة (Omra) -->
+            <div class="absolute top-4 left-1/2 -translate-x-1/2">
+              <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-blue-600 text-white shadow-md uppercase tracking-wider">
+                {isAr ? "عمرة وجدة" : "Omra Oujda"}
+              </span>
+            </div>
+
+            <!-- شارة إضافية -->
+            <div class="absolute top-4 right-4 bg-white/90 text-gray-900 px-3 py-1 rounded-full text-xs font-bold dark:bg-gray-900/90 dark:text-gray-200 shadow-md backdrop-blur-sm">
+              {isAr ? "طيران مباشر" : "Vol Direct"}
+            </div>
+
+            <!-- زر تكبير ملصق الإعلان -->
+            {fixedImageUrl && (
+              <button 
+                type="button" 
+                class="absolute bottom-3 left-3 bg-black/75 hover:bg-black text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-md flex items-center gap-1.5 shadow-lg transition-transform group-hover/img:scale-105 program-flyer-btn"
+                data-full-img={fixedImageUrl}
+                data-title={programTitle}
+              >
+                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                <span>{isAr ? "عرض الملصق كاملاً" : "Agrandir l'affiche"}</span>
+              </button>
+            )}
+          </div>
+
+          <!-- تفاصيل ومحتوى البطاقة -->
+          <div class="p-6 flex-grow flex flex-col justify-between">
+            <div>
+              <h3 class="text-2xl font-bold text-brand-teal mb-3 dark:text-cyan-400 leading-snug">
+                {programTitle}
+              </h3>
+              
+              {program.description && program.description !== program.title && (
+                <p class="text-gray-600 mb-5 dark:text-gray-300 text-sm leading-relaxed">
+                  {program.description}
+                </p>
+              )}
+
+              <!-- قائمة الخدمات المشمولة (مطابقة تماماً لـ ProgramCard) -->
+              <div class="mt-4">
+                <h4 class="font-bold text-gray-800 mb-3 dark:text-gray-100 text-sm flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-gold"></span>
+                  {isAr ? "يشمل البرنامج ما يلي :" : "Inclus dans ce programme :"}
+                </h4>
+                <ul class="space-y-2.5 text-gray-600 dark:text-gray-300 text-xs sm:text-sm">
+                  {defaultFeatures.map((feature) => (
+                    <li class="flex items-start">
+                      <svg class="w-4 h-4 text-gold mr-2 rtl:ml-2 rtl:mr-0 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <!-- الجزء السفلي: السعر وأزرار الحجز والاتصال -->
+            <div class="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center gap-3">
+              <div>
+                <div class="text-2xl font-black text-brand-teal dark:text-cyan-400">
+                  {programPrice}
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">
+                  {isAr ? "أماكن محدودة متوفرة" : "Places limitées"}
+                </p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <!-- زر الحجز واتساب -->
+                <a 
+                  href={`https://wa.me/212699922229?text=${whatsappMsg}`}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold px-3.5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+                >
+                  <svg class="w-4 h-4 ml-1.5 rtl:mr-1.5 rtl:ml-0" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.803-4.394 9.806-9.799.002-2.618-1.01-5.078-2.854-6.924C16.379 2.036 13.91 1.017 11.29 1.017c-5.4.001-9.799 4.403-9.801 9.809-.001 1.77.475 3.493 1.378 5.017l-.992 3.62 3.717-.975zm11.367-7.384c-.327-.164-1.93-.955-2.229-1.062-.298-.11-.517-.165-.73.165-.213.33-.825 1.062-1.011 1.28-.187.219-.373.245-.7.083-.326-.164-1.38-.508-2.63-1.622-.973-.867-1.629-1.938-1.82-2.265-.19-.328-.02-.504.144-.668.148-.147.327-.38.492-.572.164-.19.219-.328.327-.546.11-.219.056-.411-.027-.573-.082-.164-.73-1.758-1.002-2.414-.265-.64-.53-.55-.73-.56-.189-.01-.408-.012-.627-.012-.22 0-.576.082-.878.411-.3.33-1.15 1.123-1.15 2.738 0 1.614 1.176 3.176 1.34 3.394.164.218 2.31 3.52 5.597 4.937.781.337 1.39.539 1.862.689.784.248 1.497.213 2.06.13.628-.094 1.93-.789 2.2-1.512.272-.723.272-1.343.19-1.472-.08-.129-.297-.212-.624-.376z"/></svg>
+                  <span>{isAr ? "احجز الآن" : "Réserver"}</span>
+                </a>
+
+                <!-- زر الاتصال الهاتفي السريع -->
+                <a 
+                  href="tel:+212699922229" 
+                  class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gold/10 hover:bg-gold text-gold hover:text-gray-900 border border-gold/30 transition-all duration-200"
+                  title={isAr ? "اتصال بالوكالة" : "Appeler l'agence"}
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- حالة عدم وجود برامج -->
+  {initialPrograms.length === 0 && (
+    <div id="no-dynamic-programs" class="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
+      <p class="text-xl font-medium text-gray-500 dark:text-gray-400">
+        {isAr ? "لا توجد برامج حصرية منشورة حالياً." : "Aucune offre exclusive pour le moment."}
+      </p>
+      <p class="text-sm text-gray-400 mt-2">
+        {isAr ? "يرجى متابعة الصفحة أو الاتصال بنا مباشرة لمعرفة أحدث المواعيد." : "Revenez bientôt ou contactez-nous directement."}
+      </p>
+    </div>
+  )}
+
+</div>
+
+<!-- نافذة عرض الملصق الإعلاني مكبراً (Poster Lightbox Modal)
+     z-[60] ضروري: الزر العائم لواتساب في Layout.astro ثابت بـ z-50 ويأتي بعد هذا المكوّن في DOM،
+     فبدون رفع الـ z-index كان يظهر فوق النافذة ويمنع التفاعل معها -->
+<div id="flyer-modal" data-lang={lang} class="fixed inset-0 z-[60] bg-black/85 backdrop-blur-md hidden flex flex-col items-center justify-center gap-4 p-4 sm:p-6 overflow-y-auto">
+  <div class="w-full max-w-4xl flex flex-col items-center gap-4">
+    <div class="w-full flex items-center justify-end">
+      <button id="close-flyer-modal" class="text-white hover:text-gold transition-colors px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-sm font-bold cursor-pointer flex items-center gap-2">
+        <span>{isAr ? "إغلاق" : "Fermer"}</span>
+        <span aria-hidden="true">✕</span>
+      </button>
+    </div>
+
+    <!-- الصورة: تملأ عرض النافذة مع الحفاظ على النسبة دون أي تشويه -->
+    <img
+      id="flyer-modal-img"
+      src=""
+      alt={isAr ? "ملصق البرنامج" : "Affiche du programme"}
+      decoding="async"
+      class="w-full h-auto max-w-full max-h-[85vh] object-contain mx-auto rounded-lg shadow-2xl"
+    />
+
+    <div class="flex gap-4">
+      <a 
+        id="flyer-modal-wa-btn" 
+        href="#" 
+        target="_blank"
+        rel="noopener noreferrer"
+        class="bg-[#25D366] hover:bg-[#20ba5a] text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-xl flex items-center gap-2 transition-all hover:scale-105"
+      >
+        <span>{isAr ? "احجز بخصوص هذا العرض عبر واتساب" : "Réserver cette offre via WhatsApp"}</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- كود JavaScript للجهة العميل (Client-side) -->
+<script>
+  import { supabase } from '../lib/supabase';
+
+  function cleanUrlClient(url: string | null): string {
+    if (!url) return '';
+    if (url.includes('{"Key"')) {
+      try {
+        const match = url.match(/"Key":"([^"]+)"/);
+        if (match && match[1]) {
+          return `https://vfmsusxvlzmpvygnsnex.supabase.co/storage/v1/object/public/${match[1]}`;
+        }
+      } catch (e) {}
+    }
+    return url.replace('/program-images/program-images/', '/program-images/');
+  }
+
+  // إعداد نافذة تكبير الملصق (مرة واحدة فقط لتجنب تكرار المستمعين)
+  let flyerModalBound = false;
+  function setupFlyerModal() {
+    if (flyerModalBound) return;
+
+    const modal = document.getElementById('flyer-modal');
+    const modalImg = document.getElementById('flyer-modal-img') as HTMLImageElement;
+    const modalWaBtn = document.getElementById('flyer-modal-wa-btn') as HTMLAnchorElement;
+    const closeBtn = document.getElementById('close-flyer-modal');
+
+    if (!modal || !modalImg) return;
+    flyerModalBound = true;
+
+    const isFrench = modal.getAttribute('data-lang') === 'fr';
+
+    function openModal(imgSrc: string, title: string) {
+      modalImg.src = imgSrc;
+      if (modalWaBtn) {
+        const msg = isFrench
+          ? `Bonjour, je souhaite réserver pour le programme: ${title}`
+          : `السلام عليكم ورحمة الله، أود الحجز والاستفسار بخصوص: ${title}`;
+        modalWaBtn.href = `https://wa.me/212699922229?text=${encodeURIComponent(msg)}`;
+      }
+      modal.classList.remove('hidden');
+      // إظهار الصورة بعد تحميلها لتفادي الوميض أثناء التنزيل
+      const revealImage = () => modalImg.classList.remove('opacity-0');
+      modalImg.classList.add('opacity-0');
+      if (modalImg.complete && modalImg.naturalWidth > 0) revealImage();
+      else {
+        modalImg.onload = revealImage;
+        modalImg.onerror = revealImage;
+      }
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+    }
+
+    document.querySelectorAll('.program-flyer-thumb, .program-flyer-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const img = target.getAttribute('data-full-img');
+        const title = target.getAttribute('data-title') || '';
+        if (img) openModal(img, title);
+      });
+    });
+
+    closeBtn?.addEventListener('click', closeModal);
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  }
+
+  // تحديث مباشر للبيانات في الواجهة
+  async function refreshClient() {
+    try {
+      const { data, error } = await supabase
+        .from('programs')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error || !data || data.length === 0) return;
+
+      const grid = document.getElementById('dynamic-programs-grid');
+      const noMsg = document.getElementById('no-dynamic-programs');
+      if (noMsg) noMsg.style.display = 'none';
+
+      // تحديث روابط الصور القديمة المعطوبة إذا وُجدت
+      document.querySelectorAll('.program-flyer-thumb').forEach((imgEl, idx) => {
+        const prog = data[idx];
+        if (prog && prog.image_url) {
+          const validUrl = cleanUrlClient(prog.image_url);
+          (imgEl as HTMLImageElement).src = validUrl;
+          imgEl.setAttribute('data-full-img', validUrl);
+        }
+      });
+
+      setupFlyerModal();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setupFlyerModal();
+    refreshClient();
+  });
+</script>

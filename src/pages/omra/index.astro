@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ProgramCard from '../../components/ProgramCard.astro';
+import DynamicPrograms from '../../components/DynamicPrograms.astro';
 import { getCollection } from 'astro:content';
 import Hero from '../../components/Hero.astro';
 import heroImage from '../../assets/pics/hajj-omra-hero.png';
@@ -64,6 +65,13 @@ const omraPrograms = await getCollection('omra');
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Dynamic Telegram Programs Section -->
+  <section class="py-12 bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <DynamicPrograms lang="fr" />
     </div>
   </section>
 

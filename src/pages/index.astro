@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import Welcome from '../components/Welcome.astro';
 import PromoVideo from '../components/PromoVideo.astro';
 import ProgramCard from '../components/ProgramCard.astro';
+import DynamicPrograms from '../components/DynamicPrograms.astro';
 import BlogCard from '../components/BlogCard.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
@@ -34,6 +35,13 @@ const latestPosts = (await getCollection('blog')).sort((a: CollectionEntry<'blog
   </section>
 
   <PromoVideo />
+  
+  <!-- Dynamic Telegram Programs Section -->
+  <section class="py-12 bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <DynamicPrograms lang="fr" />
+    </div>
+  </section>
   
   <!-- Programs Section -->
   <section class="py-16 bg-white dark:bg-gray-900">

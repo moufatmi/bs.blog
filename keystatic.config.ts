@@ -13,6 +13,9 @@ const commonProgramFields = {
     }),
     pdfUrl: fields.text({ label: 'Lien du PDF du programme (Optionnel) / رابط ملف البرنامج PDF (اختياري)' }),
     availabilityNote: fields.text({ label: 'Note de disponibilité (ex: Places limitées) / ملاحظة حول التوفر (اختياري)' }),
+    // مُستخدمة بواسطة سكربت المزامنة (scripts/sync-supabase.js) لمنع تكرار البرامج.
+    // يجب أن تكون معرّفة هنا حتى لا تُحذف عند أي حفظ من لوحة التحكم.
+    supabaseId: fields.text({ label: 'Supabase ID (لا تعدّله) / معرّف Supabase (لا تقم بالتعديل)' }),
     content: fields.markdoc({ label: 'Description détaillée (Contenu) / التفاصيل الكاملة للبرنامج' }),
 };
 
