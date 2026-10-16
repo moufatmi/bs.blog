@@ -34,16 +34,23 @@ const typeColors = {
 
 <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full dark:bg-gray-800 dark:shadow-lg dark:hover:shadow-gray-700/50">
   <div class="relative">
-    <Image 
-      src={image} 
-      alt={`Agence de voyage Beauséjour Voyage Omra Oujda - ${title}`} 
-      width={380} 
-      height={224} 
-      class="w-full h-56 object-cover" 
-      loading="lazy" 
-      decoding="async"
-      referrerpolicy="no-referrer" 
-    />
+    {image ? (
+      <Image
+        src={image}
+        alt={`Agence de voyage Beauséjour Voyage Omra Oujda - ${title}`}
+        width={380}
+        height={224}
+        class="w-full h-56 object-cover"
+        loading="lazy"
+        decoding="async"
+        referrerpolicy="no-referrer"
+      />
+    ) : (
+      // صورة مفقودة (مثلاً بعد حذفها من bucket) — نعرض بديلاً بدل فشل البناء
+      <div class="w-full h-56 flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400">
+        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      </div>
+    )}
     <div class="absolute top-4 right-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold dark:bg-gray-900/80 dark:text-gray-200">
       {duration}
     </div>

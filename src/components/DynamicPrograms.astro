@@ -1,6 +1,7 @@
 ---
 // src/components/DynamicPrograms.astro
-import { supabase, type Program } from '../lib/supabase';
+import { fetchProgramsFeed, isFeedConfigured, warnIfFeedMissing, type FeedProgram } from '../lib/programsFeed';
+import ProgramFlyerCard from './ProgramFlyerCard.astro';
 
 interface Props {
   lang?: 'ar' | 'fr';
@@ -9,58 +10,36 @@ interface Props {
 const { lang = 'ar' } = Astro.props;
 const isAr = lang === 'ar';
 
-// وظيفة لتنظيف وتصحيح رابط الصورة في حال كان كائن JSON
-function cleanImageUrl(url: string | null): string {
-  if (!url) return '';
-  if (url.includes('{"Key"')) {
-    try {
-      const match = url.match(/"Key":"([^"]+)"/);
-      if (match && match[1]) {
-        return `https://vfmsusxvlzmpvygnsnex.supabase.co/storage/v1/object/public/${match[1]}`;
-      }
-    } catch (e) {
-      // fallback
-    }
+// القيم الافتراضية عند غياب البيانات (تُستخدم من الخادم ومن المتصفح)
+const fallbackTitle = isAr ? 'برنامج عمرة وجدة' : 'Programme Omra Oujda';
+const fallbackPrice = isAr ? 'اتصل للمزيد' : 'Sur demande';
+
+// جلب البيانات وقت البناء (نسخة احتياطية فقط)
+// المصدر الحقيقي هو Google Sheet، والمتصفح يحدّث نفسه عند كل زيارة.
+let initialPrograms: FeedProgram[] = [];
+let initialFetchFailed = false;
+if (warnIfFeedMissing()) {
+  initialFetchFailed = true;
+} else {
+  try {
+    initialPrograms = await fetchProgramsFeed();
+  } catch (e) {
+    initialFetchFailed = true;
+    console.error('Could not load the programs feed at build time:', e);
   }
-  // إصلاح التكرار في مسار program-images إذا وجد
-  return url.replace('/program-images/program-images/', '/program-images/');
 }
 
-// مميزات افتراضية احترافية في حال لم يحدد الوالد نصاً مفصلاً
-const defaultFeaturesAr = [
-  'طيران مباشر من مطار وجدة أنجاد (RAM أو السعودية)',
-  'فنادق قريبة وممتازة بجوار الحرمين الشريفين',
-  'مرافقة وتأطير ديني وإداري طيلة الرحلة',
-  'تأشيرة العمرة والنقل بحافلات مريحة ومكيفة',
-];
-
-const defaultFeaturesFr = [
-  'Vol direct depuis Aéroport Oujda Angads (RAM / Saudia)',
-  'Hôtels sélectionnés très proches du Haram',
-  'Accompagnement religieux et assistance complète',
-  'Visa et transferts internes en bus grand confort',
-];
-
-const defaultFeatures = isAr ? defaultFeaturesAr : defaultFeaturesFr;
-
-// جلب البيانات الأولية من Supabase
-let initialPrograms: Program[] = [];
-try {
-  const { data, error } = await supabase
-    .from('programs')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (!error && data) {
-    initialPrograms = data as Program[];
-  }
-} catch (e) {
-  console.error('Error fetching initial programs from Supabase:', e);
-}
+const programCards = initialPrograms.map((program) => ({
+  id: program.id,
+  title: program.title || fallbackTitle,
+  description: program.description,
+  price: program.price || fallbackPrice,
+  imageUrl: program.image_url || '',
+}));
 ---
 
 <div class="dynamic-programs-wrapper my-4" dir={isAr ? "rtl" : "ltr"}>
-  
+
   <!-- ترويسة القسم -->
   <div class="text-center mb-10">
     <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-brand-teal/10 text-brand-teal dark:bg-cyan-500/10 dark:text-cyan-400 mb-3 tracking-wider uppercase">
@@ -70,156 +49,54 @@ try {
       {isAr ? "أحدث برامج العمرة المعلنة" : "Nos Dernières Offres Publiées"}
     </h2>
     <p class="mt-2 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-sm md:text-base">
-      {isAr 
-        ? "برامج ورحلات حصرية ومباشرة من مطار وجدة أنجاد. اضغط على أي إعلان لعرض التفاصيل الكاملة أو الحجز المباشر." 
+      {isAr
+        ? "برامج ورحلات حصرية ومباشرة من مطار وجدة أنجاد. اضغط على أي إعلان لعرض التفاصيل الكاملة أو الحجز المباشر."
         : "Programmes exclusifs avec vols directs depuis Oujda. Cliquez sur l'affiche pour agrandir ou réservez directement."}
     </p>
     <div class="w-20 h-1 bg-gradient-to-r from-brand-teal to-gold mx-auto mt-4 rounded-full"></div>
   </div>
 
-  <!-- شبكة عرض البرامج -->
+  <!-- شبكة عرض البرامج (تُملأ من الخادم، ويستكملها العميل) -->
   <div id="dynamic-programs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {initialPrograms.map((program) => {
-      const fixedImageUrl = cleanImageUrl(program.image_url);
-      const programTitle = program.title || (isAr ? "برنامج عمرة وجدة" : "Programme Omra Oujda");
-      const programPrice = program.price || (isAr ? "اتصل للمزيد" : "Sur demande");
-      const whatsappMsg = encodeURIComponent(
-        isAr 
-          ? `السلام عليكم ورحمة الله، أود الاستفسار والحجز بخصوص: ${programTitle}` 
-          : `Bonjour, je souhaite réserver pour le programme: ${programTitle}`
-      );
-
-      return (
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full dark:bg-gray-800 dark:shadow-lg dark:hover:shadow-gray-700/50 border border-gray-100 dark:border-gray-700">
-          
-          <!-- صورة البرنامج مع الشارات (ارتفاع ثابت + object-cover يمنع التمدد والتشويه) -->
-          <div class="relative overflow-hidden bg-gray-900 group/img">
-            {fixedImageUrl ? (
-              <img 
-                src={fixedImageUrl} 
-                alt={programTitle} 
-                loading="lazy"
-                decoding="async"
-                class="w-full h-48 sm:h-56 object-cover rounded-t-xl group-hover:scale-105 transition-transform duration-500 cursor-pointer program-flyer-thumb" 
-                data-full-img={fixedImageUrl}
-                data-title={programTitle}
-              />
-            ) : (
-              <div class="w-full h-48 sm:h-56 flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400">
-                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-              </div>
-            )}
-
-            <!-- شارة الفئة (Omra) -->
-            <div class="absolute top-4 left-1/2 -translate-x-1/2">
-              <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-blue-600 text-white shadow-md uppercase tracking-wider">
-                {isAr ? "عمرة وجدة" : "Omra Oujda"}
-              </span>
-            </div>
-
-            <!-- شارة إضافية -->
-            <div class="absolute top-4 right-4 bg-white/90 text-gray-900 px-3 py-1 rounded-full text-xs font-bold dark:bg-gray-900/90 dark:text-gray-200 shadow-md backdrop-blur-sm">
-              {isAr ? "طيران مباشر" : "Vol Direct"}
-            </div>
-
-            <!-- زر تكبير ملصق الإعلان -->
-            {fixedImageUrl && (
-              <button 
-                type="button" 
-                class="absolute bottom-3 left-3 bg-black/75 hover:bg-black text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-md flex items-center gap-1.5 shadow-lg transition-transform group-hover/img:scale-105 program-flyer-btn"
-                data-full-img={fixedImageUrl}
-                data-title={programTitle}
-              >
-                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
-                <span>{isAr ? "عرض الملصق كاملاً" : "Agrandir l'affiche"}</span>
-              </button>
-            )}
-          </div>
-
-          <!-- تفاصيل ومحتوى البطاقة -->
-          <div class="p-6 flex-grow flex flex-col justify-between">
-            <div>
-              <h3 class="text-2xl font-bold text-brand-teal mb-3 dark:text-cyan-400 leading-snug">
-                {programTitle}
-              </h3>
-              
-              {program.description && program.description !== program.title && (
-                <p class="text-gray-600 mb-5 dark:text-gray-300 text-sm leading-relaxed">
-                  {program.description}
-                </p>
-              )}
-
-              <!-- قائمة الخدمات المشمولة (مطابقة تماماً لـ ProgramCard) -->
-              <div class="mt-4">
-                <h4 class="font-bold text-gray-800 mb-3 dark:text-gray-100 text-sm flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-gold"></span>
-                  {isAr ? "يشمل البرنامج ما يلي :" : "Inclus dans ce programme :"}
-                </h4>
-                <ul class="space-y-2.5 text-gray-600 dark:text-gray-300 text-xs sm:text-sm">
-                  {defaultFeatures.map((feature) => (
-                    <li class="flex items-start">
-                      <svg class="w-4 h-4 text-gold mr-2 rtl:ml-2 rtl:mr-0 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                      </svg>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <!-- الجزء السفلي: السعر وأزرار الحجز والاتصال -->
-            <div class="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center gap-3">
-              <div>
-                <div class="text-2xl font-black text-brand-teal dark:text-cyan-400">
-                  {programPrice}
-                </div>
-                <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">
-                  {isAr ? "أماكن محدودة متوفرة" : "Places limitées"}
-                </p>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <!-- زر الحجز واتساب -->
-                <a 
-                  href={`https://wa.me/212699922229?text=${whatsappMsg}`}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold px-3.5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
-                >
-                  <svg class="w-4 h-4 ml-1.5 rtl:mr-1.5 rtl:ml-0" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.803-4.394 9.806-9.799.002-2.618-1.01-5.078-2.854-6.924C16.379 2.036 13.91 1.017 11.29 1.017c-5.4.001-9.799 4.403-9.801 9.809-.001 1.77.475 3.493 1.378 5.017l-.992 3.62 3.717-.975zm11.367-7.384c-.327-.164-1.93-.955-2.229-1.062-.298-.11-.517-.165-.73.165-.213.33-.825 1.062-1.011 1.28-.187.219-.373.245-.7.083-.326-.164-1.38-.508-2.63-1.622-.973-.867-1.629-1.938-1.82-2.265-.19-.328-.02-.504.144-.668.148-.147.327-.38.492-.572.164-.19.219-.328.327-.546.11-.219.056-.411-.027-.573-.082-.164-.73-1.758-1.002-2.414-.265-.64-.53-.55-.73-.56-.189-.01-.408-.012-.627-.012-.22 0-.576.082-.878.411-.3.33-1.15 1.123-1.15 2.738 0 1.614 1.176 3.176 1.34 3.394.164.218 2.31 3.52 5.597 4.937.781.337 1.39.539 1.862.689.784.248 1.497.213 2.06.13.628-.094 1.93-.789 2.2-1.512.272-.723.272-1.343.19-1.472-.08-.129-.297-.212-.624-.376z"/></svg>
-                  <span>{isAr ? "احجز الآن" : "Réserver"}</span>
-                </a>
-
-                <!-- زر الاتصال الهاتفي السريع -->
-                <a 
-                  href="tel:+212699922229" 
-                  class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gold/10 hover:bg-gold text-gold hover:text-gray-900 border border-gold/30 transition-all duration-200"
-                  title={isAr ? "اتصال بالوكالة" : "Appeler l'agence"}
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                </a>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      );
-    })}
+    {programCards.map((program) => (
+      <ProgramFlyerCard
+        lang={lang}
+        title={program.title}
+        description={program.description}
+        price={program.price}
+        imageUrl={program.imageUrl}
+        programId={program.id}
+      />
+    ))}
   </div>
 
   <!-- حالة عدم وجود برامج -->
-  {initialPrograms.length === 0 && (
+  {programCards.length === 0 && (
     <div id="no-dynamic-programs" class="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
       <p class="text-xl font-medium text-gray-500 dark:text-gray-400">
         {isAr ? "لا توجد برامج حصرية منشورة حالياً." : "Aucune offre exclusive pour le moment."}
       </p>
       <p class="text-sm text-gray-400 mt-2">
-        {isAr ? "يرجى متابعة الصفحة أو الاتصال بنا مباشرة لمعرفة أحدث المواعيد." : "Revenez bientôt ou contactez-nous directement."}
+        {isAr ? "يرجى متابعة الصفحة أو الاتصال بنا مباشرة لمعرفة أحدث المواعيد." : "Revenez bientôt ou contactez-nous مباشرة."}
       </p>
     </div>
   )}
+
+  <!--
+    قالب بطاقة يُستخدم من JavaScript لتوليد البطاقات في المتصفح.
+    هذا خط الدفاع: إذا فشل جلب Supabase وقت البناء، أو أُضيف برنامج جديد بعد النشر.
+  -->
+  <template id="program-card-template">
+    <ProgramFlyerCard lang={lang} />
+  </template>
+
+  <script is:inline type="application/json" id="program-card-config" set:html={JSON.stringify({
+    lang,
+    isAr,
+    fallbackTitle,
+    fallbackPrice,
+    initialFetchFailed,
+  })} />
 
 </div>
 
@@ -245,9 +122,9 @@ try {
     />
 
     <div class="flex gap-4">
-      <a 
-        id="flyer-modal-wa-btn" 
-        href="#" 
+      <a
+        id="flyer-modal-wa-btn"
+        href="#"
         target="_blank"
         rel="noopener noreferrer"
         class="bg-[#25D366] hover:bg-[#20ba5a] text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-xl flex items-center gap-2 transition-all hover:scale-105"
@@ -260,19 +137,164 @@ try {
 
 <!-- كود JavaScript للجهة العميل (Client-side) -->
 <script>
-  import { supabase } from '../lib/supabase';
+  import { fetchProgramsFeed, isFeedConfigured, warnIfFeedMissing } from '../lib/programsFeed';
 
-  function cleanUrlClient(url: string | null): string {
-    if (!url) return '';
-    if (url.includes('{"Key"')) {
-      try {
-        const match = url.match(/"Key":"([^"]+)"/);
-        if (match && match[1]) {
-          return `https://vfmsusxvlzmpvygnsnex.supabase.co/storage/v1/object/public/${match[1]}`;
-        }
-      } catch (e) {}
+  const WHATSAPP_NUMBER = '212699922229';
+
+  // الصورة تأتي مباشرة من صف Google Sheet (رابط Drive عام)
+  function imageUrlOf(prog) {
+    return String(prog?.image_url || '').trim();
+  }
+
+  function readConfig() {
+    const node = document.getElementById('program-card-config');
+    if (!node) return { lang: 'ar', isAr: true };
+    try {
+      return JSON.parse(node.textContent || '{}');
+    } catch (e) {
+      return { lang: 'ar', isAr: true };
     }
-    return url.replace('/program-images/program-images/', '/program-images/');
+  }
+
+  // توليد بطاقة من القالب <template> — يغطي الحالات التي لم يصل فيها بناء الخادم
+  function renderCardFromTemplate(prog, config) {
+    const template = document.getElementById('program-card-template');
+    const grid = document.getElementById('dynamic-programs-grid');
+    if (!template || !grid) return null;
+
+    const fragment = template.content.cloneNode(true);
+    const card = fragment.querySelector('[data-program-card]');
+    if (!card) return null;
+
+    const title = prog.title || config.fallbackTitle;
+    const description = prog.description && prog.description !== prog.title ? prog.description : '';
+    const price = prog.price || config.fallbackPrice;
+    const image = imageUrlOf(prog);
+
+    card.setAttribute('data-program-id', prog.id ?? '');
+
+    const titleEl = card.querySelector('[data-slot="title"]');
+    if (titleEl) titleEl.textContent = title;
+
+    const descEl = card.querySelector('[data-slot="description"]');
+    if (descEl) {
+      descEl.textContent = description;
+      descEl.classList.toggle('hidden', !description);
+    }
+
+    const priceEl = card.querySelector('[data-slot="price"]');
+    if (priceEl) priceEl.textContent = price;
+
+    // الصورة: القالب يبني الحالة "بدون صورة"، لذلك نكشف الصورة ونخفي البديل
+    const img = card.querySelector('.program-flyer-thumb');
+    const placeholder = card.querySelector('[data-slot="image-placeholder"]');
+    const zoomBtn = card.querySelector('.program-flyer-btn');
+
+    if (image) {
+      if (img) {
+        img.src = image;
+        img.alt = title;
+        img.classList.remove('hidden');
+        img.setAttribute('data-full-img', image);
+        img.setAttribute('data-title', title);
+      }
+      if (placeholder) placeholder.classList.add('hidden');
+      if (zoomBtn) {
+        zoomBtn.classList.remove('hidden');
+        zoomBtn.setAttribute('data-full-img', image);
+        zoomBtn.setAttribute('data-title', title);
+      }
+
+      const waBtn = card.querySelector('a[href*="wa.me"]');
+      if (waBtn) {
+        const msg = config.isAr
+          ? `السلام عليكم ورحمة الله، أود الاستفسار والحجز بخصوص: ${title}`
+          : `Bonjour, je souhaite réserver pour le programme: ${title}`;
+        waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+      }
+    } else if (img) {
+      img.classList.add('hidden');
+    }
+
+    grid.appendChild(fragment);
+    return card;
+  }
+
+  // تحديث شبكة البطاقات في المتصفح (يغطي البرامج الجديدة والحذف بعد النشر)
+  function syncGrid(programs, config) {
+    const grid = document.getElementById('dynamic-programs-grid');
+    if (!grid) return;
+
+    const cards = Array.from(grid.querySelectorAll('[data-program-card]'));
+    const byId = new Map(cards.map((c) => [c.getAttribute('data-program-id'), c]));
+
+    programs.forEach((prog) => {
+      const existing = prog.id ? byId.get(prog.id) : null;
+      if (existing) {
+        // تحديث الحقول دون إعادة بناء البطاقة (يحافظ على أي حالة عرض)
+        const title = prog.title || config.fallbackTitle;
+        const titleEl = existing.querySelector('[data-slot="title"]');
+        if (titleEl && titleEl.textContent.trim() !== title) titleEl.textContent = title;
+
+        const price = prog.price || config.fallbackPrice;
+        const priceEl = existing.querySelector('[data-slot="price"]');
+        if (priceEl && priceEl.textContent.trim() !== price) priceEl.textContent = price;
+
+        const description = prog.description && prog.description !== prog.title ? prog.description : '';
+        const descEl = existing.querySelector('[data-slot="description"]');
+        if (descEl) {
+          descEl.textContent = description;
+          descEl.classList.toggle('hidden', !description);
+        }
+
+        const image = imageUrlOf(prog);
+        const img = existing.querySelector('.program-flyer-thumb');
+        if (img && image) {
+          const current = img.getAttribute('data-full-img');
+          if (current !== image) {
+            img.src = image;
+            img.classList.remove('hidden');
+            img.setAttribute('data-full-img', image);
+            img.setAttribute('data-title', title);
+            const placeholder = existing.querySelector('[data-slot="image-placeholder"]');
+            if (placeholder) placeholder.classList.add('hidden');
+            const btn = existing.querySelector('.program-flyer-btn');
+            if (btn) {
+              btn.classList.remove('hidden');
+              btn.setAttribute('data-full-img', image);
+              btn.setAttribute('data-title', title);
+            }
+          }
+        }
+        return;
+      }
+
+      renderCardFromTemplate(prog, config);
+    });
+
+    const emptyState = document.getElementById('no-dynamic-programs');
+    const cardCount = grid.querySelectorAll('[data-program-card]').length;
+    if (emptyState) emptyState.classList.toggle('hidden', cardCount > 0);
+  }
+
+  // استبدال الصور الميتة (404) بالأيقونة البديلة بدل مربع فارغ
+  function handleBrokenImages(root) {
+    root.querySelectorAll('img.program-flyer-thumb').forEach((img) => {
+      if (img.dataset.fallbackApplied) return;
+      img.addEventListener('error', () => {
+        if (img.dataset.fallbackApplied) return;
+        img.dataset.fallbackApplied = '1';
+        const placeholder = document.createElement('div');
+        placeholder.className =
+          'w-full h-48 sm:h-56 flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400';
+        placeholder.innerHTML =
+          '<svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
+        img.replaceWith(placeholder);
+        // بلا صورة لا فائدة من زر التكبير
+        const btn = root.querySelector('.program-flyer-btn');
+        if (btn) btn.classList.add('hidden');
+      });
+    });
   }
 
   // إعداد نافذة تكبير الملصق (مرة واحدة فقط لتجنب تكرار المستمعين)
@@ -281,8 +303,8 @@ try {
     if (flyerModalBound) return;
 
     const modal = document.getElementById('flyer-modal');
-    const modalImg = document.getElementById('flyer-modal-img') as HTMLImageElement;
-    const modalWaBtn = document.getElementById('flyer-modal-wa-btn') as HTMLAnchorElement;
+    const modalImg = document.getElementById('flyer-modal-img');
+    const modalWaBtn = document.getElementById('flyer-modal-wa-btn');
     const closeBtn = document.getElementById('close-flyer-modal');
 
     if (!modal || !modalImg) return;
@@ -290,13 +312,13 @@ try {
 
     const isFrench = modal.getAttribute('data-lang') === 'fr';
 
-    function openModal(imgSrc: string, title: string) {
+    function openModal(imgSrc, title) {
       modalImg.src = imgSrc;
       if (modalWaBtn) {
         const msg = isFrench
           ? `Bonjour, je souhaite réserver pour le programme: ${title}`
           : `السلام عليكم ورحمة الله، أود الحجز والاستفسار بخصوص: ${title}`;
-        modalWaBtn.href = `https://wa.me/212699922229?text=${encodeURIComponent(msg)}`;
+        modalWaBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       }
       modal.classList.remove('hidden');
       // إظهار الصورة بعد تحميلها لتفادي الوميض أثناء التنزيل
@@ -313,13 +335,12 @@ try {
       modal.classList.add('hidden');
     }
 
-    document.querySelectorAll('.program-flyer-thumb, .program-flyer-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const target = e.currentTarget as HTMLElement;
-        const img = target.getAttribute('data-full-img');
-        const title = target.getAttribute('data-title') || '';
-        if (img) openModal(img, title);
-      });
+    // تفويض الأحداث: يعمل أيضاً مع البطاقات التي ولّدها المتصفح لاحقاً
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.program-flyer-thumb, .program-flyer-btn');
+      if (!trigger) return;
+      const img = trigger.getAttribute('data-full-img');
+      if (img) openModal(img, trigger.getAttribute('data-title') || '');
     });
 
     closeBtn?.addEventListener('click', closeModal);
@@ -331,38 +352,32 @@ try {
     });
   }
 
-  // تحديث مباشر للبيانات في الواجهة
+  // جلب البيانات من Google Sheet وتحديث الواجهة — لا build ولا deploy
   async function refreshClient() {
-    try {
-      const { data, error } = await supabase
-        .from('programs')
-        .select('*')
-        .order('created_at', { ascending: false });
+    const config = readConfig();
+    const grid = document.getElementById('dynamic-programs-grid');
+    if (!grid) return;
+    if (!isFeedConfigured()) return;
 
-      if (error || !data || data.length === 0) return;
+    const programs = await fetchProgramsFeed({ useBrowserCache: true });
+    const cardCount = grid.querySelectorAll('[data-program-card]').length;
 
-      const grid = document.getElementById('dynamic-programs-grid');
-      const noMsg = document.getElementById('no-dynamic-programs');
-      if (noMsg) noMsg.style.display = 'none';
+    if (programs.length > 0) {
+      syncGrid(programs, config);
+      handleBrokenImages(grid);
+      return;
+    }
 
-      // تحديث روابط الصور القديمة المعطوبة إذا وُجدت
-      document.querySelectorAll('.program-flyer-thumb').forEach((imgEl, idx) => {
-        const prog = data[idx];
-        if (prog && prog.image_url) {
-          const validUrl = cleanUrlClient(prog.image_url);
-          (imgEl as HTMLImageElement).src = validUrl;
-          imgEl.setAttribute('data-full-img', validUrl);
-        }
-      });
-
-      setupFlyerModal();
-    } catch (e) {
-      console.error(e);
+    // لا بيانات من المصدر: لا نمسح ما بُني وقت البناء إلا إذا كان فارغاً أصلاً
+    if (cardCount === 0) {
+      const emptyState = document.getElementById('no-dynamic-programs');
+      if (emptyState) emptyState.classList.remove('hidden');
     }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     setupFlyerModal();
+    handleBrokenImages(document);
     refreshClient();
   });
 </script>

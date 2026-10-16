@@ -16,6 +16,18 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # The programs feed URL. Astro bakes PUBLIC_* variables into the pages at
+    # build time, so this job needs it. GitHub Pages has no .env file.
+    #
+    # It works out of the box thanks to the fallback URL below. To change it
+    # later, set a repository variable instead of editing this file:
+    #   Settings -> Secrets and variables -> Actions -> Variables
+    #   name:  PUBLIC_PROGRAMS_FEED_URL
+    #   value: https://script.google.com/macros/s/XXXX/exec
+    #
+    # This is not a secret: the URL is readable by anyone who opens the page.
+    env:
+      PUBLIC_PROGRAMS_FEED_URL: ${{ vars.PUBLIC_PROGRAMS_FEED_URL || 'https://script.google.com/macros/s/AKfycbzD3ToaZu8x7Sak4btiVw9RHxbFWCFjWSvwfWBLjr-uoCvgB25yBnqy8mlspl9KT-PAkA/exec' }}
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4

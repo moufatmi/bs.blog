@@ -11,6 +11,9 @@ dist/
 .env.local
 .env.production
 
+# Sync backups (scripts/sync-supabase.js)
+.sync-backup/
+
 # IDE
 .vscode/
 .idea/

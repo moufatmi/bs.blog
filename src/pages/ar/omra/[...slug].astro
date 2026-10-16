@@ -76,15 +76,21 @@ const tripSchema = {
       <div class="lg:col-span-8 space-y-8">
         <!-- Hero Section Inside Detail -->
         <div class="relative rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px]">
-          <Image 
-            src={program.data.image} 
-            alt={`Agence de voyage Beauséjour Voyage Omra Oujda - ${program.data.title}`} 
-            width={800}
-            height={450}
-            class="w-full h-full object-cover"
-            loading="eager"
-            fetchpriority="high"
-          />
+          {program.data.image ? (
+            <Image 
+              src={program.data.image} 
+              alt={`وكالة أسفار Beauséjour Voyage للعمرة من وجدة - ${program.data.title}`} 
+              width={800}
+              height={450}
+              class="w-full h-full object-cover"
+              loading="eager"
+              fetchpriority="high"
+            />
+          ) : (
+            <div class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400 font-arabic">
+              <span class="text-sm">{program.data.title}</span>
+            </div>
+          )}
           <div class="absolute top-4 left-4 bg-gold text-gray-900 px-4 py-1.5 rounded-full font-bold text-sm shadow-md font-arabic">
             {program.data.duration}
           </div>

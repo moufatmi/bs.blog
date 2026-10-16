@@ -7,19 +7,13 @@
     "dev": "astro dev --host",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "sync": "node scripts/sync-supabase.js",
-    "deploy": "gh-pages -d dist",
-    "update": "npm run sync && git add . && git commit -m 'update' && git push && npm run build && npm run deploy"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/markdoc": "^0.15.10",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",
-    "@keystatic/astro": "^5.0.6",
-    "@keystatic/core": "^0.5.48",
-    "@supabase/supabase-js": "^2.118.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "alpinejs": "^3.14.9",
@@ -29,8 +23,5 @@
     "react-dom": "^18.3.1",
     "tailwindcss": "^3.4.1"
   },
-  "devDependencies": {
-    "@types/alpinejs": "^3.13.11",
-    "gh-pages": "^6.3.0"
-  }
+  "devDependencies": {}
 }
