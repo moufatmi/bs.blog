@@ -30,6 +30,20 @@ The Google Sheet tab called **`programs`**. One row per program:
 
 The owner can edit any of those cells directly to correct a typo.
 
+### How form submissions get in
+
+The Google Form writes to its own tab (`Form Responses 1`). When the website
+asks for the feed, the script compares that tab with the `programs` tab and
+imports anything missing — resolving the photo, making it publicly readable,
+and appending a clean row.
+
+**There is no background job involved.** This matters: a trigger can stop
+working silently (authorisation problems) and the programs then vanish with
+nobody noticing. Importing on read cannot fail unnoticed, because the website
+keeps asking until everything is there.
+
+A new program therefore appears within about a minute.
+
 ---
 
 ## What the website does
@@ -57,11 +71,21 @@ That's it.
 
 ## Photos
 
-Photos are stored in Google Drive and shared as "anyone with the link", then
-referenced by the site. Free, and enough for flyers.
+Photos are stored in Google Drive. There are two ways the website gets them:
 
-**Use real resolution photos.** The 64x90 pixel images currently in Supabase
-are unusable on any screen.
+1. **Normal case** — the script makes the file readable with "anyone with the
+   link" and the site uses that link. Cheap and fast.
+2. **When public sharing is refused** — some Google accounts (usually Workspace
+   domains) forbid public links. The script then serves the file itself through
+   `?img=FILE_ID`, and the site turns the bytes into an image. Slightly heavier,
+   but it works regardless of the account policy.
+
+You do not have to care which one is in use: if a photo cannot be shared, the
+site still shows it.
+
+**Use real resolution photos.** Tiny images look blurry on any screen, and the
+image proxy re-sends the file on every page view, so keep flyers reasonable
+(under ~2 MB).
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 // src/components/DynamicPrograms.astro
-import { fetchProgramsFeed, isFeedConfigured, warnIfFeedMissing, type FeedProgram } from '../lib/programsFeed';
+import { fetchProgramsFeed, isFeedConfigured, warnIfFeedMissing, toDisplayableImage, type FeedProgram } from '../lib/programsFeed';
 import ProgramFlyerCard from './ProgramFlyerCard.astro';
 
 interface Props {
@@ -29,13 +29,16 @@ if (warnIfFeedMissing()) {
   }
 }
 
-const programCards = initialPrograms.map((program) => ({
-  id: program.id,
-  title: program.title || fallbackTitle,
-  description: program.description,
-  price: program.price || fallbackPrice,
-  imageUrl: program.image_url || '',
-}));
+const programCards = await Promise.all(
+  initialPrograms.map(async (program) => ({
+    id: program.id,
+    title: program.title || fallbackTitle,
+    description: program.description,
+    price: program.price || fallbackPrice,
+    // Resolved at build time too, so the first paint already shows photos.
+    imageUrl: await toDisplayableImage(program.image_url),
+  }))
+);
 ---
 
 <div class="dynamic-programs-wrapper my-4" dir={isAr ? "rtl" : "ltr"}>
@@ -137,7 +140,7 @@ const programCards = initialPrograms.map((program) => ({
 
 <!-- كود JavaScript للجهة العميل (Client-side) -->
 <script>
-  import { fetchProgramsFeed, isFeedConfigured, warnIfFeedMissing } from '../lib/programsFeed';
+  import { fetchProgramsFeed, isFeedConfigured, warnIfFeedMissing, toDisplayableImage, type FeedProgram } from '../lib/programsFeed';
 
   const WHATSAPP_NUMBER = '212699922229';
 
@@ -191,19 +194,25 @@ const programCards = initialPrograms.map((program) => ({
     const zoomBtn = card.querySelector('.program-flyer-btn');
 
     if (image) {
-      if (img) {
-        img.src = image;
-        img.alt = title;
-        img.classList.remove('hidden');
-        img.setAttribute('data-full-img', image);
-        img.setAttribute('data-title', title);
-      }
-      if (placeholder) placeholder.classList.add('hidden');
-      if (zoomBtn) {
-        zoomBtn.classList.remove('hidden');
-        zoomBtn.setAttribute('data-full-img', image);
-        zoomBtn.setAttribute('data-title', title);
-      }
+      // Some photos are served as base64 through the feed script, because the
+      // Google account forbids public sharing. Resolve them into a real image.
+      toDisplayableImage(image).then((displayable) => {
+        if (!displayable) return;
+
+        if (img) {
+          img.src = displayable;
+          img.alt = title;
+          img.classList.remove('hidden');
+          img.setAttribute('data-full-img', displayable);
+          img.setAttribute('data-title', title);
+        }
+        if (placeholder) placeholder.classList.add('hidden');
+        if (zoomBtn) {
+          zoomBtn.classList.remove('hidden');
+          zoomBtn.setAttribute('data-full-img', displayable);
+          zoomBtn.setAttribute('data-title', title);
+        }
+      });
 
       const waBtn = card.querySelector('a[href*="wa.me"]');
       if (waBtn) {
@@ -250,20 +259,24 @@ const programCards = initialPrograms.map((program) => ({
         const image = imageUrlOf(prog);
         const img = existing.querySelector('.program-flyer-thumb');
         if (img && image) {
-          const current = img.getAttribute('data-full-img');
+          const current = img.getAttribute('data-source-img') || img.getAttribute('data-full-img');
           if (current !== image) {
-            img.src = image;
-            img.classList.remove('hidden');
-            img.setAttribute('data-full-img', image);
-            img.setAttribute('data-title', title);
-            const placeholder = existing.querySelector('[data-slot="image-placeholder"]');
-            if (placeholder) placeholder.classList.add('hidden');
-            const btn = existing.querySelector('.program-flyer-btn');
-            if (btn) {
-              btn.classList.remove('hidden');
-              btn.setAttribute('data-full-img', image);
-              btn.setAttribute('data-title', title);
-            }
+            img.setAttribute('data-source-img', image);
+            toDisplayableImage(image).then((displayable) => {
+              if (!displayable) return;
+              img.src = displayable;
+              img.classList.remove('hidden');
+              img.setAttribute('data-full-img', displayable);
+              img.setAttribute('data-title', title);
+              const placeholder = existing.querySelector('[data-slot="image-placeholder"]');
+              if (placeholder) placeholder.classList.add('hidden');
+              const btn = existing.querySelector('.program-flyer-btn');
+              if (btn) {
+                btn.classList.remove('hidden');
+                btn.setAttribute('data-full-img', displayable);
+                btn.setAttribute('data-title', title);
+              }
+            });
           }
         }
         return;

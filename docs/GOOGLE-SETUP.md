@@ -119,9 +119,14 @@ The program shows up on the website within seconds.
 
 ## Checking that everything works
 
-In the spreadsheet menu: **3️⃣ Check that everything works**.
-It prints the configuration, the trigger count and the current programs, and
-tells you whether each one has a photo.
+In the spreadsheet menu:
+
+- **3️⃣ Import pending submissions now** — imports anything the form received
+  but that is not published yet, and tells you how many programs the website
+  will now show.
+- **4️⃣ Check that everything works** — a full report: configuration, how many
+  submissions exist, how many are published, how many are waiting, and whether
+  each one has a photo.
 
 To see the data exactly as the website sees it, open the `/exec` URL in your
 browser. You should get JSON like:
@@ -135,6 +140,16 @@ browser. You should get JSON like:
   ]
 }
 ```
+
+### No trigger is required
+
+The website imports anything missing **every time it asks for the feed**, so a
+submission appears within about a minute without any background job. This is
+deliberate: background triggers can stop working silently (authorisation
+problems), and the programs then disappear with nobody noticing.
+
+`setup()` offers to create a trigger anyway, purely to make the delay shorter.
+Ignore it if you prefer fewer moving parts.
 
 ---
 
@@ -156,19 +171,36 @@ Edit a cell, wait up to a minute, reload the website. Done.
 
 ## If something goes wrong
 
-**No photos appear.**
-The most common cause is the photo question not being linked to a folder.
-Run `3️⃣ Check that everything works` — it shows `[photo ok]` or `[no photo]`
-per program.
+**No programs on the site.**
+Run **3️⃣ Import pending submissions now** from the Programs menu. It imports
+whatever the form received but has not published, and reports the count.
+
+If it says 0 pending while the form clearly has submissions, the script cannot
+find the form's tab. Re-run **1️⃣ Setup**, which remembers the right tab name.
+
+**Programs appear but the photos are missing.**
+Run **5️⃣ Fix photos (make them public)**. It reports the exact reason per photo,
+for example:
+
+- `restricted` — this Google account forbids public sharing. Nothing to fix: the
+  script serves the photo itself and the website shows it.
+- `cannot open file` — the script cannot reach that file. Check
+  `UPLOAD_FOLDER_ID` and that the photo question is linked to that folder.
+- `NO PHOTO` — the form row has no photo at all. Attach one and resubmit.
+
+To re-import a program after fixing its photo: delete its row from the
+`programs` tab, then run **3️⃣ Import pending submissions now**.
 
 **The website still shows the old programs.**
-The browser caches the feed for 5 minutes. Hard-refresh the page, or wait.
+The browser caches the feed for 90 seconds. Hard-refresh the page, or wait.
 
 **The website shows nothing and the JSON URL returns an error.**
 Open the `/exec` URL directly: the error message is included in the JSON.
 
+**A program is wrong.**
+Fix the row in the `programs` tab. To undo a submission completely, delete the
+row from both `programs` and the form's response tab.
+
 **Google asks you to re-authorise.**
 Apps Script needs permission for Sheets and Drive. Re-run setup and approve.
-
-**A program is wrong.**
-Fix the row in the `programs` tab. To undo a bad submission, delete the row.
+Changing the scopes in `appsscript.json` also requires a new deployment.

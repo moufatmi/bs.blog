@@ -30,7 +30,7 @@ export const FEED_URL: string = (import.meta.env.PUBLIC_PROGRAMS_FEED_URL || '')
 
 /** Browser cache so we do not hit Apps Script on every page view. */
 const CACHE_KEY = 'bsv_programs_feed_v1';
-const CACHE_TTL_MS = 5 * 60 * 1000;
+const CACHE_TTL_MS = 90 * 1000;
 
 export function isFeedConfigured(): boolean {
   return FEED_URL.length > 0;
@@ -149,6 +149,37 @@ export async function fetchProgramsFeed(options?: {
 interface BrowserCache {
   at: number;
   programs: FeedProgram[];
+}
+
+/**
+ * Photos come in two shapes.
+ *
+ *  1. A normal https link to a publicly shared Drive file. Used as-is.
+ *  2. A link back to the feed script with ?img=FILE_ID. It returns the image
+ *     as base64 because some Google accounts forbid public sharing, so the
+ *     script has to serve the bytes itself.
+ *
+ * This turns shape 2 into something an <img> tag can display, and leaves
+ * shape 1 alone.
+ */
+export async function toDisplayableImage(url: string | null | undefined): Promise<string> {
+  const src = String(url ?? '').trim();
+  if (!src) return '';
+  if (!src.includes('?img=')) return src;
+
+  try {
+    const res = await fetch(src, { redirect: 'follow' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const payload = (await res.json()) as { mime?: string; base64?: string; error?: string };
+    if (payload.error) throw new Error(payload.error);
+    if (!payload.base64) return '';
+
+    return `data:${payload.mime || 'image/jpeg'};base64,${payload.base64}`;
+  } catch (err) {
+    console.error('Could not load the image:', err);
+    return '';
+  }
 }
 
 function readBrowserCache(url: string, allowStale = false): FeedProgram[] | null {
