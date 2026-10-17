@@ -267,12 +267,16 @@ const programCards = await Promise.all(
         const image = imageUrlOf(prog);
         const img = existing.querySelector('.program-flyer-thumb');
         if (img && image) {
-          const current = img.getAttribute('data-source-img') || img.getAttribute('data-full-img');
-          if (current !== image) {
+          const source = img.getAttribute('data-source-img');
+          const loaded = img.getAttribute('src');
+          // نحدّث إن كان المصدر مختلفاً، أو إن لم تُحمَّل الصورة بعد.
+          // الحالة الثانية مهمة: البناء قد ينتج بطاقة بلا src.
+          if (source !== image || !loaded) {
             img.setAttribute('data-source-img', image);
             toDisplayableImage(image).then((displayable) => {
               if (!displayable) return;
               img.src = displayable;
+              img.alt = title;
               img.classList.remove('hidden');
               img.setAttribute('data-full-img', displayable);
               img.setAttribute('data-title', title);
@@ -302,6 +306,11 @@ const programCards = await Promise.all(
   function handleBrokenImages(root) {
     root.querySelectorAll('img.program-flyer-thumb').forEach((img) => {
       if (img.dataset.fallbackApplied) return;
+
+      // عنصر بلا src لا يُظهر شيئاً ولا يُطلق حدث error، فتبقى الأيقونة
+      // البديلة فوقه. نخفيه الآن ونستبدله فور وصول الرابط.
+      if (!img.getAttribute('src')) img.classList.add('hidden');
+
       img.addEventListener('error', () => {
         if (img.dataset.fallbackApplied) return;
         img.dataset.fallbackApplied = '1';
