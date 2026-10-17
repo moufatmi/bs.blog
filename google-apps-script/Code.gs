@@ -82,12 +82,25 @@ function serveImage(id) {
   }
 }
 
-/** Public link when the file allows it, otherwise the proxy link. */
+/**
+ * Where the website should load a photo from.
+ *
+ * Google Drive refuses to serve files to some other websites and answers
+ * "403 Forbidden" in the visitor's browser, even when the file is public.
+ * Testing showed this happens with beausejourvoyage.com as the referring page.
+ *
+ * So the website always goes through this script, which reads the file with
+ * the owner's own access and returns the bytes. It works in every case:
+ * public files, private files, and accounts that forbid public sharing.
+ */
 function imageUrlFor(id, sharingStatus) {
-  if (sharingStatus === 'ok') return driveUrl(id);
-  // Served through the script: works even when public sharing is forbidden.
   const feed = PropertiesService.getScriptProperties().getProperty('WEB_APP_URL');
-  return feed ? feed + '?img=' + id : '';
+  if (!feed) {
+    // The script does not know its own address yet: fall back to the direct
+    // link so the photo still has a chance of working.
+    return driveUrl(id);
+  }
+  return feed + '?img=' + id;
 }
 
 function loadPrograms() {
@@ -446,15 +459,12 @@ function resolvePhotoUrl(cellValue) {
   }
 
   const status = ensurePublic(id);
-  if (status !== 'ok') {
-    rememberFailedPhoto(id, status);
-    // Public sharing is not allowed on this account, but the script can serve
-    // the file itself, so the photo still reaches the website.
-    return imageUrlFor(id, status);
-  }
+  if (status !== 'ok') rememberFailedPhoto(id, status);
+  else forgetFailedPhoto(id);
 
-  forgetFailedPhoto(id);
-  return driveUrl(id);
+  // Always route through the script: Drive blocks hotlinks from the website
+  // with a 403 even for public files.
+  return imageUrlFor(id, status);
 }
 
 /**

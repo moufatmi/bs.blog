@@ -140,11 +140,17 @@ const programCards = await Promise.all(
 
 <!-- كود JavaScript للجهة العميل (Client-side) -->
 <script>
-  import { fetchProgramsFeed, isFeedConfigured, warnIfFeedMissing, toDisplayableImage, type FeedProgram } from '../lib/programsFeed';
+  import { FEED_URL, fetchProgramsFeed, isFeedConfigured, warnIfFeedMissing, toDisplayableImage, type FeedProgram } from '../lib/programsFeed';
 
   const WHATSAPP_NUMBER = '212699922229';
 
   // الصورة تأتي مباشرة من صف Google Sheet (رابط Drive عام)
+  /** يستخرج معرّف ملف Drive من أي رابطdrive. */
+  function extractDriveId(url) {
+    const m = String(url || '').match(/[?&]id=([A-Za-z0-9_-]{6,})/);
+    return m ? m[1] : '';
+  }
+
   function imageUrlOf(prog) {
     return String(prog?.image_url || '').trim();
   }
@@ -302,7 +308,7 @@ const programCards = await Promise.all(
     if (emptyState) emptyState.classList.toggle('hidden', cardCount > 0);
   }
 
-  // استبدال الصور الميتة (404) بالأيقونة البديلة بدل مربع فارغ
+  // استبدال الصور الميتة (404 / 403) بالأيقونة البديلة
   function handleBrokenImages(root) {
     root.querySelectorAll('img.program-flyer-thumb').forEach((img) => {
       if (img.dataset.fallbackApplied) return;
@@ -311,7 +317,31 @@ const programCards = await Promise.all(
       // البديلة فوقه. نخفيه الآن ونستبدله فور وصول الرابط.
       if (!img.getAttribute('src')) img.classList.add('hidden');
 
-      img.addEventListener('error', () => {
+      // Drive يرفض عرض الملفات على مواقع أخرى ويرد بـ 403 رغم أن الصورة
+      // عامة. عندها نطلبها من السكربت الذي يملك صلاحية قراءتها.
+      img.addEventListener('error', async () => {
+        const id = extractDriveId(img.getAttribute('src') || '');
+        if (id && !img.dataset.viaProxy) {
+          img.dataset.viaProxy = '1';
+          const proxy = FEED_URL + '?img=' + id;
+          const retried = await toDisplayableImage(proxy);
+          if (retried) {
+            img.src = retried;
+            img.classList.remove('hidden');
+            img.setAttribute('data-full-img', retried);
+            const zoom = img.closest('[data-program-card]')?.querySelector('.program-flyer-btn');
+            if (zoom) {
+              zoom.classList.remove('hidden');
+              zoom.setAttribute('data-full-img', retried);
+            }
+            const ph = img.closest('[data-program-card]')?.querySelector('[data-slot="image-placeholder"]');
+            if (ph) ph.classList.add('hidden');
+            return;
+          }
+        }
+
+        if (img.dataset.fallbackApplied) return;
+        img.dataset.fallbackApplied = '1';
         if (img.dataset.fallbackApplied) return;
         img.dataset.fallbackApplied = '1';
         const placeholder = document.createElement('div');
