@@ -237,6 +237,14 @@ const programCards = await Promise.all(
     const cards = Array.from(grid.querySelectorAll('[data-program-card]'));
     const byId = new Map(cards.map((c) => [c.getAttribute('data-program-id'), c]));
 
+    // حذف البطاقة إذا اختفى برنامجها من المصدر.
+    // بدون هذه الخطوة تبقى البطاقات القديمة على الشاشة إلى الأبد.
+    const liveIds = new Set(programs.map((p) => p.id));
+    cards.forEach((card) => {
+      const id = card.getAttribute('data-program-id');
+      if (!liveIds.has(id)) card.remove();
+    });
+
     programs.forEach((prog) => {
       const existing = prog.id ? byId.get(prog.id) : null;
       if (existing) {
@@ -373,19 +381,15 @@ const programCards = await Promise.all(
     if (!isFeedConfigured()) return;
 
     const programs = await fetchProgramsFeed({ useBrowserCache: true });
-    const cardCount = grid.querySelectorAll('[data-program-card]').length;
 
-    if (programs.length > 0) {
-      syncGrid(programs, config);
-      handleBrokenImages(grid);
-      return;
-    }
+    // syncGrid يضيف ويحدّث ويحذف، فيغطي كل الحالات في نداء واحد.
+    syncGrid(programs, config);
 
-    // لا بيانات من المصدر: لا نمسح ما بُني وقت البناء إلا إذا كان فارغاً أصلاً
-    if (cardCount === 0) {
-      const emptyState = document.getElementById('no-dynamic-programs');
-      if (emptyState) emptyState.classList.remove('hidden');
-    }
+    const emptyState = document.getElementById('no-dynamic-programs');
+    const remaining = grid.querySelectorAll('[data-program-card]').length;
+    if (emptyState) emptyState.classList.toggle('hidden', remaining > 0);
+
+    handleBrokenImages(grid);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
